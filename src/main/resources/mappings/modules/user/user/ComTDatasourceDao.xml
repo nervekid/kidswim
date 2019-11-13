@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.user.dao.user.ComTDatasourceDao">
+    
+	<sql id="comTDatasourceColumns">
+		a.dataflag AS "dataflag",
+		a.datasourcename AS "datasourcename",
+		a.id AS "id"
+	</sql>
+	
+	<sql id="comTDatasourceJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="ComTDatasource" >
+		SELECT 
+			<include refid="comTDatasourceColumns"/>
+		FROM com_t_datasource a
+		<include refid="comTDatasourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComTDatasource" >
+		SELECT 
+			<include refid="comTDatasourceColumns"/>
+		FROM com_t_datasource a
+		<include refid="comTDatasourceJoins"/>
+		<where>
+			
+			<if test="dataflag != null and dataflag != ''">
+				AND a.dataflag = #{dataflag}
+			</if>
+			<if test="datasourcename != null and datasourcename != ''">
+				AND a.datasourcename = #{datasourcename}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComTDatasource" >
+		SELECT 
+			<include refid="comTDatasourceColumns"/>
+		FROM com_t_datasource a
+		<include refid="comTDatasourceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_t_datasource(
+			dataflag,
+			datasourcename,
+			id
+		) VALUES (
+			#{dataflag},
+			#{datasourcename},
+			#{id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_t_datasource SET 	
+			dataflag = #{dataflag},
+			datasourcename = #{datasourcename}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM com_t_datasource
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE com_t_datasource SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="ComTDatasource" statementType="STATEMENT">
+		select * FROM com_t_datasource  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

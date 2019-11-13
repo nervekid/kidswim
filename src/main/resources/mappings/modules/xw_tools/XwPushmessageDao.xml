@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.xw_tools.dao.XwPushmessageDao">
+    
+	<sql id="xwPushmessageColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.content AS "content",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.read_num,
+	    b.un_read_num
+	</sql>
+	
+	<sql id="xwPushmessageJoins">
+		LEFT JOIN (
+            SELECT r.pushmeaasge_id,
+                   sum(case when r.read_flag = '1' then 1 else 0 end) read_num,
+                   sum(case when r.read_flag != '1' then 1 else 0 end) un_read_num
+            FROM xw_pushmessage_record r GROUP BY r.pushmeaasge_id
+    	) b ON b.pushmeaasge_id = a.id
+	</sql>
+	
+    
+	<select id="get" resultType="XwPushmessage" >
+		SELECT 
+			<include refid="xwPushmessageColumns"/>
+		FROM xw_pushmessage a
+		<include refid="xwPushmessageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XwPushmessage" >
+		SELECT 
+			<include refid="xwPushmessageColumns"/>
+		<if test="isSelf">,
+			r.read_flag
+		</if>
+		FROM xw_pushmessage a
+		<include refid="xwPushmessageJoins"/>
+		<!-- 我的通知 -->
+		<if test="isSelf">
+			JOIN xw_pushmessage_record r ON r.pushmeaasge_id = a.id AND r.user_id = #{currentUser.id}
+			<if test="readFlag != null and readFlag != ''">
+				AND r.read_flag = #{readFlag}
+			</if>
+		</if>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XwPushmessage" >
+		SELECT 
+			<include refid="xwPushmessageColumns"/>
+		FROM xw_pushmessage a
+		<include refid="xwPushmessageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO xw_pushmessage(
+			id,
+			title,
+			content,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{title},
+			#{content},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE xw_pushmessage SET 	
+			title = #{title},
+			content = #{content},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM xw_pushmessage
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE xw_pushmessage SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="XwPushmessage" statementType="STATEMENT">
+		select * FROM xw_pushmessage  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="findListById" resultType="XwPushmessage" >
+		SELECT
+		<include refid="xwPushmessageColumns"/>
+		<if test="isSelf">,
+			r.read_flag
+		</if>
+		FROM xw_pushmessage a
+		<include refid="xwPushmessageJoins"/>
+		<!-- 我的通知 -->
+		<if test="isSelf">
+			JOIN xw_pushmessage_record r ON r.pushmeaasge_id = a.id AND r.user_id = #{currentUser.id}
+			<if test="readFlag != null and readFlag != ''">
+				AND r.read_flag = #{readFlag}
+			</if>
+		</if>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

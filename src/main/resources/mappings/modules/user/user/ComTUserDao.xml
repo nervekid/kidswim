@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.user.dao.user.ComTUserDao">
+    
+	<sql id="comTUserColumns">
+	    a.id AS "id",
+		a.username AS "username",
+		a.password AS "password"
+	</sql>
+	
+	<sql id="comTUserJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="ComTUser" >
+		SELECT 
+			<include refid="comTUserColumns"/>
+		FROM com_t_user a
+		<include refid="comTUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComTUser" >
+		SELECT 
+			<include refid="comTUserColumns"/>
+		FROM com_t_user a
+		<include refid="comTUserJoins"/>
+		<where>
+			
+			<if test="username != null and username != ''">
+				AND a.username = #{username}
+			</if>
+			<if test="password != null and password != ''">
+				AND a.password = #{password}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComTUser" >
+		SELECT 
+			<include refid="comTUserColumns"/>
+		FROM com_t_user a
+		<include refid="comTUserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_t_user(
+			username,
+			password
+		) VALUES (
+			#{username},
+			#{password}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_t_user SET 	
+			username = #{username},
+			password = #{password}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM com_t_user
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE com_t_user SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="ComTUser" statementType="STATEMENT">
+		select * FROM com_t_user  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

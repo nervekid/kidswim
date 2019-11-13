@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SysTDataaccessentityDao">
+
+	<sql id="sysTDataaccessentityColumns">
+		a.id AS "id",
+		a.parentId AS "parentId",
+		a.entityOrgId AS "entityOrgId",
+		a.conditions AS "conditions",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		organEntity.dataTableName AS 'dataTableName',
+		organEntity.dataTableNameCN AS 'dataTableNameCN',
+		createby.name AS "createName",
+		updateby.name AS "updateName"
+	</sql>
+
+	<sql id="sysTDataaccessentityJoins">
+		LEFT JOIN sys_t_dataaccess b ON b.id = a.parentid and b.del_flag = '0'
+		LEFT JOIN sys_t_entityuseorgan organEntity ON organEntity.id = a.entityOrgId and organEntity.del_flag = '0'
+		LEFT JOIN sys_user createby ON createby.id = a.create_by and createby.del_flag = '0'
+		LEFT JOIN sys_user updateby ON updateby.id = a.update_by and updateby.del_flag = '0'
+	</sql>
+
+
+	<select id="get" resultType="SysTDataaccessentity" >
+		SELECT
+			<include refid="sysTDataaccessentityColumns"/>
+		FROM sys_t_dataaccessentity a
+		<include refid="sysTDataaccessentityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysTDataaccessentity" >
+		SELECT
+			<include refid="sysTDataaccessentityColumns"/>
+		FROM sys_t_dataaccessentity a
+		<include refid="sysTDataaccessentityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="sysTDataaccess != null and sysTDataaccess != '' and sysTDataaccess.id !=null and sysTDataaccess.id!='' ">
+				AND a.parentId = #{sysTDataaccess.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysTDataaccessentity" >
+		SELECT
+			<include refid="sysTDataaccessentityColumns"/>
+		FROM sys_t_dataaccessentity a
+		<include refid="sysTDataaccessentityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_t_dataaccessentity(
+			id,
+			parentId,
+			entityOrgId,
+			conditions,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parentId},
+			#{entityOrgId},
+			#{conditions},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_t_dataaccessentity SET
+			parentId = #{parentId},
+			entityOrgId = #{entityOrgId},
+			conditions = #{conditions},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_t_dataaccessentity
+		WHERE id = #{id}
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_t_dataaccessentity SET
+			del_flag = #{DEL_FLAG_DELETE}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysTDataaccessentity" statementType="STATEMENT">
+		select * FROM sys_t_dataaccessentity  where ${propertyName} = '${value}'
+	</select>
+
+</mapper>

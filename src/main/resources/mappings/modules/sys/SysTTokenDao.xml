@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SysTTokenDao">
+    
+	<sql id="sysTTokenColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.pid AS "pid",
+		a.secret AS "secret",
+		a.ip as "ip",
+		a.accessNum as "accessNum",
+		a.workspace_id  as "workspaceId",
+		a.use_flag   as "useflag",
+		a.remarks  as  "remarks"
+	</sql>
+	
+	<sql id="sysTTokenJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="SysTToken" >
+		SELECT 
+			<include refid="sysTTokenColumns"/>
+		FROM sys_t_token a
+		<include refid="sysTTokenJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysTToken" >
+		SELECT 
+			<include refid="sysTTokenColumns"/>
+		FROM sys_t_token a
+		<include refid="sysTTokenJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="pid != null and pid != ''">
+				AND a.pid LIKE 
+					<if test="dbName == 'oracle'">'%'||#{pid}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{pid}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{pid},'%')</if>
+			</if>
+			<if test="secret != null and secret != ''">
+				AND a.secret LIKE 
+					<if test="dbName == 'oracle'">'%'||#{secret}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{secret}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{secret},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysTToken" >
+		SELECT 
+			<include refid="sysTTokenColumns"/>
+		FROM sys_t_token a
+		<include refid="sysTTokenJoins"/>
+		<where>
+
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_t_token(
+			id,
+			name,
+			pid,
+			secret,
+			ip,
+			accessNum,
+			/*username,*/
+			workspace_id,
+			/*projectname,*/
+			use_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{pid},
+			#{secret},
+			#{ip},
+			#{accessNum},
+			#{workspaceId},
+			#{useflag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_t_token SET 	
+			name = #{name},
+			pid = #{pid},
+			secret = #{secret},
+			ip =#{ip},
+			accessNum=#{accessNum},
+			workspace_id = #{workspaceId},
+			use_flag = #{useflag},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_t_token
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_t_token SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysTToken" statementType="STATEMENT">
+		select * FROM sys_t_token  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="getByPidAndSecret" resultType="SysTToken" >
+		SELECT
+		<include refid="sysTTokenColumns"/>
+		FROM sys_t_token a
+		<include refid="sysTTokenJoins"/>
+		WHERE a.pid = #{pid} and a.secret=#{secret}  limit  1
+	</select>
+
+
+	<select id="getByIp" resultType="SysTToken" >
+		SELECT
+		<include refid="sysTTokenColumns"/>
+		FROM sys_t_token a
+		<include refid="sysTTokenJoins"/>
+		WHERE a.ip=#{ip}
+	</select>
+
+	<select id="checkPidAndScretAndWorspaceIdExist"  resultType="Integer">
+		select  count(1)  from   sys_t_token  a  where 1=1
+		and  pid = #{pid}   and  secret = #{secret }  and  workspace_id =#{workspaceId}
+		<if test=" id != null and  id != ''">
+			and id != #{id}
+		</if>
+
+	</select>
+
+	<select id="checkPidSecrectAndWorkspaceId" resultType="Integer">
+		select  count(1)  from   sys_t_token  a  where 1=1
+		and  pid = #{pid}   and  secret = #{secret }
+		<if test="workspaceId!=null and workspaceId != ''">
+			and  workspace_id =#{workspaceId}
+		</if>
+
+
+	</select>
+
+	<select id="getByPidSecretAndWorkspaceId" resultType="SysTToken" >
+		select   *  from  sys_t_token a   where  a.pid =#{pid}  and a.secret = #{secret}
+		<if test="workspaceId != null  and   workspaceId !=''">
+			and  a.workspace_id = #{workspaceId}
+		</if>
+
+	</select>
+
+</mapper>

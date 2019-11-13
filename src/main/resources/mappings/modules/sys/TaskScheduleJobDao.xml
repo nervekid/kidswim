@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.TaskScheduleJobDao">
+    
+	<sql id="taskScheduleJobColumns">
+		a.id AS "id",
+		a.cron_expression AS "cronExpression",
+		a.method_name AS "methodName",
+		a.is_concurrent AS "isConcurrent",
+		a.description AS "description",
+		a.update_by AS "updateBy.id",
+		a.bean_class AS "beanClass",
+		a.create_date AS "createDate",
+		a.job_status AS "jobStatus",
+		a.job_group AS "jobGroup",
+		a.update_date AS "updateDate",
+		a.create_by AS "createBy.id",
+		a.spring_bean AS "springBean",
+		a.job_name AS "jobName"
+	</sql>
+	
+	<sql id="taskScheduleJobJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="TaskScheduleJob" >
+		SELECT 
+			<include refid="taskScheduleJobColumns"/>
+		FROM sys_schedule_job a
+		<include refid="taskScheduleJobJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TaskScheduleJob" >
+		SELECT 
+			<include refid="taskScheduleJobColumns"/>
+		FROM sys_schedule_job a
+		<include refid="taskScheduleJobJoins"/>
+		<where>
+			
+			<if test="methodName != null and methodName != ''">
+				AND a.method_name = #{methodName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TaskScheduleJob" >
+		SELECT 
+			<include refid="taskScheduleJobColumns"/>
+		FROM sys_schedule_job a
+		<include refid="taskScheduleJobJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_schedule_job(
+			id,
+			cron_expression,
+			method_name,
+			is_concurrent,
+			description,
+			update_by,
+			bean_class,
+			create_date,
+			job_status,
+			job_group,
+			update_date,
+			create_by,
+			spring_bean,
+			job_name
+		) VALUES (
+			#{id},
+			#{cronExpression},
+			#{methodName},
+			#{isConcurrent},
+			#{description},
+			#{updateBy.id},
+			#{beanClass},
+			#{createDate},
+			#{jobStatus},
+			#{jobGroup},
+			#{updateDate},
+			#{createBy.id},
+			#{springBean},
+			#{jobName}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_schedule_job SET 	
+			cron_expression = #{cronExpression},
+			method_name = #{methodName},
+			is_concurrent = #{isConcurrent},
+			description = #{description},
+			update_by = #{updateBy.id},
+			bean_class = #{beanClass},
+			job_status = #{jobStatus},
+			job_group = #{jobGroup},
+			update_date = #{updateDate},
+			spring_bean = #{springBean},
+			job_name = #{jobName}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_schedule_job
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_schedule_job SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="TaskScheduleJob" statementType="STATEMENT">
+		select * FROM sys_schedule_job  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

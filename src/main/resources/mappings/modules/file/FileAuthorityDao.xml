@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.file.dao.FileAuthorityDao">
+    
+	<sql id="fileAuthorityColumns">
+		a.id AS "id",
+		a.fileId AS "fileId",
+		a.deptId AS "deptId",
+		a.userId AS "userId",
+		a.ruleId AS "ruleId",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		ff.`NAME` as "fileName",
+		fc.`name` as "catalogName",
+		su.`name` as "createFileName",
+		ff.`level` as "level",
+        fr.name as "ruleName"
+	</sql>
+	
+	<sql id="fileAuthorityJoins">
+		LEFT JOIN file_fastdfs ff ON a.fileId = ff.id AND ff.del_flag = '0'
+		LEFT JOIN file_catalog fc ON fc.id = ff.catalogId
+		left join sys_user su on su.id = ff.create_by and su.del_flag ='0'
+        left join file_rule fr on fr.id = a.ruleId and fr.del_flag ='0'
+	</sql>
+	
+    
+	<select id="get" resultType="FileAuthority" >
+		SELECT 
+			<include refid="fileAuthorityColumns"/>
+		FROM file_authority a
+		<include refid="fileAuthorityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByFileId" resultType="FileAuthority" >
+		SELECT
+		<include refid="fileAuthorityColumns"/>
+		FROM file_authority a
+		<include refid="fileAuthorityJoins"/>
+		WHERE a.fileId = #{fileId}
+	</select>
+	
+	<select id="findList" resultType="FileAuthority" >
+		SELECT 
+			<include refid="fileAuthorityColumns"/>
+		FROM file_authority a
+		<include refid="fileAuthorityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="catalogId != null and catalogId != ''">
+				AND (
+				fc.id = #{catalogId}
+				or
+				fc.parentIds like concat('%',#{catalogId},'%')
+				)
+			</if>
+			<if test="fileName != null and fileName != ''">
+				AND ff.NAME like concat('%',#{fileName},'%')
+			</if>
+			<if test="createFileName != null and createFileName != ''">
+				AND su.name like concat('%',#{createFileName},'%')
+			</if>
+			<if test="level != null and level != ''">
+				AND ff.level = #{level}
+			</if>
+
+			AND
+			<choose>
+				<!-- 超级管理员-->
+				<when test="ifAdmin != null and ifAdmin == 'Y'.toString()">
+					(ff.level != '4' or a.create_by = #{currUserId} )
+				</when>
+				<!-- 普通用户-->
+				<otherwise>
+					(
+					a.create_by = #{currUserId}
+					)
+				</otherwise>
+			</choose>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="FileAuthority" >
+		SELECT 
+			<include refid="fileAuthorityColumns"/>
+		FROM file_authority a
+		<include refid="fileAuthorityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO file_authority(
+			id,
+			fileId,
+			deptId,
+			userId,
+			ruleId,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{fileId},
+			#{deptId},
+			#{userId},
+			#{ruleId},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE file_authority SET 	
+			fileId = #{fileId},
+			deptId = #{deptId},
+			userId = #{userId},
+			ruleId = #{ruleId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM file_authority
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE file_authority SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteLogicList">
+		UPDATE file_authority SET
+			del_flag = 1
+		WHERE fileId in
+		<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="renewList">
+		UPDATE file_authority SET
+		del_flag = 0
+		WHERE fileId in
+		<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+			#{item}
+		</foreach>
+	</update>
+
+	<delete id="deleteList">
+		DELETE FROM file_authority
+		WHERE 1=1 and del_flag = '1'
+		<if test="list != null and list.size >0">
+			and fileId in
+			<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="FileAuthority" statementType="STATEMENT">
+		select * FROM file_authority  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="findFileList" resultType="FileAuthority" parameterType="fileAuthority" >
+		select
+            ff.id as "fileId",
+			ff.`NAME` as "fileName",
+			fc.`name` as "catalogName",
+			su.`name` as "createFileName",
+			ff.`level` as "level",
+			fa.`userId` as "userId",
+			fa.`deptId` as "deptId",
+			fa.`remarks` as "remarks"
+		from
+			file_fastdfs ff
+			LEFT JOIN file_catalog fc ON fc.id = ff.catalogId
+			LEFT JOIN file_authority fa ON fa.fileId = ff.id AND fa.del_flag = '0'
+			left join sys_user su on su.id = ff.create_by and su.del_flag ='0'
+		WHERE
+			1 = 1
+			AND ff.del_flag = '0'
+		<if test="catalogId != null and catalogId != ''">
+			AND (
+			fc.id = #{catalogId}
+			or
+			fc.parentIds like concat('%',#{catalogId},'%')
+			)
+		</if>
+		<if test="fileName != null and fileName != ''">
+			  AND ff.NAME like concat('%',#{fileName},'%')
+		</if>
+		<if test="createFileName != null and createFileName != ''">
+			  AND su.name like concat('%',#{createFileName},'%')
+		</if>
+		<if test="level != null and level != ''">
+			AND ff.level = #{level}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY ff.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="getByFile" parameterType="FileAuthority">
+		select
+			ff.id as "fileId",
+			ff.`NAME` as "fileName",
+			fc.`name` as "catalogName",
+			su.`name` as "createFileName",
+			ff.`level` as "level",
+			fa.`userId` as "userId",
+			fa.`deptId` as "deptId",
+			fa.`remarks` as "remarks"
+		from
+			file_fastdfs ff
+			LEFT JOIN file_catalog fc ON fc.id = ff.catalogId
+			LEFT JOIN file_authority fa ON fa.fileId = ff.id AND fa.del_flag = '0'
+			left join sys_user su on su.id = ff.create_by and su.del_flag ='0'
+		WHERE
+			1 = 1
+		AND ff.id = #{fileId}
+	</select>
+
+
+
+	<update id="updataUser">
+		update file_authority set userId = #{userId} where id = #{id} and del_flag = '0'
+	</update>
+
+
+	<insert id="insertList" parameterType ="FileAuthority">
+		insert into file_authority (
+		id,
+		fileId,
+		deptId,
+		userId,
+		ruleId,
+		del_flag,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks
+		) VALUE
+		<foreach collection="list" item="item" separator="," index="index">
+			(
+			#{item.id},
+			#{item.fileId},
+			#{item.deptId},
+			#{item.userId},
+			#{item.ruleId},
+			#{item.delFlag},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks}
+			)
+		</foreach>
+	</insert>
+
+
+	<update id="addRule">
+		UPDATE file_authority SET
+		ruleId = #{ruleId}
+		WHERE id IN
+		<foreach collection="listId" close=")" open="(" item="item" separator=",">
+			#{item}
+		</foreach>
+	</update>
+</mapper>

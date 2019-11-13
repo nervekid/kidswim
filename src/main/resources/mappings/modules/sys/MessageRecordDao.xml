@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.MessageRecordDao">
+    
+	<sql id="messageRecordColumns">
+		a.userName AS "userName",
+		a.content as "content",
+		a.userId AS "userId",
+		a.userPhone AS "userPhone",
+		a.userEmail AS "userEmail",
+		a.userLoginName AS "userLoginName",
+		a.isSuccess AS "isSuccess",
+		a.successCount AS "successCount",
+		a.failCount AS "failCount",
+		a.updateSendMessageDate AS "updateSendMessageDate"
+	</sql>
+	
+	<sql id="messageRecordJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="MessageRecord" >
+		SELECT 
+			<include refid="messageRecordColumns"/>
+		FROM message_record a
+		<include refid="messageRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MessageRecord" >
+		SELECT 
+			<include refid="messageRecordColumns"/>
+		FROM message_record a
+		<include refid="messageRecordJoins"/>
+		<where>
+			
+			<if test="userName != null and userName != ''">
+				AND a.userName LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+			<if test="userPhone != null and userPhone != ''">
+				AND a.userPhone = #{userPhone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MessageRecord" >
+		SELECT 
+			<include refid="messageRecordColumns"/>
+		FROM message_record a
+		<include refid="messageRecordJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO message_record(
+			userName,
+			content,
+			userId,
+			userPhone,
+			userEmail,
+			userLoginName,
+			isSuccess,
+			successCount,
+			failCount,
+			updateSendMessageDate
+		) VALUES (
+			#{userName},
+			#{content},
+			#{userId},
+			#{userPhone},
+			#{userEmail},
+			#{userLoginName},
+			#{isSuccess},
+			#{successCount},
+			#{failCount},
+			#{updateSendMessageDate}
+		)
+	</insert>
+	
+	<update id="updateMessageInfo">
+		UPDATE message_record
+		set successCount=#{successCount},
+		failCount=#{failCount},
+		updateSendMessageDate=#{updateSendMessageDate}
+		where userPhone = #{userPhone}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM message_record
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE message_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="MessageRecord" statementType="STATEMENT">
+		select * FROM message_record  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

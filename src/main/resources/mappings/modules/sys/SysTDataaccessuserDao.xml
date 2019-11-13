@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SysTDataaccessuserDao">
+
+	<sql id="sysTDataaccessuserColumns">
+		a.id AS "id",
+		a.dateAccessId AS "dateAccessId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		createby.name AS "createName",
+		updateby.name AS "updateName",
+		data.name AS "dataAccessName"
+	</sql>
+
+	<sql id="sysTDataaccessuserJoins">
+		LEFT JOIN sys_t_dataaccess data ON data.id = a.dateAccessId and data.del_flag = '0'
+		LEFT JOIN sys_user createby ON createby.id = a.create_by and createby.del_flag = '0'
+		LEFT JOIN sys_user updateby ON updateby.id = a.update_by and updateby.del_flag = '0'
+	</sql>
+
+
+	<select id="get" resultType="SysTDataaccessuser" >
+		SELECT
+			<include refid="sysTDataaccessuserColumns"/>
+		FROM sys_t_dataaccessuser a
+		<include refid="sysTDataaccessuserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysTDataaccessuser" >
+		SELECT
+			<include refid="sysTDataaccessuserColumns"/>
+		FROM sys_t_dataaccessuser a
+		<include refid="sysTDataaccessuserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="dataAccessName != null and dataAccessName != ''">
+				AND data.name like '%' #{dataAccessName} '%'
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysTDataaccessuser" >
+		SELECT
+			<include refid="sysTDataaccessuserColumns"/>
+		FROM sys_t_dataaccessuser a
+		<include refid="sysTDataaccessuserJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_t_dataaccessuser(
+			id,
+			dateAccessId,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{dateAccessId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_t_dataaccessuser SET
+			dateAccessId = #{dateAccessId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_t_dataaccessuser
+		WHERE id = #{id}
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_t_dataaccessuser SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysTDataaccessuser" statementType="STATEMENT">
+		select * FROM sys_t_dataaccessuser  where ${propertyName} = '${value}'
+	</select>
+
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.file.dao.FileCatalogDao">
+    
+	<sql id="fileCatalogColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.parentId AS "parentId",
+		a.del_flag AS "delFlag",
+		a.create_id AS "createId",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.parentIds AS "parentIds",
+        csu.name AS "createBy.name",
+        pfc.name AS "parentName"
+	</sql>
+	
+	<sql id="fileCatalogJoins">
+        left join sys_user csu on a.create_id = csu.id and csu.del_flag = '0'
+        left join file_catalog pfc on a.parentId = pfc.id and pfc.del_flag = '0'
+	</sql>
+	
+    
+	<select id="get" resultType="FileCatalog" >
+		SELECT 
+			<include refid="fileCatalogColumns"/>
+		FROM file_catalog a
+		<include refid="fileCatalogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="FileCatalog" >
+		SELECT 
+			<include refid="fileCatalogColumns"/>
+		FROM file_catalog a
+		<include refid="fileCatalogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+
+			<!--<if test="name != null and name != ''">-->
+				<!--AND a.name LIKE -->
+					<!--<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>-->
+					<!--<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>-->
+					<!--<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>-->
+			<!--</if>-->
+			<if test="extId != null and extId != ''">
+				AND a.id != #{extId}
+                AND  a.parentIds  not like concat('%',#{extId},'%')
+            </if>
+			<if test="name != null and name != ''">
+				AND  a.name = #{name}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="FileCatalog" >
+		SELECT 
+			<include refid="fileCatalogColumns"/>
+		FROM file_catalog a
+		<include refid="fileCatalogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO file_catalog(
+			id,
+			name,
+			parentId,
+			del_flag,
+			create_id,
+			create_date,
+			remarks,
+			parentIds
+		) VALUES (
+			#{id},
+			#{name},
+			#{parentId},
+			#{delFlag},
+			#{createId},
+			#{createDate},
+			#{remarks},
+			#{parentIds}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE file_catalog SET 	
+			name = #{name},
+			parentId = #{parentId},
+			create_id = #{createId},
+			remarks = #{remarks},
+			parentIds = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM file_catalog
+		WHERE id = #{id} or parentIds like concat('%',#{id},'%')
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE file_catalog SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="FileCatalog" statementType="STATEMENT">
+		select * FROM file_catalog  where ${propertyName} = '${value}'
+	</select>
+
+
+
+    <select id="findByParentIdsLike" resultType="FileCatalog">
+        SELECT
+        <include refid="fileCatalogColumns"/>
+        FROM file_catalog a
+        <include refid="fileCatalogJoins"/>
+        WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parentIds LIKE #{parentIds}
+    </select>
+
+    <update id="updateParentIds">
+        UPDATE file_catalog SET
+        parentId = #{parentId},
+        parentIds = #{parentIds}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

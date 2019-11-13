@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.MessageRecordEmailDao">
+    
+	<sql id="messageRecordEmailColumns">
+		a.userName AS "userName",
+		a.userId AS "userId",
+		a.userPhone AS "userPhone",
+		a.userEmail AS "userEmail",
+		a.userLoginName AS "userLoginName",
+		a.content AS "content",
+		a.isSuccess AS "isSuccess",
+		a.successCount AS "successCount",
+		a.failCount AS "failCount",
+		a.updateSendMessageDate AS "updateSendMessageDate"
+	</sql>
+	
+	<sql id="messageRecordEmailJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="MessageRecordEmail" >
+		SELECT 
+			<include refid="messageRecordEmailColumns"/>
+		FROM message_record_email a
+		<include refid="messageRecordEmailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MessageRecordEmail" >
+		SELECT 
+			<include refid="messageRecordEmailColumns"/>
+		FROM message_record_email a
+		<include refid="messageRecordEmailJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MessageRecordEmail" >
+		SELECT 
+			<include refid="messageRecordEmailColumns"/>
+		FROM message_record_email a
+		<include refid="messageRecordEmailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO message_record_email(
+			userName,
+			userId,
+			userPhone,
+			userEmail,
+			userLoginName,
+			content,
+			isSuccess,
+			successCount,
+			failCount,
+			updateSendMessageDate
+		) VALUES (
+			#{userName},
+			#{userId},
+			#{userPhone},
+			#{userEmail},
+			#{userLoginName},
+			#{content},
+			#{isSuccess},
+			#{successCount},
+			#{failCount},
+			#{updateSendMessageDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE message_record_email SET 	
+			userName = #{userName},
+			userId = #{userId},
+			userPhone = #{userPhone},
+			userEmail = #{userEmail},
+			userLoginName = #{userLoginName},
+			content = #{content},
+			isSuccess = #{isSuccess},
+			successCount = #{successCount},
+			failCount = #{failCount},
+			updateSendMessageDate = #{updateSendMessageDate}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM message_record_email
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE message_record_email SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="MessageRecordEmail" statementType="STATEMENT">
+		select * FROM message_record_email  where ${propertyName} = '${value}'
+	</select>
+
+	<update id="updateMessageInfo">
+		UPDATE message_record_email
+		set successCount=#{successCount},
+		failCount=#{failCount},
+		updateSendMessageDate=#{updateSendMessageDate}
+		where userPhone = #{userPhone}
+	</update>
+</mapper>

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.OfficeDao">
+
+	<sql id="officeColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.code,
+		a.name,
+		a.sort,
+		a.type,
+		a.grade,
+		a.address,
+		a.zip_code,
+		a.master,
+		a.phone,
+		a.fax,
+		a.email,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.primary_person AS "primaryPerson.id",
+		a.deputy_person AS "deputyPerson.id",
+		p.name AS "parent.name",
+		p.id AS "parent.id",
+		pp.name AS "primaryPerson.name",
+		dp.name AS "deputyPerson.name",
+		a.organTag AS "organTag",
+		dict.label AS "organName"
+	</sql>
+
+	<sql id="officeJoins">
+		LEFT JOIN sys_office p ON p.id = a.parent_id
+		LEFT JOIN sys_user pp ON pp.id = a.primary_person
+		LEFT JOIN sys_user dp ON dp.id = a.deputy_person
+		LEFT JOIN sys_dict dict ON dict.value = a.organTag and dict.type = 'org_flag' and dict.del_flag = '0'
+    </sql>
+
+	<select id="get" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCode" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+
+		WHERE a.code = #{code}
+	</select>
+
+	<select id="getByName" resultType="String">
+		SELECT
+			a.id
+		FROM sys_office a
+
+		WHERE a.name = #{name} AND a.del_flag = #{flag}
+	</select>
+
+	<select id="findList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<!-- 数据范围过滤 -->
+		${sqlMap.dfs}
+		<if test="name != null and name != ''">
+		AND a.name = #{name}
+		</if>
+		<if test="organTag != null and organTag != ''">
+			AND a.organTag = #{organTag}
+			OR ( a.organTag = #{organTag} and  a.id = #{currentUser.office.id} )
+		</if>
+		<if test="unOrganTag != null and unOrganTag != ''">
+			AND a.unOrganTag != #{unOrganTag}
+		</if>
+		<if test="listId != null and listId.size > 0">
+			and a.id IN
+			<foreach collection="listId" index="index" close=")" open="(" separator="," item="item">
+				#{item}
+			</foreach>
+		</if>
+
+		ORDER BY a.sort
+	</select>
+
+	<select id="findAllList" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="organTag != null and organTag != ''">
+			AND a.organTag = #{organTag}
+		</if>
+		<if test="unOrganTag != null and unOrganTag != ''">
+			AND a.organTag != #{unOrganTag}
+		</if>
+		<if test="parent!= null and parent.id!=null and parent.id != ''">
+			AND a.parent_id=#{parent.id}
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like CONCAT('%', #{name}, '%')
+		</if>
+		ORDER BY a.code
+	</select>
+
+	<select id="findByParentIdsLike" resultType="Office">
+		SELECT
+			<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND (a.parent_ids LIKE CONCAT('%,', #{id}, ',%') or a.id =#{id})
+		<if test="organTag != null and organTag != ''">
+			AND a.organTag = #{organTag}
+		</if>
+		ORDER BY a.code
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_office(
+			id,
+			parent_id,
+			parent_ids,
+			code,
+			name,
+			sort,
+			type,
+			grade,
+			address,
+			zip_code,
+			master,
+			phone,
+			fax,
+			email,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			useable,
+			primary_person,
+			deputy_person,
+			organTag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{code},
+			#{name},
+			#{sort},
+			#{type},
+			#{grade},
+			#{address},
+			#{zipCode},
+			#{master},
+			#{phone},
+			#{fax},
+			#{email},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{useable},
+			#{primaryPerson.id},
+			#{deputyPerson.id},
+			#{organTag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_office SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			code = #{code},
+			name = #{name},
+			type = #{type},
+			grade = #{grade},
+			address = #{address},
+			zip_code = #{zipCode},
+			master = #{master},
+			phone = #{phone},
+			fax = #{fax},
+			email = #{email},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			useable=#{useable},
+			primary_person=#{primaryPerson.id},
+			deputy_person=#{deputyPerson.id},
+			organTag = #{organTag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE sys_office SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_office
+		WHERE id = #{id} OR parent_ids LIKE
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<update id="deleteByLogic">
+		UPDATE sys_office SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<update id="updateTencentOfficeId">
+		update sys_office_tencent
+		set tencentOfficeId=#{tencentId},tencentParentOfficeId=#{tencentParentOfficeId},flag='1'
+		where kiteOfficeId=#{officeId}
+	</update>
+
+    <update id="updateTencentOfficeParentIds" >
+        UPDATE sys_office_tencent tt
+        set tt.tencentParentOfficeIds = concat(getParentList_org_tencent(tt.tencentOfficeId),tencentOfficeId)
+        where tt.tencentOfficeId=#{tencentOfficeId}
+    </update>
+
+	<delete id="deleteTencentOfficeId">
+		delete from sys_office_tencent where kiteOfficeId = #{officeId}
+	</delete>
+
+	<update id="updateQywxOfficeParentIds" >
+		UPDATE sys_office_qywx tt
+		set tt.qywxParentOfficeIds = concat(getParentList_org_qywx(tt.qywxOfficeId),qywxOfficeId)
+		where tt.qywxOfficeId=#{qywxOfficeId}
+	</update>
+
+	<delete id="deleteQywxOfficeId">
+		delete from  sys_office_qywx where kiteOfficeId = #{id}
+	</delete>
+
+	<select id="getTencentOfficeIsCreate" resultType="Long">
+		select tencentOfficeId
+		from sys_office_tencent sot
+		where sot.kiteOfficeId=#{officeId} and sot.flag='1'
+	</select>
+
+	<select id="findAllDataList" resultType="Office">
+		SELECT
+		<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE
+		1=1
+		<if test="organTag != null and organTag != ''">
+			AND a.organTag = #{organTag}
+		</if>
+		ORDER BY a.code
+	</select>
+
+	<select id="findNextSort" resultType="Integer">
+		SELECT max(a.sort)
+		FROM sys_office a
+		WHERE a.organTag = #{organTag}
+	</select>
+
+
+	<select id="findListByOwer" resultType="Office">
+		SELECT
+		<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = 0
+		<if test="organTag != null and organTag != ''">
+			AND a.organTag = #{organTag}
+		</if>
+		<if test="organTag != null and organTag != ''">
+			and  EXISTS (
+			select s.id from sys_office s
+			INNER JOIN sys_role_office sro on s.id = sro.office_id
+			INNER JOIN sys_role sr on sro.role_id = sr.id  and sr.del_flag=0
+			INNER JOIN sys_user_role sur on sur.role_id = sr.id
+			INNER JOIN sys_user su on su.id = sur.user_id and su.del_flag=0
+			where su.id=#{userId}
+			and a.id =s.id and s.del_flag=0
+			)
+		</if>
+		ORDER BY a.sort
+	</select>
+
+
+	<!--  获取所有部门的一级，二级，三级 部门ID，部门名称，或者获取指定部门的名称及上面的所有等级   -->
+	<select id="getOfficeGradeById" resultType="com.kite.modules.sys.entity.OfficeGrade">
+		select dept.*,
+		one.name  AS "officeOneName",
+		tow.name  AS "officeTwoName",
+		thr.name  AS "officeThreeName"
+		from (
+			select
+				case
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 2
+							then office.id
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 3
+							then (select sys_office.id from sys_office where sys_office.id = office.parent_id)
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 4
+							then (select sys_office.id from sys_office where sys_office.id = (select distinct so.parent_id from  sys_office so where so.id = office.parent_id))
+						else null end as 'officeOneId',
+				case
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 2
+						then null
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 3
+						then (select sys_office.id from sys_office where sys_office.id = office.id)
+						WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 4
+						then (select sys_office.id from sys_office where sys_office.id = office.parent_id)
+						else null end as 'officeTwoId',
+				case
+					WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 2
+						then null+0
+					WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 3
+						then null
+					WHEN (SELECT LENGTH(office.parent_ids) - LENGTH(REPLACE(office.parent_ids,',','' ))) = 4
+						then (select sys_office.id from sys_office where sys_office.id = office.id)
+					else null end as 'officeThreeId',
+				office.id  AS  "officeId",
+				office.name   AS "officeName"
+			from   sys_office office
+			where  office.del_flag=0  and office.organTag = '1'
+				<if test="officeId != null  and  officeId !='' ">
+					and  office.id = #{officeId}
+				</if>
+		) dept
+		LEFT JOIN sys_office one  on  dept.officeOneId = one.id
+		LEFT JOIN sys_office tow  on  dept.officeTwoId = tow.id
+		LEFT JOIN sys_office thr  on  dept.officeThreeId = thr.id
+		where  1 = 1
+		<!--<if test="officeId != null  and  officeId !='' ">
+			and  dept.officeId = #{officeId}
+		</if>-->
+	</select>
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.att.dao.SysCertificatesCoachDao">
+    
+	<sql id="sysCertificatesCoachColumns">
+		a.id AS "id",
+		a.coathId AS "coathId",
+		a.qualification AS "qualification",
+		a.obtainYearMonth AS "obtainYearMonth",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysCertificatesCoachJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="SysCertificatesCoach" >
+		SELECT 
+			<include refid="sysCertificatesCoachColumns"/>
+		FROM sys_certificates_coach a
+		<include refid="sysCertificatesCoachJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysCertificatesCoach" >
+		SELECT 
+			<include refid="sysCertificatesCoachColumns"/>
+		FROM sys_certificates_coach a
+		<include refid="sysCertificatesCoachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysCertificatesCoach" >
+		SELECT 
+			<include refid="sysCertificatesCoachColumns"/>
+		FROM sys_certificates_coach a
+		<include refid="sysCertificatesCoachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_certificates_coach(
+			id,
+			coathId,
+			qualification,
+			obtainYearMonth,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{coathId},
+			#{qualification},
+			#{obtainYearMonth},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_certificates_coach SET 	
+			coathId = #{coathId},
+			qualification = #{qualification},
+			obtainYearMonth = #{obtainYearMonth},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_certificates_coach
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_certificates_coach SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysCertificatesCoach" statementType="STATEMENT">
+		select * FROM sys_certificates_coach  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

@@ -1,0 +1,8 @@
+.impowerBox {margin-top: -15px;}
+.impowerBox .qrcode {width: 200px;}
+.impowerBox .title {display: none;}
+.impowerBox .info {width: 220px;margin-top: -10px;}
+.status_icon {display:none  !important}
+.impowerBox .status {display: none;}
+.wrp_code {margin-top: -30px;}
+.status_txt {text-align:center;}

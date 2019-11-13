@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SysUserCollectionMenuDao">
+    
+	<sql id="sysUserCollectionMenuColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.menu_url AS "menuUrl",
+		user.name AS "user.name",
+		title as "title",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="sysUserCollectionMenuJoins">
+		LEFT JOIN sys_user user ON user.id = a.user_id
+	</sql>
+	
+    
+	<select id="get" resultType="SysUserCollectionMenu" >
+		SELECT 
+			<include refid="sysUserCollectionMenuColumns"/>
+		FROM sys_user_collection_menu a
+		<include refid="sysUserCollectionMenuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysUserCollectionMenu" >
+		SELECT 
+			<include refid="sysUserCollectionMenuColumns"/>
+		FROM sys_user_collection_menu a
+		<include refid="sysUserCollectionMenuJoins"/>
+		<where>
+			<if test="user != null and user.id != null and user.id!=''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date asc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysUserCollectionMenu" >
+		SELECT 
+			<include refid="sysUserCollectionMenuColumns"/>
+		FROM sys_user_collection_menu a
+		<include refid="sysUserCollectionMenuJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_user_collection_menu(
+			id,
+			user_id,
+			menu_url,
+			title,
+			create_date
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{menuUrl},
+			#{title},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user_collection_menu SET 	
+			user_id = #{user.id},
+			menu_url = #{menuUrl},
+			title = #{title}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_user_collection_menu
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_user_collection_menu SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysUserCollectionMenu" statementType="STATEMENT">
+		select * FROM sys_user_collection_menu  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="getDataByUserAndMenu" resultType="SysUserCollectionMenu" >
+		SELECT
+		<include refid="sysUserCollectionMenuColumns"/>
+		FROM sys_user_collection_menu a
+		<include refid="sysUserCollectionMenuJoins"/>
+		WHERE a.user_id = #{user.id} and a.menu_url = #{menuUrl}
+	</select>
+
+	<!--物理删除-->
+	<update id="deleteDataByUserAndMenu">
+		DELETE FROM sys_user_collection_menu
+		WHERE user_id = #{user.id} and menu_url = #{menuUrl}
+	</update>
+	
+</mapper>

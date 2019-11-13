@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kite.modules.sys.dao.SysSequenceDao">
+
+    <select id="getByName" resultType="SysSequence">
+        select * from sys_sequence where seqName = #{seqName}
+    </select>
+
+    <update id="increase">
+        update sys_sequence set currentVal = currentVal+increaseVal where seqName = #{seqName}
+    </update>
+
+    <update id="update">
+        update sys_sequence
+        <set>
+            currentVal = #{currentVal},
+            increaseVal = #{increaseVal},
+            currentDate = #{currentDate}
+        </set>
+        where seqName = #{seqName}
+    </update>
+
+</mapper>

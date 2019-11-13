@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>滑动拼图验证码</title>
+  <link rel="stylesheet" href="/a/static/css/jigsaw.css" />
+  <style>
+    .container {
+      width: 310px;
+      margin: 100px auto;
+    }
+    input {
+      display: block;
+      width: 290px;
+      line-height: 40px;
+      margin: 10px 0;
+      padding: 0 10px;
+      outline: none;
+      border:1px solid #c8cccf;
+      border-radius: 4px;
+      color:#6a6f77;
+    }
+
+    a:link,a:visited,a:hover,a:active {
+      margin-left: 100px;
+      color: #0366D6;
+    }
+
+  </style>
+</head>
+<body>
+1
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+
+<div class="container">
+  <div id="captcha" style="position: "></div>
+</div>
+<script src="/a/static/block/jigsaw.js"></script>
+<script>
+  jigsaw.init(document.getElementById('captcha'), function () {
+    console.log('登录成功！');
+  })
+</script>
+</body>
+</html>

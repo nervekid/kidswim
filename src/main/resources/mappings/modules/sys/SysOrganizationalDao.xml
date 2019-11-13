@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SysOrganizationalDao">
+
+	<sql id="sysOrganizationalColumns">
+		a.id AS "id",
+		a.company_id AS "companyId",
+		a.office_one_id AS "officeOneId",
+		a.office_id AS "office.id",
+		a.user_id AS "user.id",
+		a.organTag AS "organTag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		office.name AS "office.name",
+		office.id AS "office.id",
+		officeOne.name AS "officeOne.name",
+		user.name AS "user.name",
+		user.id as "user.id",
+		user.email as "user.email",
+		user.positionId as "user.positionId",
+		company.name AS "companyName",
+		createby.name AS "createName",
+		updateby.name AS "updateName",
+		a.office_one_id as "officeOneId",
+		a.office_one_id as "officeOne.id",
+		userInfo.become_worker as "becomeWorker"
+	</sql>
+
+	<sql id="sysOrganizationalJoins">
+		LEFT JOIN sys_office office ON office.id = a.office_id and office.del_flag = '0'
+		LEFT JOIN sys_office officeOne ON officeOne.id = a.office_one_id and officeOne.del_flag = '0'
+		LEFT JOIN sys_office company ON company.id = a.company_id and company.del_flag = '0'
+		LEFT JOIN sys_user user ON user.id = a.user_id and user.del_flag = '0'
+		LEFT JOIN sys_dict dict ON dict.value = a.organTag and dict.type = 'org_flag' and dict.del_flag = '0'
+		LEFT JOIN sys_user createby ON createby.id = a.create_by and createby.del_flag = '0'
+		LEFT JOIN sys_user updateby ON updateby.id = a.update_by and updateby.del_flag = '0'
+		LEFT JOIN user_info userInfo ON userInfo.userId = a.user_id AND userInfo.del_flag = '0'
+
+	</sql>
+
+	<select id="get" resultType="SysOrganizational" >
+		SELECT
+			<include refid="sysOrganizationalColumns"/>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findOfiiceOneIdByUserIdAndOrganTag" resultType="String" >
+		SELECT a.office_one_id
+		FROM sys_organizational a
+		WHERE a.user_id = #{userId} and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<select id="findOfficeIdByUserIdAndOrganTag" resultType="SysOrganizational" >
+		SELECT
+			<include refid="sysOrganizationalColumns"/>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		WHERE a.user_id = #{userId} and a.organTag = #{organTag}
+	</select>
+
+	<select id="findOfficeIdByUserIdAndOrganTagOne" resultType="SysOrganizational" >
+		SELECT
+			<include refid="sysOrganizationalColumns"/>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		WHERE a.user_id = #{userId} and a.organTag = #{organTag} limit 1
+	</select>
+
+	<select id="findUserNameByCompanyIdAndOrganTag" resultType="String" >
+		SELECT user.name
+		FROM sys_organizational a
+		LEFT JOIN sys_user user ON user.id = a.user_id and user.del_flag = '0'
+		WHERE (a.company_id = #{companyId} or a.office_id=#{companyId}) and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<select id="findUserIdByCompanyIdAndOrganTag" resultType="String" >
+		SELECT a.user_id
+		FROM sys_organizational a
+		WHERE (a.company_id = #{companyId} or a.office_id=#{companyId}) and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<select id="findList" resultType="SysOrganizational" >
+		SELECT
+			<include refid="sysOrganizationalColumns"/>
+		<if test="organTag != null and organTag != '' and organTag==4">
+			,
+			sop.rank_flag as rankFlag,
+			sop.superior_flag as superiorFlag
+		</if>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		<if test="organTag != null and organTag != '' and organTag == 4">
+			LEFT JOIN sys_organizational_approval sop on a.id = sop.org_id and sop.del_flag= '0'
+		</if>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="companyId != null and companyId != ''">
+				AND a.company_id = #{companyId}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND (a.office_id = #{office.id} or office.parent_ids  like '%' #{office.id} '%')
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="user != null and user.name != null and user.name != ''">
+				AND user.name  like '%' #{user.name} '%'
+			</if>
+			<if test="organTag != null and organTag != ''">
+				AND a.organTag = #{organTag}
+			</if>
+			<if test="becomeWorker != null and becomeWorker != ''">
+				AND userInfo.become_worker = #{becomeWorker}
+			</if>
+            ${sqlMap.dfs}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysOrganizational" >
+		SELECT
+			<include refid="sysOrganizationalColumns"/>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_organizational(
+			id,
+			company_id,
+			office_one_id,
+			office_id,
+			user_id,
+			organTag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{companyId},
+			#{officeOne.id},
+			#{office.id},
+			#{user.id},
+			#{organTag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_organizational SET
+			company_id = #{companyId},
+			office_id = #{office.id},
+			office_one_id = #{officeOne.id},
+			user_id = #{user.id},
+			organTag = #{organTag},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_organizational
+		WHERE id = #{id}
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_organizational SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysOrganizational" statementType="STATEMENT">
+		select * FROM sys_organizational  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="findUserIdByOfficeOneIdAndOrganTag" resultType="String" >
+		SELECT a.user_id
+		FROM sys_organizational a
+		WHERE a.office_one_id = #{officeOneId} and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<select id="findUserNameByOfficeOneIdAndOrganTag" resultType="String" >
+		SELECT user.name
+		FROM sys_organizational a
+		LEFT JOIN sys_user user ON user.id = a.user_id and user.del_flag = '0'
+		WHERE a.office_one_id = #{officeOneId} and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+
+	<select id="findOfficeNameByOfficeOneNameAndOrganTag" resultType="String" >
+		SELECT so.name
+		FROM sys_organizational a
+		LEFT JOIN sys_office so ON so.id = a.office_one_id and so.del_flag = '0'
+		WHERE a.office_one_id = #{officeOneId} and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<!--逻辑删除-->
+	<update id="deleteByUserId">
+		UPDATE sys_organizational SET
+		del_flag = #{delflag}
+		WHERE user_id = #{userId}
+	</update>
+
+	<select id="findEntityByUserIdAndOrganTag" resultType="SysOrganizational" >
+		SELECT
+		<include refid="sysOrganizationalColumns"/>
+		FROM sys_organizational a
+		<include refid="sysOrganizationalJoins"/>
+		WHERE a.user_id = #{userId} and a.organTag = #{organTag}
+		limit 1
+	</select>
+
+	<select id="findOfficeOneIByUserIddAndOrganTag" resultType="String" >
+		SELECT a.user_id
+		FROM sys_organizational a
+		WHERE a.user_id = #{userId} and a.organTag = #{organTag} and a.del_flag = '0'
+	</select>
+
+	<!-- 获取所有一级部门和名称 -->
+	<select id="findListOfficeOneIdAndName" resultType="SysOrganizational" >
+		select distinct sorg.office_one_id AS "officeOneId",so.name   AS  "companyName" from sys_organizational  sorg  left join sys_office so
+			on sorg.office_one_id = so.id
+			where sorg.organTag=1  and sorg.office_one_id is not null and sorg.office_one_id!=''   and sorg.del_flag=0
+			order  by  convert(so.name using gbk) ASC
+	</select>
+
+	<delete id="deleteDataByUserId">
+		DELETE FROM sys_organizational
+		WHERE user_id = #{userId}
+	</delete>
+</mapper>

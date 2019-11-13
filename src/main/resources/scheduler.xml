@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- - Scheduler context for Quartz. - Note that Quartz Jobs are throwaway objects, in contrast to shared TimerTasks. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+             http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"  lazy-init="false" >
+		<property name="triggers">
+			<list>
+				&lt;!&ndash; <ref bean="schedulerServerTest"/>&ndash;&gt;
+				 <ref bean="sendMessageForMaterial"/>
+				<ref bean="backupUserAndOffice"/>
+				<ref bean="sendEmailToMocCheck"/>
+				<ref bean="getWxApproval"/>
+				<ref bean="generateChannelenterprise"/>
+			</list>
+		</property>
+		<property name="autoStartup" value="false" />
+		<property name="startupDelay" value="30" />
+	</bean>-->
+<!--	 <bean id="schedulerServerTest" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	        <property name="jobDetail" ref="schedulerServerDetail" />
+	        <property name="cronExpression" value="0 * * * * ?"/>
+	        <property name="description" value="定时器测试"></property>
+	        <property name="group" value="illegal" />
+	 </bean>-->
+	<!-- <bean id="schedulerServerDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="schedulerTest" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="false" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>-->
+
+	<!-- 定期发邮件提醒设备到期情况 -->
+	<!-- <bean id="sendMessageForMaterial" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	        <property name="jobDetail" ref="sendMessageForMaterialDetail" />
+	        <property name="cronExpression" value="0 0 9 * * ?"/>
+	        <property name="description" value="定期发邮件提醒设备到期情况"></property>
+	        <property name="group" value="illegal" />
+	 </bean>
+	 <bean id="sendMessageForMaterialDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="sendMessageForMaterial" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="true" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>
+-->
+
+
+
+	<!-- 定期发邮件提醒设备到期情况 -->
+<!--
+	<bean id="backupUserAndOffice" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="backupUserAndOfficeData" />
+		<property name="cronExpression" value="0 0 23 L * ?"/>
+		<property name="description" value="定期备份组织架构"></property>
+		<property name="group" value="illegal" />
+	</bean>
+	<bean id="backupUserAndOfficeData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="backupUserAndOfficeData" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="true" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>
+-->
+
+
+	<!-- 商务系统每天定时检查发送邮件任务 -->
+	<!--<bean id="sendEmailToMocCheck" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="sendEmailToMocCheckData" />
+		<property name="cronExpression" value="*0 30 8 * * ? "/>
+		<property name="description" value="商务系统每日检查定时发送任务"></property>
+		<property name="group" value="illegal" />
+	</bean>
+	<bean id="sendEmailToMocCheckData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="sendMessageForMoc" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="true" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>-->
+
+
+	<!-- 获取微信审批数据 -->
+	<!--<bean id="getWxApproval" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="getWxApprovalData" />
+		&lt;!&ndash;<property name="cronExpression" value="*/5 * * * * ?"/>&ndash;&gt;
+		<property name="cronExpression" value="0 0 0 * * ?"/>
+		<property name="description" value="获取微信审批数据"></property>
+		<property name="group" value="illegal" />
+	</bean>
+	<bean id="getWxApprovalData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="getWxApproval" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="false" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>-->
+
+	<!-- 通道企业对应关系数据生成脚本 -->
+	<!--<bean id="generateChannelenterprise" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="generateChannelenterpriseData" />
+		<property name="cronExpression" value="*0 30 7 * * ? "/>
+		<property name="description" value="通道企业对应关系数据生成脚本"></property>
+		<property name="group" value="illegal" />
+	</bean>
+	<bean id="generateChannelenterpriseData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerServer" />&lt;!&ndash; 要执行的类 &ndash;&gt;
+		<property name="targetMethod" value="generatePChannelenterprise" />&lt;!&ndash; 要执行类当中的方法 &ndash;&gt;
+		<property name="concurrent" value="false" />&lt;!&ndash; 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 &ndash;&gt;
+	</bean>
+-->
+	<!-- 计划任务后台管理 -->
+	<bean id="schedulerFactoryBean"
+		  class="org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+	<!-- 计划任务启动监听器 -->
+	<bean class="com.kite.modules.sys.listener.ScheduleJobInitListener" />
+
+</beans>

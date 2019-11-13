@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.SessionSituationDao">
+
+	<sql id="sessionSituationColumns">
+		a.id AS "id",
+		a.sessionid AS "sessionId",
+		a.user_name AS "userName",
+		a.create_time AS "createTime",
+		a.stop_time AS "stopTime",
+		a.expire_time AS "expireTime",
+		a.plan_exit_time AS "planExitTime",
+		a.actual_exit_time AS "actualExitTime",
+		a.isabnormal AS "isAbnormal"
+	</sql>
+
+	<sql id="sessionSituationJoins">
+	</sql>
+
+
+	<select id="get" resultType="SessionSituation" >
+		SELECT
+			<include refid="sessionSituationColumns"/>
+		FROM sys_session_situation a
+		<include refid="sessionSituationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SessionSituation" >
+		SELECT
+			<include refid="sessionSituationColumns"/>
+		FROM sys_session_situation a
+		<include refid="sessionSituationJoins"/>
+		<where>
+
+			<if test="userName != null and userName != ''">
+				AND a.user_name = #{userName}
+			</if>
+		</where>
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+
+	<select id="findAllList" resultType="SessionSituation" >
+		SELECT
+			<include refid="sessionSituationColumns"/>
+		FROM sys_session_situation a
+		<include refid="sessionSituationJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_session_situation(
+			id,
+			sessionid,
+			user_name,
+			create_time,
+			stop_time,
+			expire_time,
+			plan_exit_time,
+			actual_exit_time,
+			isabnormal
+		) VALUES (
+			#{id},
+			#{sessionId},
+			#{userName},
+			#{createTime},
+			#{stopTime},
+			#{expireTime},
+			#{planExitTime},
+			#{actualExitTime},
+			#{isAbnormal}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_session_situation SET
+			sessionid = #{sessionId},
+			user_name = #{userName},
+			create_time = #{createTime},
+			stop_time = #{stopTime},
+			expire_time = #{expireTime},
+			plan_exit_time = #{planExitTime},
+			actual_exit_time = #{actualExitTime},
+			isabnormal = #{isAbnormal}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_session_situation
+		WHERE id = #{id}
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_session_situation SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SessionSituation" statementType="STATEMENT">
+		select * FROM sys_session_situation  where ${propertyName} = '${value}'
+	</select>
+
+	<select id="findBySessionId" resultType="SessionSituation" >
+		SELECT
+		<include refid="sessionSituationColumns"/>
+		FROM sys_session_situation a
+		<include refid="sessionSituationJoins"/>
+		WHERE a.sessionid=#{sessionId}
+		limit 1
+	</select>
+
+</mapper>

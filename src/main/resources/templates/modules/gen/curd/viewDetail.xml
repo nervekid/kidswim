@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>viewDetail</name>
+	<filePath>src/main/webapp/webpage/${lastPackageName}/${moduleName}/${subModuleName}</filePath>
+	<fileName>${className}View.jsp</fileName>
+	<content><![CDATA[
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/webpage/include/taglib.jsp"%>
+<html>
+<head>
+	<title>${functionNameSimple}查看</title>
+	<meta name="decorator" content="default"/>
+</head>
+<body >
+	<div class="print-box">
+	    <div id="print">
+			 <div class="print-title">
+				${functionNameSimple}
+			</div>
+			<div class="print-info">
+				<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
+					<#assign x=0 />
+					<#list table.columnList as c >
+					<#if c.isForm?? && c.isForm == "1" >
+						<#assign x=x+1 />
+						<#if x%2==1>
+							<tr>
+								<th class="formTitle">${c.comments}：</th>
+								<td class="formValue" style="padding-right: 20px;">
+				<#if c.simpleJavaType == "Date">
+					<input type="text" readonly="readonly" class="form-control" value="<fmt:formatDate value="${"$"}{${className}.${c.javaFieldId}}" pattern="yyyy-MM-dd"/>" />
+				<#elseif c.showType == "select" || c.showType == "checkbox" || c.showType == "radiobox">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{fns:getDictLabel(${className}.${c.javaFieldId}, '${c.dictType}', '')}" />
+				<#elseif c.showType == "userselect" || c.showType == "officeselect" || c.showType == "areaselect" || c.showType == "gridselect">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{${className}.${c.javaFieldName}}" />
+				<#elseif c.showType == "umeditor">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{fns:unescapeHtml(${className}.${c.javaFieldId})}" />
+				<#else>
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{${className}.${c.javaFieldId}}" />
+				</#if>
+								</td>
+						</#if>
+						<#if x%2==0>
+								<th class="formTitle">${c.comments}：</th>
+								<td class="formValue">
+				<#if c.simpleJavaType == "Date">
+					<input type="text" readonly="readonly" class="form-control" value="<fmt:formatDate value="${"$"}{${className}.${c.javaFieldId}}" pattern="yyyy-MM-dd"/>" />
+				<#elseif c.showType == "select" || c.showType == "checkbox" || c.showType == "radiobox">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{fns:getDictLabel(${className}.${c.javaFieldId}, '${c.dictType}', '')}" />
+				<#elseif c.showType == "userselect" || c.showType == "officeselect" || c.showType == "areaselect" || c.showType == "gridselect">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{${className}.${c.javaFieldName}}" />
+				<#elseif c.showType == "umeditor">
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{fns:unescapeHtml(${className}.${c.javaFieldId})}" />
+				<#else>
+					<input type="text" readonly="readonly" class="form-control" value="${"$"}{${className}.${c.javaFieldId}}" />
+				</#if>
+								</td>
+							</tr>
+						</#if>
+					</#if>
+					</#list>
+			<#if x%2==1 >
+					<th class="formTitle"></th>
+					<td class="formValue"></td>
+		  		</tr>
+			</#if>
+				</table>
+			</div>
+        </div>
+	</div>
+</body>
+</html>]]>
+	</content>
+</template>

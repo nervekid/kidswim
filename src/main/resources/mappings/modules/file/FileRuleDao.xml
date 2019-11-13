@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.file.dao.FileRuleDao">
+    
+	<sql id="fileRuleColumns">
+		a.id AS "id",
+		a.deptId AS "deptId",
+		a.userId AS "userId",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.name AS "name",
+		csu.`name` as "createName",
+		usu.`name` as "updateName"
+	</sql>
+	
+	<sql id="fileRuleJoins">
+		left join sys_user csu on csu.id = a.create_by and csu.del_flag = '0'
+		left join sys_user usu on usu.id = a.create_by and usu.del_flag = '0'
+	</sql>
+	
+    
+	<select id="get" resultType="FileRule" >
+		SELECT 
+			<include refid="fileRuleColumns"/>
+		FROM file_rule a
+		<include refid="fileRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="FileRule" >
+		SELECT 
+			<include refid="fileRuleColumns"/>
+		FROM file_rule a
+		<include refid="fileRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name like concat('%',#{name},'%')
+			</if>
+			<if test="createName != null and createName != ''">
+				AND csu.`name` like concat('%',#{createName},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="FileRule" >
+		SELECT 
+			<include refid="fileRuleColumns"/>
+		FROM file_rule a
+		<include refid="fileRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO file_rule(
+			id,
+			deptId,
+			userId,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			name
+		) VALUES (
+			#{id},
+			#{deptId},
+			#{userId},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE file_rule SET 	
+			deptId = #{deptId},
+			userId = #{userId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			`name` = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM file_rule
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE file_rule SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="FileRule" statementType="STATEMENT">
+		select * FROM file_rule  where ${propertyName} = '${value}'
+	</select>
+
+	<update id="updataUser">
+		update file_rule set userId = #{userId} where id = #{id} and del_flag = '0'
+	</update>
+
+	<update id="deleteList">
+		UPDATE file_rule SET
+			del_flag = '1'
+		WHERE id IN
+		<foreach collection="list" close=")" open="(" item="item" separator=",">
+			#{item}
+		</foreach>
+	</update>
+
+
+</mapper>

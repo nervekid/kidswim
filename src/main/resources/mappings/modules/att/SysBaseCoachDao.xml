@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.att.dao.SysBaseCoachDao">
+    
+	<sql id="sysBaseCoachColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.nameCn AS "nameCn",
+		a.nameEN AS "nameEN",
+		a.sex AS "sex",
+		a.phone AS "phone",
+		a.idNo AS "idNo",
+		a.email AS "email",
+		a.address AS "address",
+		a.educationLevel AS "educationLevel",
+		a.entryYear AS "entryYear",
+		a.entryPosition AS "entryPosition",
+		a.entryHourWage AS "entryHourWage",
+		a.presentPosition AS "presentPosition",
+		a.presentHourWage AS "presentHourWage",
+		a.industryExperience AS "industryExperience",
+		a.contract_flag AS "contractFlag",
+		a.accumulatedTeachingHours AS "accumulatedTeachingHours",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysBaseCoachJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="SysBaseCoach" >
+		SELECT 
+			<include refid="sysBaseCoachColumns"/>
+		FROM sys_base_coach a
+		<include refid="sysBaseCoachJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysBaseCoach" >
+		SELECT 
+			<include refid="sysBaseCoachColumns"/>
+		FROM sys_base_coach a
+		<include refid="sysBaseCoachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="nameCn != null and nameCn != ''">
+				AND a.nameCn = #{nameCn}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysBaseCoach" >
+		SELECT 
+			<include refid="sysBaseCoachColumns"/>
+		FROM sys_base_coach a
+		<include refid="sysBaseCoachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_base_coach(
+			id,
+			code,
+			nameCn,
+			nameEN,
+			sex,
+			phone,
+			idNo,
+			email,
+			address,
+			educationLevel,
+			entryYear,
+			entryPosition,
+			entryHourWage,
+			presentPosition,
+			presentHourWage,
+			industryExperience,
+			contract_flag,
+			accumulatedTeachingHours,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{nameCn},
+			#{nameEN},
+			#{sex},
+			#{phone},
+			#{idNo},
+			#{email},
+			#{address},
+			#{educationLevel},
+			#{entryYear},
+			#{entryPosition},
+			#{entryHourWage},
+			#{presentPosition},
+			#{presentHourWage},
+			#{industryExperience},
+			#{contractFlag},
+			#{accumulatedTeachingHours},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_base_coach SET 	
+			code = #{code},
+			nameCn = #{nameCn},
+			nameEN = #{nameEN},
+			sex = #{sex},
+			phone = #{phone},
+			idNo = #{idNo},
+			email = #{email},
+			address = #{address},
+			educationLevel = #{educationLevel},
+			entryYear = #{entryYear},
+			entryPosition = #{entryPosition},
+			entryHourWage = #{entryHourWage},
+			presentPosition = #{presentPosition},
+			presentHourWage = #{presentHourWage},
+			industryExperience = #{industryExperience},
+			contract_flag = #{contractFlag},
+			accumulatedTeachingHours = #{accumulatedTeachingHours},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_base_coach
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_base_coach SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysBaseCoach" statementType="STATEMENT">
+		select * FROM sys_base_coach  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

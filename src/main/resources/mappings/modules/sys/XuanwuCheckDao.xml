@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.XuanwuCheckDao">
+    
+	<sql id="xuanwuCheckColumns">
+		a.xuanwuu AS "xuanwuu",
+		a.xuanwup AS "xuanwup"
+	</sql>
+	
+	<sql id="xuanwuCheckJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="XuanwuCheck" >
+		SELECT 
+			<include refid="xuanwuCheckColumns"/>
+		FROM xuanwu_check a
+		<include refid="xuanwuCheckJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XuanwuCheck" >
+		SELECT 
+			<include refid="xuanwuCheckColumns"/>
+		FROM xuanwu_check a
+		<include refid="xuanwuCheckJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XuanwuCheck" >
+		SELECT 
+			<include refid="xuanwuCheckColumns"/>
+		FROM xuanwu_check a
+		<include refid="xuanwuCheckJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO xuanwu_check(
+			xuanwuu,
+			xuanwup
+		) VALUES (
+			#{xuanwuu},
+			#{xuanwup}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE xuanwu_check SET 	
+			xuanwuu = #{xuanwuu},
+			xuanwup = #{xuanwup}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM xuanwu_check
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE xuanwu_check SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="XuanwuCheck" statementType="STATEMENT">
+		select * FROM xuanwu_check  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

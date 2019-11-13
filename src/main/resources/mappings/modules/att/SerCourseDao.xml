@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.att.dao.SerCourseDao">
+    
+	<sql id="serCourseColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.coathId AS "coathId",
+		a.beginYearMonth AS "beginYearMonth",
+		a.endYearMonth AS "endYearMonth",
+		a.courseDate AS "courseDate",
+		a.courseNum AS "courseNum",
+		a.courseAddress AS "courseAddress",
+		a.strInWeek AS "strInWeek",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="serCourseJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="SerCourse" >
+		SELECT 
+			<include refid="serCourseColumns"/>
+		FROM ser_course a
+		<include refid="serCourseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SerCourse" >
+		SELECT 
+			<include refid="serCourseColumns"/>
+		FROM ser_course a
+		<include refid="serCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SerCourse" >
+		SELECT 
+			<include refid="serCourseColumns"/>
+		FROM ser_course a
+		<include refid="serCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ser_course(
+			id,
+			code,
+			coathId,
+			beginYearMonth,
+			endYearMonth,
+			courseDate,
+			courseNum,
+			courseAddress,
+			strInWeek,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{coathId},
+			#{beginYearMonth},
+			#{endYearMonth},
+			#{courseDate},
+			#{courseNum},
+			#{courseAddress},
+			#{strInWeek},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ser_course SET 	
+			code = #{code},
+			coathId = #{coathId},
+			beginYearMonth = #{beginYearMonth},
+			endYearMonth = #{endYearMonth},
+			courseDate = #{courseDate},
+			courseNum = #{courseNum},
+			courseAddress = #{courseAddress},
+			strInWeek = #{strInWeek},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM ser_course
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE ser_course SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SerCourse" statementType="STATEMENT">
+		select * FROM ser_course  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

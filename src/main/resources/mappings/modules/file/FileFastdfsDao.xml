@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.file.dao.FileFastdfsDao">
+
+	<sql id="fileFastdfsColumns">
+		a.id AS "id",
+		a.number AS "number",
+		a.name AS "name",
+		a.url AS "url",
+		a.size AS "size",
+		a.level AS "level",
+		a.type AS "type",
+		a.`group` AS "group",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		csu.name AS "createBy.name",
+		dsu.name AS "delName",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.catalogId AS "catalogId",
+		fc.name AS "catalogName",
+		a.del_by AS "delBy",
+		a.userId AS "userId",
+		usu.name AS "belongName",
+		a.del_date AS "delDate"
+	</sql>
+
+	<sql id="fileFastdfsJoins">
+		left join sys_user csu on a.create_by = csu.id and csu.del_flag = '0'
+		left join sys_user dsu on a.del_by = dsu.id and dsu.del_flag = '0'
+		left join sys_user usu on a.userId = usu.id and usu.del_flag = '0'
+		left join file_catalog fc on fc.id = a.catalogId and fc.del_flag = '0'
+		left join file_authority fa on fa.fileId = a.id and fa.del_flag = '0'
+		left join file_rule fr on fr.id =fa.ruleId and fr.del_flag = '0'
+	</sql>
+
+
+	<select id="get" resultType="FileFastdfs" >
+		SELECT
+			<include refid="fileFastdfsColumns"/>
+		FROM file_fastdfs a
+		<include refid="fileFastdfsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="FileFastdfs" >
+		SELECT
+			<include refid="fileFastdfsColumns"/>
+		FROM file_fastdfs a
+		<include refid="fileFastdfsJoins"/>
+		<where>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE  concat('%',#{name},'%')
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE  concat('%',#{type},'%')
+			</if>
+			<if test="group != null and group != ''">
+				AND a.group = #{group}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level = #{level}
+			</if>
+			<if test="createName != null and createName != ''">
+				AND csu.name like concat('%',#{createName},'%')
+			</if>
+			<if test="belongName != null and belongName != ''">
+				AND usu.name like concat('%',#{belongName},'%')
+			</if>
+			<if test="beginDate != null">
+				AND a.create_date &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.create_date &lt;= #{endDate}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND a.userId = #{userId}
+			</if>
+			<if test="listId != null and listId.size > 0">
+				AND a.id in
+				<foreach collection="listId" index="index" close=")" item="item" open="(" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test="catalogId != null and catalogId != ''">
+				AND (
+					  fc.id = #{catalogId}
+						or
+						fc.parentIds like concat('%',#{catalogId},'%')
+					)
+			</if>
+
+			AND
+			<!-- 权限设置-->
+			<choose>
+				<!-- 超级管理员-->
+				<when test="ifAdmin != null and ifAdmin == 'Y'.toString()">
+					(a.level != '4' or a.create_by = #{currUserId} )
+				</when>
+				<!-- 普通用户-->
+				<otherwise>
+					(
+						a.level = '0'
+						or a.create_by = #{currUserId}
+						or(
+							a.level = '1' and
+							(
+								fa.userId like concat('%',#{currUserId},'%')
+								or fr.userId like concat('%',#{currUserId},'%')
+								<if test="currDeptId != null and currDeptId != ''">
+									or fa.deptId like concat('%',#{currDeptId},'%')
+									or fr.deptId like concat('%',#{currDeptId},'%')
+								</if>
+								<if test="currParentDeptId != null and currParentDeptId != ''">
+									or fa.deptId like concat('%',#{currParentDeptId},'%')
+									or fr.deptId like concat('%',#{currParentDeptId},'%')
+								</if>
+							)
+						  )
+					)
+				</otherwise>
+			</choose>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="FileFastdfs" >
+		SELECT
+			<include refid="fileFastdfsColumns"/>
+		FROM file_fastdfs a
+		<include refid="fileFastdfsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO file_fastdfs(
+			id,
+			`number`,
+			`name`,
+			url,
+			size,
+			`level`,
+			type,
+			`group`,
+			create_by,
+			create_date,
+			remarks,
+			del_flag,
+			catalogId,
+			del_date,
+			del_by,
+			userId
+		) VALUES (
+			#{id},
+			#{number},
+			#{name},
+			#{url},
+			#{size},
+			#{level},
+			#{type},
+			#{group},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag},
+			#{catalogId},
+			#{delDate},
+			#{delBy},
+			#{userId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE file_fastdfs SET
+			`number` = #{number},
+			`name` = #{name},
+			url = #{url},
+			size = #{size},
+			`level` = #{level},
+			type = #{type},
+			`group` = #{group},
+			remarks = #{remarks},
+			catalogId = #{catalogId},
+			del_by = #{delBy},
+			del_date = #{delDate}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM file_fastdfs
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteList" >
+		UPDATE file_fastdfs SET del_flag = '1',del_date = #{date},del_by = #{userId}
+		WHERE 1=1
+		<if test="list != null and list.size >0">
+			and id in
+			<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+
+	<delete id="renew">
+		UPDATE file_fastdfs SET del_flag = '0'
+		WHERE 1=1 and del_flag = '1'
+		<if test="list != null and list.size >0">
+			and id in
+			<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+
+	<delete id="deleteRecyclyList">
+		DELETE FROM file_fastdfs
+		WHERE 1=1 and del_flag = '1'
+		<if test="list != null and list.size >0">
+			and id in
+			<foreach collection="list" item="item" separator="," open="(" close=")" index="index">
+				#{item}
+			</foreach>
+		</if>
+	</delete>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE file_fastdfs SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="FileFastdfs" statementType="STATEMENT">
+		select * FROM file_fastdfs  where ${propertyName} = '${value}'
+	</select>
+
+	<insert id="insertList" parameterType="FileFastdfs">
+		insert into file_fastdfs (
+			id,
+			`number`,
+			`name`,
+			url,
+			size,
+			`level`,
+			type,
+			`group`,
+			create_by,
+			create_date,
+			remarks,
+			del_flag,
+			catalogId,
+            del_date,
+            del_by,
+		    userId
+		) VALUE
+		<foreach collection="list" item="item" separator="," index="index">
+		(
+			#{item.id},
+			#{item.number},
+			#{item.name},
+			#{item.url},
+			#{item.size},
+			#{item.level},
+			#{item.type},
+			#{item.group},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.catalogId},
+            #{item.delDate},
+            #{item.delBy},
+			#{item.userId}
+		)
+		</foreach>
+	</insert>
+
+    <update id="updataCatalog">
+        update file_fastdfs set catalogId = #{catalogId}
+        where 1=1 and id in
+        <foreach collection="listId" item="item" separator="," open="(" close=")" index="index">
+          #{item}
+         </foreach>
+    </update>
+
+	<update id="updateLevel" >
+		update file_fastdfs set level = #{level}
+		where 1=1 and id in
+		<foreach collection="listId" item="item" separator="," open="(" close=")" index="index">
+			#{item}
+		</foreach>
+	</update>
+
+	<select id="checkAuthority" resultType="FileFastdfs">
+		select * from file_fastdfs where del_flag = '0'
+		and
+		<choose>
+			<!-- 超级管理员-->
+			<when test="ifAdmin != null and ifAdmin == 'Y'.toString()">
+				(level != '4' or create_by = #{currUserId} )
+			</when>
+			<!-- 普通用户-->
+			<otherwise>
+				create_by = #{currUserId}
+			</otherwise>
+		</choose>
+		AND
+		<if test="listId != null and listId.size > 0">
+			id IN
+			<foreach collection="listId" item="item" separator="," open="(" close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+
+    <select id="findRecyclePage" resultType="FileFastdfs">
+        SELECT
+        <include refid="fileFastdfsColumns"/>
+        FROM file_fastdfs a
+        <include refid="fileFastdfsJoins"/>
+        <where>
+            <if test="delFlag != null and delFlag != ''">
+                AND a.del_flag = #{delFlag}
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE  concat('%',#{name},'%')
+            </if>
+            <if test="type != null and type != ''">
+                AND a.type LIKE  concat('%',#{type},'%')
+            </if>
+            <if test="group != null and group != ''">
+                AND a.group = #{group}
+            </if>
+            <if test="level != null and level != ''">
+                AND a.level = #{level}
+            </if>
+            <if test="createName != null and createName != ''">
+                AND csu.name like concat('%',#{createName},'%')
+            </if>
+			<if test="belongName != null and belongName != ''">
+				AND usu.name like concat('%',#{belongName},'%')
+			</if>
+            <if test="beginDate != null">
+                AND a.create_date &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                AND a.create_date &lt;= #{endDate}
+            </if>
+            <if test="listId != null and listId.size > 0">
+                AND a.id in
+                <foreach collection="listId" index="index" close=")" item="item" open="(" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="catalogId != null and catalogId != ''">
+                AND (
+                fc.id = #{catalogId}
+                or
+                fc.parentIds like concat('%',#{catalogId},'%')
+                )
+            </if>
+
+            AND
+            <!-- 权限设置-->
+            <choose>
+                <!-- 超级管理员-->
+                <when test="ifAdmin != null and ifAdmin == 'Y'.toString()">
+                    (a.level != '4' or a.create_by = #{currUserId} )
+                </when>
+                <!-- 普通用户-->
+                <otherwise>
+                    (
+                     a.create_by = #{currUserId} or del_by = #{currUserId}
+                    )
+                </otherwise>
+            </choose>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <select id="findUrlById" resultType="String" >
+		SELECT
+			a.url
+		FROM file_fastdfs a
+		WHERE a.id = #{id}
+	</select>
+</mapper>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.att.dao.SysBaseStudentDao">
+    
+	<sql id="sysBaseStudentColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.nameCn AS "nameCn",
+		a.nameEN AS "nameEN",
+		a.idNo AS "idNo",
+		a.sex AS "sex",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.birthday AS "birthday",
+		a.contactAddress AS "contactAddress",
+		a.attendingSchool AS "attendingSchool",
+		a.grade AS "grade",
+		a.studiedSwim_flag AS "studiedSwimFlag",
+		a.studySwimmingOrgan AS "studySwimmingOrgan",
+		a.studiedSwimmingStyle AS "studiedSwimmingStyle",
+		a.drowned_flag AS "drownedFlag",
+		a.drownedAge AS "drownedAge",
+		a.longTermDisease AS "longTermDisease",
+		a.longTermMedicine AS "longTermMedicine",
+		a.courseLevel_flag AS "courseLevelFlag",
+		a.contactPhone AS "contactPhone",
+		a.contactRelationship AS "contactRelationship",
+		a.urgentPhone AS "urgentPhone",
+		a.urgentRelationship AS "urgentRelationship",
+		a.guardianName AS "guardianName",
+		a.guardianPhone AS "guardianPhone",
+		a.guardianIdNo AS "guardianIdNo",
+		a.guardianRelationship AS "guardianRelationship",
+		a.facebook AS "facebook",
+		a.whatsApp AS "whatsApp",
+		a.photoId AS "photoId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysBaseStudentJoins">
+	</sql>
+	
+    
+	<select id="get" resultType="SysBaseStudent" >
+		SELECT 
+			<include refid="sysBaseStudentColumns"/>
+		FROM sys_base_student a
+		<include refid="sysBaseStudentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysBaseStudent" >
+		SELECT 
+			<include refid="sysBaseStudentColumns"/>
+		FROM sys_base_student a
+		<include refid="sysBaseStudentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="nameCn != null and nameCn != ''">
+				AND a.nameCn = #{nameCn}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysBaseStudent" >
+		SELECT 
+			<include refid="sysBaseStudentColumns"/>
+		FROM sys_base_student a
+		<include refid="sysBaseStudentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_base_student(
+			id,
+			code,
+			nameCn,
+			nameEN,
+			idNo,
+			sex,
+			email,
+			phone,
+			birthday,
+			contactAddress,
+			attendingSchool,
+			grade,
+			studiedSwim_flag,
+			studySwimmingOrgan,
+			studiedSwimmingStyle,
+			drowned_flag,
+			drownedAge,
+			longTermDisease,
+			longTermMedicine,
+			courseLevel_flag,
+			contactPhone,
+			contactRelationship,
+			urgentPhone,
+			urgentRelationship,
+			guardianName,
+			guardianPhone,
+			guardianIdNo,
+			guardianRelationship,
+			facebook,
+			whatsApp,
+			photoId,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{nameCn},
+			#{nameEN},
+			#{idNo},
+			#{sex},
+			#{email},
+			#{phone},
+			#{birthday},
+			#{contactAddress},
+			#{attendingSchool},
+			#{grade},
+			#{studiedSwimFlag},
+			#{studySwimmingOrgan},
+			#{studiedSwimmingStyle},
+			#{drownedFlag},
+			#{drownedAge},
+			#{longTermDisease},
+			#{longTermMedicine},
+			#{courseLevelFlag},
+			#{contactPhone},
+			#{contactRelationship},
+			#{urgentPhone},
+			#{urgentRelationship},
+			#{guardianName},
+			#{guardianPhone},
+			#{guardianIdNo},
+			#{guardianRelationship},
+			#{facebook},
+			#{whatsApp},
+			#{photoId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_base_student SET 	
+			code = #{code},
+			nameCn = #{nameCn},
+			nameEN = #{nameEN},
+			idNo = #{idNo},
+			sex = #{sex},
+			email = #{email},
+			phone = #{phone},
+			birthday = #{birthday},
+			contactAddress = #{contactAddress},
+			attendingSchool = #{attendingSchool},
+			grade = #{grade},
+			studiedSwim_flag = #{studiedSwimFlag},
+			studySwimmingOrgan = #{studySwimmingOrgan},
+			studiedSwimmingStyle = #{studiedSwimmingStyle},
+			drowned_flag = #{drownedFlag},
+			drownedAge = #{drownedAge},
+			longTermDisease = #{longTermDisease},
+			longTermMedicine = #{longTermMedicine},
+			courseLevel_flag = #{courseLevelFlag},
+			contactPhone = #{contactPhone},
+			contactRelationship = #{contactRelationship},
+			urgentPhone = #{urgentPhone},
+			urgentRelationship = #{urgentRelationship},
+			guardianName = #{guardianName},
+			guardianPhone = #{guardianPhone},
+			guardianIdNo = #{guardianIdNo},
+			guardianRelationship = #{guardianRelationship},
+			facebook = #{facebook},
+			whatsApp = #{whatsApp},
+			photoId = #{photoId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM sys_base_student
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE sys_base_student SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SysBaseStudent" statementType="STATEMENT">
+		select * FROM sys_base_student  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

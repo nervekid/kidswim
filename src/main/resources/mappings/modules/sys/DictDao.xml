@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.sys.dao.DictDao">
+
+	<select id="get" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict
+		WHERE id = #{id}
+	</select>
+
+	<select id="findList" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict
+		WHERE del_flag = #{DEL_FLAG_NORMAL}
+		<if test="label != null and label != ''">
+			AND label LIKE
+			<if test="dbName == 'oracle'">'%'||#{label}||'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{label}, '%')</if>
+		</if>
+		<if test="type != null and type != ''">
+			AND type = #{type}
+		</if>
+		<if test="description != null and description != ''">
+			AND description LIKE
+					<if test="dbName == 'oracle'">'%'||#{description}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{description}, '%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY type, sort, update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict
+		WHERE del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY type, sort, update_date DESC
+	</select>
+
+	<select id="findTypeList" resultType="string">
+		SELECT
+			type
+		FROM sys_dict
+		WHERE del_flag = #{DEL_FLAG_NORMAL}
+		GROUP BY type
+		ORDER BY type
+	</select>
+
+	<select id="findDictListByType" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict a
+		WHERE a.del_flag = #{flag} AND a.type = #{name}
+	</select>
+
+	<select id="findDictLabelListByType" resultType="String">
+	SELECT
+		a.label
+	FROM sys_dict a
+	WHERE a.del_flag = #{flag} AND a.type = #{name}
+</select>
+
+	<select id="findValueByTypeAndLabel" resultType="String">
+		SELECT
+			a.value
+		FROM sys_dict a
+		WHERE a.type = #{type} AND a.label = #{label}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_dict(
+			id,
+			value,
+			label,
+			type,
+			description,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{value},
+			#{label},
+			#{type},
+			#{description},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_dict SET
+			value = #{value},
+			label = #{label},
+			type = #{type},
+			description = #{description},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_dict
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByLogic">
+		UPDATE sys_dict SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findCountByTypeAndLabelAndFlag" resultType="String">
+		SELECT
+		count(a.value) num
+		FROM sys_dict a
+		WHERE a.type = #{type} AND a.label = #{label} AND a.del_flag = #{flag}
+	</select>
+
+	<select id="findStringByTypeAndFlag" resultType="String">
+		SELECT
+		GROUP_CONCAT(a.label)
+		FROM sys_dict a
+		WHERE a.type = #{type} AND a.del_flag = #{flag}
+	</select>
+
+	<!-- 根据类型数组查询字典数据 -->
+	<select id="findListByTypeArr" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict
+		WHERE
+			del_flag = '0'
+			AND type in
+			<foreach collection="dictType" item="type" index="index" open="(" close=")" separator=",">#{type}</foreach>
+		ORDER BY type, sort, update_date DESC
+	</select>
+
+	<select id="getDictByTypeAndValue" resultType="java.util.Map">
+		SELECT
+			type, value, label, description, remarks
+		FROM sys_dict
+		WHERE
+			del_flag = '0'
+		AND type = #{type}
+		AND value = #{value}
+	</select>
+
+	<update id="updateStatus">
+		UPDATE sys_dict SET
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+</mapper>
