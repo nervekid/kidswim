@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SerSaleDao">
-    
+
 	<sql id="serSaleColumns">
 		a.id AS "id",
 		a.code AS "code",
-		a.courseId AS "courseId",
+		a.courseCode AS "courseCode",
 		a.studentId AS "studentId",
 		a.discount AS "discount",
 		a.payAmount AS "payAmount",
@@ -19,21 +19,21 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
 	</sql>
-	
+
 	<sql id="serSaleJoins">
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="SerSale" >
-		SELECT 
+		SELECT
 			<include refid="serSaleColumns"/>
 		FROM ser_sale a
 		<include refid="serSaleJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SerSale" >
-		SELECT 
+		SELECT
 			<include refid="serSaleColumns"/>
 		FROM ser_sale a
 		<include refid="serSaleJoins"/>
@@ -49,15 +49,15 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="SerSale" >
-		SELECT 
+		SELECT
 			<include refid="serSaleColumns"/>
 		FROM ser_sale a
 		<include refid="serSaleJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -67,12 +67,12 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO ser_sale(
 			id,
 			code,
-			courseId,
+			courseCode,
 			studentId,
 			discount,
 			payAmount,
@@ -88,7 +88,7 @@
 		) VALUES (
 			#{id},
 			#{code},
-			#{courseId},
+			#{courseCode},
 			#{studentId},
 			#{discount},
 			#{payAmount},
@@ -103,11 +103,11 @@
 			#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE ser_sale SET 	
+		UPDATE ser_sale SET
 			code = #{code},
-			courseId = #{courseId},
+			courseCode = #{courseCode},
 			studentId = #{studentId},
 			discount = #{discount},
 			payAmount = #{payAmount},
@@ -119,25 +119,25 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM ser_sale
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE ser_sale SET 
+		UPDATE ser_sale SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SerSale" statementType="STATEMENT">
 		select * FROM ser_sale  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

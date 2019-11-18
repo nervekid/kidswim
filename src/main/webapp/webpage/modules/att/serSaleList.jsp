@@ -23,10 +23,10 @@
 				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
 	   </div>
 	</div>
-    
+
     <div class="ibox-content">
 	<sys:message content="${message}"/>
-	
+
 	<!--查询条件-->
 	<div class="row">
 	<div class="col-sm-12">
@@ -36,12 +36,12 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		 </div>	
+		 </div>
 	</form:form>
 	<br/>
 	</div>
 	</div>
-	
+
 	<!-- 工具栏 -->
 	<div class="row">
 	<div class="col-sm-12">
@@ -62,7 +62,7 @@
 	       		<table:exportExcel url="${ctx}/att/serSale/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
 	       	</shiro:hasPermission>
 	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
-		
+
 			</div>
 		<div class="pull-right">
 			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
@@ -70,14 +70,14 @@
 		</div>
 	</div>
 	</div>
-	
+
 	<!-- 表格 -->
 	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column code">销售单编号 P+年月+流水码 例如:P201901000001 按照规则编码</th>
-				<th  class="sort-column courseId">课程id</th>
+				<th  class="sort-column courseCode">课程id</th>
 				<th  class="sort-column studentId">学员id</th>
 				<th  class="sort-column discount">折扣 1 或者0.9，0.85计算</th>
 				<th  class="sort-column payAmount">付款金额 按照课程收费标准及折扣进行计算 单位(港币)</th>
@@ -95,7 +95,7 @@
 					${serSale.code}
 				</a></td>
 				<td>
-					${serSale.courseId}
+					${serSale.courseCode}
 				</td>
 				<td>
 					${serSale.studentId}
@@ -130,7 +130,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	
+
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
 	<br/>
