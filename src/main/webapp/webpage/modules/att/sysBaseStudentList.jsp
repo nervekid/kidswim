@@ -17,16 +17,16 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 	<div class="ibox">
-	<div class="ibox-title">
+	<%-- <div class="ibox-title">
 		<h5></h5>
 		<div class="ibox-tools">
 				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
 	   </div>
-	</div>
-    
+	</div> --%>
+
     <div class="ibox-content">
 	<sys:message content="${message}"/>
-	
+
 	<!--查询条件-->
 	<div class="row">
 	<div class="col-sm-12">
@@ -36,16 +36,16 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		
+
 				<form:input placeholder="学员编号 入学年份+月份+流水码 如:201901000001" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
-		
+
 				<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
-		 </div>	
+		 </div>
 	</form:form>
 	<br/>
 	</div>
 	</div>
-	
+
 	<!-- 工具栏 -->
 	<div class="row">
 	<div class="col-sm-12">
@@ -65,40 +65,39 @@
 			<shiro:hasPermission name="att:sysBaseStudent:export">
 	       		<table:exportExcel url="${ctx}/att/sysBaseStudent/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
 	       	</shiro:hasPermission>
-	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
-		
+
 			</div>
 		<div class="pull-right">
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
+			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
 		</div>
 	</div>
 	</div>
-	
+
 	<!-- 表格 -->
-	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
+	<table id="contentTable"  style="min-width:1100px;"  class="table table_list_box text-nowrap table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
-				<th  class="sort-column code">学员编号 入学年份+月份+流水码 如:201901000001</th>
+				<th  class="sort-column code">学员编号</th>
 				<th  class="sort-column nameCn">中文名</th>
 				<th  class="sort-column nameEN">英文名</th>
 				<th  class="sort-column idNo">身份证号码</th>
-				<th  class="sort-column sex">性别 字典枚举 sex_flag 1:男 2:女</th>
+				<th  class="sort-column sex">性别 字典枚举</th>
 				<th  class="sort-column email">电邮</th>
 				<th  class="sort-column phone">电话号码</th>
 				<th  class="sort-column birthday">出生日期</th>
 				<th  class="sort-column contactAddress">联系地址</th>
 				<th  class="sort-column attendingSchool">就读学校</th>
 				<th  class="sort-column grade">年级</th>
-				<th  class="sort-column studiedSwimFlag">是否曾学习过游泳 字典枚举 yes_no 1:是 0:否</th>
+				<th  class="sort-column studiedSwimFlag">是否曾学习过游泳</th>
 				<th  class="sort-column studySwimmingOrgan">习泳机构</th>
-				<th  class="sort-column studiedSwimmingStyle">已懂泳式 以,号分割</th>
-				<th  class="sort-column drownedFlag">是否曾遇溺 字典枚举 yes_no 1:是 0:否</th>
+				<th  class="sort-column studiedSwimmingStyle">已懂泳式</th>
+				<th  class="sort-column drownedFlag">是否曾遇溺 字典枚举</th>
 				<th  class="sort-column drownedAge">预溺岁数</th>
 				<th  class="sort-column longTermDisease">长期病患</th>
 				<th  class="sort-column longTermMedicine">长期服药</th>
-				<th  class="sort-column courseLevelFlag">课程等级 字典枚举 courseLevel_flag 1:NA 2:BB 3:CA 4:CB 5:CC 6:AD 7:TA 8:TB</th>
+				<th  class="sort-column courseLevelFlag">课程等级 字典枚举</th>
 				<th  class="sort-column contactPhone">联系人号码</th>
 				<th  class="sort-column contactRelationship">联系人关系</th>
 				<th  class="sort-column urgentPhone">紧急联系人号码</th>
@@ -109,11 +108,10 @@
 				<th  class="sort-column guardianRelationship">监护人关系</th>
 				<th  class="sort-column facebook">facebook账号</th>
 				<th  class="sort-column whatsApp">whatsapp账号</th>
-				<th  class="sort-column photoId">照片id (暂缺,留位)</th>
 				<th>操作</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody style="height: 600px">
 		<c:forEach items="${page.list}" var="sysBaseStudent">
 			<tr>
 				<td> <input type="checkbox" id="${sysBaseStudent.id}" class="i-checks"></td>
@@ -205,9 +203,6 @@
 					${sysBaseStudent.whatsApp}
 				</td>
 				<td>
-					${sysBaseStudent.photoId}
-				</td>
-				<td>
 					<shiro:hasPermission name="att:sysBaseStudent:view">
 						<a href="#" onclick="openDialogView('查看学员', '${ctx}/att/sysBaseStudent/view?id=${sysBaseStudent.id}','950px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
 					</shiro:hasPermission>
@@ -222,7 +217,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	
+
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
 	<br/>
