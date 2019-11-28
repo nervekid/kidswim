@@ -10,6 +10,10 @@
             if(checkBoxChecked){
                 $("#collectionId").attr("checked",true);
             }
+            /* $("#contentTable").bootstrapTable({
+				fixedColumns: true,//固定列
+				fixedNumber:3
+			}); */
 		});
 	</script>
 	<script type="text/javascript" src="${ctxStatic}/common/collectionMenu.js"></script>
@@ -37,7 +41,7 @@
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
 
-				<form:input placeholder="学员编号 入学年份+月份+流水码 如:201901000001" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+				<form:input placeholder="学员编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
 
 				<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
 		 </div>
@@ -73,7 +77,7 @@
 		</div>
 	</div>
 	</div>
-
+<div style="overflow:auto;">
 	<!-- 表格 -->
 	<table id="contentTable"  style="min-width:1100px;"  class="table table_list_box text-nowrap table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
@@ -108,7 +112,6 @@
 				<th  class="sort-column guardianRelationship">监护人关系</th>
 				<th  class="sort-column facebook">facebook账号</th>
 				<th  class="sort-column whatsApp">whatsapp账号</th>
-				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody style="height: 600px">
@@ -202,21 +205,11 @@
 				<td>
 					${sysBaseStudent.whatsApp}
 				</td>
-				<td>
-					<shiro:hasPermission name="att:sysBaseStudent:view">
-						<a href="#" onclick="openDialogView('查看学员', '${ctx}/att/sysBaseStudent/view?id=${sysBaseStudent.id}','950px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="att:sysBaseStudent:edit">
-    					<a href="#" onclick="openDialog('修改学员', '${ctx}/att/sysBaseStudent/form?id=${sysBaseStudent.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
-    				</shiro:hasPermission>
-    				<shiro:hasPermission name="att:sysBaseStudent:del">
-						<a href="${ctx}/att/sysBaseStudent/delete?id=${sysBaseStudent.id}" onclick="return confirmx('确认要删除该学员吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
-					</shiro:hasPermission>
-				</td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
+	</div>
 
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
