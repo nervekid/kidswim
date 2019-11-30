@@ -3,8 +3,9 @@
  */
 package com.kite.modules.att.web;
 
-import java.util.List;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,18 +26,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
-import com.kite.common.utils.DateUtils;
-import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
-import com.kite.common.utils.verification.BasicVerification;
-import com.kite.common.web.BaseController;
+import com.kite.common.utils.DateUtils;
+import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
 import com.kite.common.utils.excel.ImportExcel;
-import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.common.utils.verification.BasicVerification;
+import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SysBaseStudent;
+import com.kite.modules.att.entity.SysBaseStudentImport;
 import com.kite.modules.att.service.SysBaseStudentService;
+import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 学员Controller
@@ -51,6 +54,8 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	private SysBaseStudentService sysBaseStudentService;
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
+	@Autowired
+	private SystemService systemService;
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -118,6 +123,14 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 			MyBeanUtils.copyBeanNotNull2Bean(sysBaseStudent, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
 			sysBaseStudentService.save(t);//保存
 		}else{//新增表单保存
+			//1.计算学员编号 入学年份+月份+流水码 如:201901000001
+			Date nowDate = new Date();
+			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
+			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
+			String yearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date());
+			int nowStudents = this.sysBaseStudentService.findCountOfStudents(beginTime, endTime) + 1;
+			String code = yearMonth + com.kite.common.utils.date.DateUtils.transformNumString(nowStudents);
+			sysBaseStudent.setCode(code);
 			sysBaseStudentService.save(sysBaseStudent);//保存
 		}
 		addMessage(redirectAttributes, "保存学员成功");
@@ -174,6 +187,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
     @RequestMapping(value = "import", method=RequestMethod.POST)
     public String importFile(MultipartFile file, HttpServletResponse response, String menuId, RedirectAttributes redirectAttributes) {
 		try {
+			Date nowDate = new Date();
 			int successNum = 0;
 			int failureNum = 0;
 			StringBuilder failureMsg = new StringBuilder();
@@ -186,9 +200,52 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 			}
 			else {
 				this.isTip = false;
-				List<SysBaseStudent> list = ei.getDataList(SysBaseStudent.class);
-				for (SysBaseStudent sysBaseStudent : list){
+				List<SysBaseStudentImport> list = ei.getDataList(SysBaseStudentImport.class);
+				for (SysBaseStudentImport sysBaseStudentImport : list){
 					try{
+						//1.计算学员编号 入学年份+月份+流水码 如:201901000001
+						Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
+						Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
+						String yearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date());
+						int nowStudents = this.sysBaseStudentService.findCountOfStudents(beginTime, endTime) + 1;
+						String code = yearMonth + com.kite.common.utils.date.DateUtils.transformNumString(nowStudents);
+
+						//字典转值
+						String sexValue = this.systemService.findDictValueByTypeAndLabel("sex_flag", sysBaseStudentImport.getSex());
+						String studiedSwimValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getStudiedSwimFlag());
+						String drownedValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getDrownedFlag());
+						String courseLevelValue = this.systemService.findDictValueByTypeAndLabel("courseLevel_flag", sysBaseStudentImport.getCourseLevelFlag());
+						SysBaseStudent sysBaseStudent = new SysBaseStudent();
+						sysBaseStudent.setCode(code);
+						sysBaseStudent.setNameCn(sysBaseStudentImport.getNameCn());
+						sysBaseStudent.setNameEn(sysBaseStudentImport.getNameEn());
+						sysBaseStudent.setIdNo(sysBaseStudentImport.getIdNo());
+						sysBaseStudent.setEmail(sysBaseStudentImport.getEmail());
+						sysBaseStudent.setPhone(sysBaseStudentImport.getPhone());
+						sysBaseStudent.setBirthday(sysBaseStudentImport.getBirthday());
+						sysBaseStudent.setContactAddress(sysBaseStudentImport.getContactAddress());
+						sysBaseStudent.setAttendingSchool(sysBaseStudentImport.getAttendingSchool());
+						sysBaseStudent.setGrade(sysBaseStudentImport.getGrade());
+						sysBaseStudent.setStudySwimmingOrgan(sysBaseStudentImport.getStudySwimmingOrgan());
+						sysBaseStudent.setStudiedSwimmingStyle(sysBaseStudentImport.getStudiedSwimmingStyle());
+						sysBaseStudent.setDrownedAge(sysBaseStudentImport.getDrownedAge());
+						sysBaseStudent.setLongTermDisease(sysBaseStudentImport.getLongTermDisease());
+						sysBaseStudent.setLongTermMedicine(sysBaseStudentImport.getLongTermMedicine());
+						sysBaseStudent.setContactPhone(sysBaseStudentImport.getContactPhone());
+						sysBaseStudent.setContactRelationship(sysBaseStudentImport.getContactRelationship());
+						sysBaseStudent.setUrgentRelationship(sysBaseStudentImport.getUrgentRelationship());
+						sysBaseStudent.setUrgentPhone(sysBaseStudentImport.getUrgentPhone());
+						sysBaseStudent.setGuardianName(sysBaseStudentImport.getGuardianName());
+						sysBaseStudent.setGuardianPhone(sysBaseStudentImport.getGuardianPhone());
+						sysBaseStudent.setGuardianIdNo(sysBaseStudentImport.getGuardianIdNo());
+						sysBaseStudent.setGuardianRelationship(sysBaseStudentImport.getGuardianRelationship());
+						sysBaseStudent.setFacebook(sysBaseStudentImport.getFacebook());
+						sysBaseStudent.setWhatsApp(sysBaseStudentImport.getWhatsApp());
+
+						sysBaseStudent.setSex(sexValue);
+						sysBaseStudent.setStudiedSwimFlag(studiedSwimValue);
+						sysBaseStudent.setDrownedFlag(drownedValue);
+						sysBaseStudent.setCourseLevelFlag(courseLevelValue);
 						sysBaseStudentService.save(sysBaseStudent);
 						successNum++;
 					}catch(ConstraintViolationException ex){
@@ -235,7 +292,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 		try {
             String fileName = "学员数据导入模板.xlsx";
     		List<SysBaseStudent> list = Lists.newArrayList();
-    		new ExportExcel("学员数据", SysBaseStudent.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("学员数据", SysBaseStudentImport.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());

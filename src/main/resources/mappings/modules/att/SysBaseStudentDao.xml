@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SysBaseStudentDao">
-    
+
 	<sql id="sysBaseStudentColumns">
 		a.id AS "id",
 		a.code AS "code",
 		a.nameCn AS "nameCn",
-		a.nameEN AS "nameEN",
+		a.nameEn AS "nameEn",
 		a.idNo AS "idNo",
 		a.sex AS "sex",
 		a.email AS "email",
@@ -41,31 +41,49 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
 	</sql>
-	
+
 	<sql id="sysBaseStudentJoins">
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="SysBaseStudent" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseStudentColumns"/>
 		FROM sys_base_student a
 		<include refid="sysBaseStudentJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SysBaseStudent" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseStudentColumns"/>
 		FROM sys_base_student a
 		<include refid="sysBaseStudentJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like '%' #{code} '%'
 			</if>
 			<if test="nameCn != null and nameCn != ''">
-				AND a.nameCn = #{nameCn}
+				AND a.nameCn like '%' #{nameCn} '%'
+			</if>
+			<if test="nameEn != null and nameEn != ''">
+				AND a.nameEn like '%' #{nameEn} '%'
+			</if>
+			<if test="studiedSwimmingStyle != null and studiedSwimmingStyle != ''">
+				AND a.studiedSwimmingStyle like '%' #{studiedSwimmingStyle} '%'
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="courseLevelFlag != null and courseLevelFlag != ''">
+				AND a.courseLevel_flag = #{courseLevelFlag}
+			</if>
+			<if test="drownedFlag != null and drownedFlag != ''">
+				AND a.drowned_flag = #{drownedFlag}
+			</if>
+			<if test="studiedSwimFlag != null and studiedSwimFlag != ''">
+				AND a.studiedSwim_flag = #{studiedSwimFlag}
 			</if>
 		</where>
 		<choose>
@@ -77,15 +95,15 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="SysBaseStudent" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseStudentColumns"/>
 		FROM sys_base_student a
 		<include refid="sysBaseStudentJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -95,13 +113,13 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO sys_base_student(
 			id,
 			code,
 			nameCn,
-			nameEN,
+			nameEn,
 			idNo,
 			sex,
 			email,
@@ -139,7 +157,7 @@
 			#{id},
 			#{code},
 			#{nameCn},
-			#{nameEN},
+			#{nameEn},
 			#{idNo},
 			#{sex},
 			#{email},
@@ -175,12 +193,12 @@
 			#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE sys_base_student SET 	
+		UPDATE sys_base_student SET
 			code = #{code},
 			nameCn = #{nameCn},
-			nameEN = #{nameEN},
+			nameEn = #{nameEn},
 			idNo = #{idNo},
 			sex = #{sex},
 			email = #{email},
@@ -213,25 +231,30 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM sys_base_student
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE sys_base_student SET 
+		UPDATE sys_base_student SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SysBaseStudent" statementType="STATEMENT">
 		select * FROM sys_base_student  where ${propertyName} = '${value}'
 	</select>
-	
+
+	<select id="findStudentCount" resultType="Integer">
+		select count(1)
+		FROM sys_base_student a
+		where a.create_date BETWEEN #{beginTime} and #{endTime}
+	</select>
 </mapper>

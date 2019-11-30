@@ -33,11 +33,13 @@ public class DictService extends CrudService<DictDao, Dict> {
 	public List<String> findTypeList(){
 		return dao.findTypeList(new Dict());
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void save(Dict dict) {
 		super.save(dict);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(Dict dict) {
@@ -62,6 +64,7 @@ public class DictService extends CrudService<DictDao, Dict> {
 		}
 		return dictDao.getDictByTypeAndValue(type, value);
 	}
+
 	@Transactional(readOnly = false)
 	public void updateStatus(Dict dict) {
 		dictDao.updateStatus(dict);

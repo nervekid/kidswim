@@ -40,10 +40,22 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-
-				<form:input placeholder="学员编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
-
-				<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:input placeholder="学员编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:input placeholder="英文名" path="nameEn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:input placeholder="已懂泳式" path="studiedSwimmingStyle" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:select placeholder="性别" path="sex"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('sex_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="课程等级" path="courseLevelFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="是否曾遇溺" path="drownedFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
 		 </div>
 	</form:form>
 	<br/>
@@ -85,7 +97,7 @@
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column code">学员编号</th>
 				<th  class="sort-column nameCn">中文名</th>
-				<th  class="sort-column nameEN">英文名</th>
+				<th  class="sort-column nameEn">英文名</th>
 				<th  class="sort-column idNo">身份证号码</th>
 				<th  class="sort-column sex">性别 字典枚举</th>
 				<th  class="sort-column email">电邮</th>
@@ -97,11 +109,11 @@
 				<th  class="sort-column studiedSwimFlag">是否曾学习过游泳</th>
 				<th  class="sort-column studySwimmingOrgan">习泳机构</th>
 				<th  class="sort-column studiedSwimmingStyle">已懂泳式</th>
-				<th  class="sort-column drownedFlag">是否曾遇溺 字典枚举</th>
-				<th  class="sort-column drownedAge">预溺岁数</th>
+				<th  class="sort-column drownedFlag">是否曾遇溺 </th>
+				<th  class="sort-column drownedAge">遇溺岁数</th>
 				<th  class="sort-column longTermDisease">长期病患</th>
 				<th  class="sort-column longTermMedicine">长期服药</th>
-				<th  class="sort-column courseLevelFlag">课程等级 字典枚举</th>
+				<th  class="sort-column courseLevelFlag">课程等级</th>
 				<th  class="sort-column contactPhone">联系人号码</th>
 				<th  class="sort-column contactRelationship">联系人关系</th>
 				<th  class="sort-column urgentPhone">紧急联系人号码</th>
@@ -125,13 +137,13 @@
 					${sysBaseStudent.nameCn}
 				</td>
 				<td>
-					${sysBaseStudent.nameEN}
+					${sysBaseStudent.nameEn}
 				</td>
 				<td>
 					${sysBaseStudent.idNo}
 				</td>
 				<td>
-					${sysBaseStudent.sex}
+					${fns:getDictLabel(sysBaseStudent.sex, 'sex_flag', '')}
 				</td>
 				<td>
 					${sysBaseStudent.email}
@@ -140,7 +152,7 @@
 					${sysBaseStudent.phone}
 				</td>
 				<td>
-					<fmt:formatDate value="${sysBaseStudent.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${sysBaseStudent.birthday}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					${sysBaseStudent.contactAddress}
@@ -152,7 +164,7 @@
 					${sysBaseStudent.grade}
 				</td>
 				<td>
-					${sysBaseStudent.studiedSwimFlag}
+					${fns:getDictLabel(sysBaseStudent.studiedSwimFlag, 'yes_no', '')}
 				</td>
 				<td>
 					${sysBaseStudent.studySwimmingOrgan}
@@ -161,7 +173,7 @@
 					${sysBaseStudent.studiedSwimmingStyle}
 				</td>
 				<td>
-					${sysBaseStudent.drownedFlag}
+					${fns:getDictLabel(sysBaseStudent.drownedFlag, 'yes_no', '')}
 				</td>
 				<td>
 					${sysBaseStudent.drownedAge}
@@ -173,7 +185,7 @@
 					${sysBaseStudent.longTermMedicine}
 				</td>
 				<td>
-					${sysBaseStudent.courseLevelFlag}
+					${fns:getDictLabel(sysBaseStudent.courseLevelFlag, 'courseLevel_flag', '')}
 				</td>
 				<td>
 					${sysBaseStudent.contactPhone}

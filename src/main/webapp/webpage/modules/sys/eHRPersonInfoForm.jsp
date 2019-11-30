@@ -616,7 +616,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td class="width-35">
 						<form:input path="userPosition.managementLayersName" readonly="true" htmlEscape="false"    class="form-control"/>
 					</td>
-
 				</tr>
 
 				<tr>
