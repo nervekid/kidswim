@@ -73,6 +73,11 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	@RequiresPermissions("att:sysBaseCoach:list")
 	@RequestMapping(value = {"list", ""})
 	public String list(SysBaseCoach sysBaseCoach, HttpServletRequest request, HttpServletResponse response, Model model) {
+		if (sysBaseCoach.getEntryYear() != null && !sysBaseCoach.getEntryYear().equals("")) {
+			String yearMonth = sysBaseCoach.getEntryYear();
+			yearMonth = yearMonth.replace("-", "");
+			sysBaseCoach.setEntryYear(yearMonth);
+		}
 		Page<SysBaseCoach> page = sysBaseCoachService.findPage(new Page<SysBaseCoach>(request, response), sysBaseCoach);
 		model.addAttribute("page", page);
 		sysUserCollectionMenuService.initCollectionMenu(request,model);

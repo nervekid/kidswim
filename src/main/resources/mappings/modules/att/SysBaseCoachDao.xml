@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SysBaseCoachDao">
-    
+
 	<sql id="sysBaseCoachColumns">
 		a.id AS "id",
 		a.code AS "code",
 		a.nameCn AS "nameCn",
-		a.nameEN AS "nameEN",
+		a.nameEn AS "nameEn",
 		a.sex AS "sex",
 		a.phone AS "phone",
 		a.idNo AS "idNo",
@@ -28,31 +28,39 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
 	</sql>
-	
+
 	<sql id="sysBaseCoachJoins">
 	</sql>
-	
-    
+
 	<select id="get" resultType="SysBaseCoach" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseCoachColumns"/>
 		FROM sys_base_coach a
 		<include refid="sysBaseCoachJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SysBaseCoach" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseCoachColumns"/>
 		FROM sys_base_coach a
 		<include refid="sysBaseCoachJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="code != null and code != ''">
-				AND a.code = #{code}
+				AND a.code like '%' #{code} '%'
 			</if>
 			<if test="nameCn != null and nameCn != ''">
-				AND a.nameCn = #{nameCn}
+				AND a.nameCn like '%' #{nameCn} '%'
+			</if>
+			<if test="nameEn != null and nameEn != ''">
+				AND a.nameEn like '%' #{nameEn} '%'
+			</if>
+			<if test="entryYear != null and entryYear != ''">
+				AND a.entryYear like '%' #{entryYear} '%'
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
 			</if>
 		</where>
 		<choose>
@@ -64,15 +72,15 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="SysBaseCoach" >
-		SELECT 
+		SELECT
 			<include refid="sysBaseCoachColumns"/>
 		FROM sys_base_coach a
 		<include refid="sysBaseCoachJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -82,13 +90,13 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO sys_base_coach(
 			id,
 			code,
 			nameCn,
-			nameEN,
+			nameEn,
 			sex,
 			phone,
 			idNo,
@@ -113,7 +121,7 @@
 			#{id},
 			#{code},
 			#{nameCn},
-			#{nameEN},
+			#{nameEn},
 			#{sex},
 			#{phone},
 			#{idNo},
@@ -136,12 +144,12 @@
 			#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE sys_base_coach SET 	
+		UPDATE sys_base_coach SET
 			code = #{code},
 			nameCn = #{nameCn},
-			nameEN = #{nameEN},
+			nameEn = #{nameEn},
 			sex = #{sex},
 			phone = #{phone},
 			idNo = #{idNo},
@@ -161,25 +169,25 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM sys_base_coach
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE sys_base_coach SET 
+		UPDATE sys_base_coach SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SysBaseCoach" statementType="STATEMENT">
 		select * FROM sys_base_coach  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

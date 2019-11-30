@@ -84,7 +84,6 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 		return "modules/att/sysBaseStudentList";
 	}
 
-
 	/**
 	 * 查看，增加，编辑学员表单页面
 	 */

@@ -51,7 +51,7 @@ public class SysBaseStudentService extends CrudService<SysBaseStudentDao, SysBas
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SysBaseStudent sysBaseStudent) {
-		super.delete(sysBaseStudent);
+		super.deleteByLogic(sysBaseStudent);
 	}
 
 	@Transactional(readOnly = false)

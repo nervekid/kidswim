@@ -10,6 +10,10 @@
             if(checkBoxChecked){
                 $("#collectionId").attr("checked",true);
             }
+            laydate.render({
+				elem: '#entryYear',
+				type: 'month'
+			});
 		});
 	</script>
 	<script type="text/javascript" src="${ctxStatic}/common/collectionMenu.js"></script>
@@ -17,16 +21,16 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 	<div class="ibox">
-	<div class="ibox-title">
+	<%-- <div class="ibox-title">
 		<h5></h5>
 		<div class="ibox-tools">
 				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
 	   </div>
-	</div>
-    
+	</div> --%>
+
     <div class="ibox-content">
 	<sys:message content="${message}"/>
-	
+
 	<!--查询条件-->
 	<div class="row">
 	<div class="col-sm-12">
@@ -36,16 +40,20 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		
-				<form:input placeholder="教练编码 C0001 C0002 自增字段" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="10"  class=" form-control input-sm"/>
-		
-				<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
-		 </div>	
+			<form:input placeholder="教练编码" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="10"  class=" form-control input-sm"/>
+			<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:input placeholder="英文名" path="nameEn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
+			<form:input placeholder="入职年月" path="entryYear" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  cssStyle="width:100px" class=" form-control input-sm"/>
+			<form:select placeholder="性别" path="sex"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('sex_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+		 </div>
 	</form:form>
 	<br/>
 	</div>
 	</div>
-	
+
 	<!-- 工具栏 -->
 	<div class="row">
 	<div class="col-sm-12">
@@ -65,25 +73,25 @@
 			<shiro:hasPermission name="att:sysBaseCoach:export">
 	       		<table:exportExcel url="${ctx}/att/sysBaseCoach/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
 	       	</shiro:hasPermission>
-	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
-		
+<!-- 	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
+ -->
 			</div>
 		<div class="pull-right">
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
+			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
 		</div>
 	</div>
 	</div>
-	
+<div style="overflow:auto;">
 	<!-- 表格 -->
-	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
+	<table id="contentTable"  style="min-width:1100px;"  class="table table_list_box text-nowrap table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
-				<th  class="sort-column code">教练编码 C0001 C0002 自增字段</th>
+				<th  class="sort-column code">教练编码</th>
 				<th  class="sort-column nameCn">中文名</th>
-				<th  class="sort-column nameEN">英文名</th>
-				<th  class="sort-column sex">性别 字典枚举 sex_flag 1:男 2:女</th>
+				<th  class="sort-column nameEn">英文名</th>
+				<th  class="sort-column sex">性别</th>
 				<th  class="sort-column phone">电话号码</th>
 				<th  class="sort-column idNo">身份证号码</th>
 				<th  class="sort-column email">电邮</th>
@@ -95,9 +103,8 @@
 				<th  class="sort-column presentPosition">现时职位</th>
 				<th  class="sort-column presentHourWage">现时时薪 单位(港币)</th>
 				<th  class="sort-column industryExperience">行业经验 单位(年)</th>
-				<th  class="sort-column contractFlag">有否合约 字典枚举 yes_no 1:是 0:否</th>
-				<th  class="sort-column accumulatedTeachingHours">累计教导时数 单位(小时) 从点名课时数累计</th>
-				<th>操作</th>
+				<th  class="sort-column contractFlag">有否合约</th>
+				<th  class="sort-column accumulatedTeachingHours">累计教导时数 单位(小时)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -111,10 +118,10 @@
 					${sysBaseCoach.nameCn}
 				</td>
 				<td>
-					${sysBaseCoach.nameEN}
+					${sysBaseCoach.nameEn}
 				</td>
 				<td>
-					${sysBaseCoach.sex}
+					${fns:getDictLabel(sysBaseCoach.sex, 'sex_flag', '')}
 				</td>
 				<td>
 					${sysBaseCoach.phone}
@@ -150,27 +157,17 @@
 					${sysBaseCoach.industryExperience}
 				</td>
 				<td>
-					${sysBaseCoach.contractFlag}
+					${fns:getDictLabel(sysBaseCoach.contractFlag, 'yes_no', '')}
 				</td>
 				<td>
 					${sysBaseCoach.accumulatedTeachingHours}
-				</td>
-				<td>
-					<shiro:hasPermission name="att:sysBaseCoach:view">
-						<a href="#" onclick="openDialogView('查看教练员', '${ctx}/att/sysBaseCoach/view?id=${sysBaseCoach.id}','950px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="att:sysBaseCoach:edit">
-    					<a href="#" onclick="openDialog('修改教练员', '${ctx}/att/sysBaseCoach/form?id=${sysBaseCoach.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
-    				</shiro:hasPermission>
-    				<shiro:hasPermission name="att:sysBaseCoach:del">
-						<a href="${ctx}/att/sysBaseCoach/delete?id=${sysBaseCoach.id}" onclick="return confirmx('确认要删除该教练员吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
-					</shiro:hasPermission>
 				</td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	
+	</div>
+
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
 	<br/>
