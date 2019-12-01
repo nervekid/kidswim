@@ -52,6 +52,31 @@ public class DateUtils {
 		}
 	}
 
+
+	/**
+	 * 将对当前整形转换为千位，带零
+	 * @param i
+	 * @return
+	 */
+	public static String transformThousandBitNumString(int i) {
+		String iStr = String.valueOf(i);
+		if(iStr.length() == 1) {
+			return "000" + iStr;
+		}
+		else if(iStr.length() == 2) {
+			return "00" + iStr;
+		}
+		else if(iStr.length() == 3) {
+			return "0" + iStr;
+		}
+		else if(iStr.length() == 4) {
+			return iStr;
+		}
+		else {
+			return iStr;
+		}
+	}
+
 	/**
 	 * 获取指定日期当天开始时间
 	 * @param date

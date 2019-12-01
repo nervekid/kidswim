@@ -3,8 +3,8 @@
  */
 package com.kite.modules.att.web;
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,18 +25,22 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
-import com.kite.common.utils.DateUtils;
-import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
-import com.kite.common.utils.verification.BasicVerification;
-import com.kite.common.web.BaseController;
+import com.kite.common.utils.DateUtils;
+import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
 import com.kite.common.utils.excel.ImportExcel;
-import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.common.utils.verification.BasicVerification;
+import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SysBaseCoach;
+import com.kite.modules.att.entity.SysBaseCoachImport;
+import com.kite.modules.att.entity.SysCertificatesCoach;
 import com.kite.modules.att.service.SysBaseCoachService;
+import com.kite.modules.att.service.SysCertificatesCoachService;
+import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 教练员Controller
@@ -51,6 +55,10 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	private SysBaseCoachService sysBaseCoachService;
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
+	@Autowired
+	private SysCertificatesCoachService sysCertificatesCoachService;
+	@Autowired
+	private SystemService systemService;
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -84,14 +92,17 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 		return "modules/att/sysBaseCoachList";
 	}
 
-
 	/**
 	 * 查看，增加，编辑教练员表单页面
 	 */
 	@RequiresPermissions(value={"att:sysBaseCoach:view","att:sysBaseCoach:add","att:sysBaseCoach:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
 	public String form(SysBaseCoach sysBaseCoach, Model model) {
+		List<SysCertificatesCoach> sysCertificatesCoachList = this.sysCertificatesCoachService.findSysCertificatesCoachListByCoachId(sysBaseCoach.getId());
+		sysBaseCoach.setSysCertificatesCoachList(sysCertificatesCoachList);
 		model.addAttribute("sysBaseCoach", sysBaseCoach);
+		model.addAttribute("sysCertificatesCoachList", sysCertificatesCoachList);
+
 		if(sysBaseCoach.getId()==null){
 			// sysBaseCoach.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
 			//设置编码
@@ -121,8 +132,25 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 		if(!sysBaseCoach.getIsNewRecord()){//编辑表单保存
 			SysBaseCoach t = sysBaseCoachService.get(sysBaseCoach.getId());//从数据库取出记录的值
 			MyBeanUtils.copyBeanNotNull2Bean(sysBaseCoach, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+			//1.年月修改
+			if (sysBaseCoach.getEntryYear() != null && !sysBaseCoach.getEntryYear().equals("")) {
+				String yearMonth = sysBaseCoach.getEntryYear();
+				yearMonth = yearMonth.replace("-", "");
+				t.setEntryYear(yearMonth);
+			}
 			sysBaseCoachService.save(t);//保存
 		}else{//新增表单保存
+			//1.编码给定
+			int countLastNum = this.sysBaseCoachService.findExitSysBaseCoachNum();
+			int nextCodeNum = countLastNum ++;
+			String code = "C" + com.kite.common.utils.date.DateUtils.transformThousandBitNumString(nextCodeNum);
+			sysBaseCoach.setCode(code);
+			//2.年月修改
+			if (sysBaseCoach.getEntryYear() != null && !sysBaseCoach.getEntryYear().equals("")) {
+				String yearMonth = sysBaseCoach.getEntryYear();
+				yearMonth = yearMonth.replace("-", "");
+				sysBaseCoach.setEntryYear(yearMonth);
+			}
 			sysBaseCoachService.save(sysBaseCoach);//保存
 		}
 		addMessage(redirectAttributes, "保存教练员成功");
@@ -173,7 +201,6 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 
 	/**
 	 * 导入Excel数据
-
 	 */
 	@RequiresPermissions("att:sysBaseCoach:import")
     @RequestMapping(value = "import", method=RequestMethod.POST)
@@ -191,9 +218,38 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 			}
 			else {
 				this.isTip = false;
-				List<SysBaseCoach> list = ei.getDataList(SysBaseCoach.class);
-				for (SysBaseCoach sysBaseCoach : list){
+				List<SysBaseCoachImport> list = ei.getDataList(SysBaseCoachImport.class);
+				for (SysBaseCoachImport sBaseCoachImport : list){
 					try{
+						SysBaseCoach sysBaseCoach = new SysBaseCoach();
+						//1.编码给定
+						int countLastNum = this.sysBaseCoachService.findExitSysBaseCoachNum();
+						int nextCodeNum = countLastNum ++;
+						String code = "C" + com.kite.common.utils.date.DateUtils.transformThousandBitNumString(nextCodeNum);
+						sysBaseCoach.setCode(code);
+						//2.年月修改
+						if (sysBaseCoach.getEntryYear() != null && !sysBaseCoach.getEntryYear().equals("")) {
+							String yearMonth = sysBaseCoach.getEntryYear();
+							yearMonth = yearMonth.replace("-", "");
+							sysBaseCoach.setEntryYear(yearMonth);
+						}
+						//字典转值
+						String sexValue = this.systemService.findDictValueByTypeAndLabel("sex_flag", sBaseCoachImport.getSex());
+						String contractValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sBaseCoachImport.getContractFlag());
+						sysBaseCoach.setNameCn(sBaseCoachImport.getNameCn());
+						sysBaseCoach.setNameEn(sBaseCoachImport.getNameEn());
+						sysBaseCoach.setSex(sexValue);
+						sysBaseCoach.setPhone(sBaseCoachImport.getPhone());
+						sysBaseCoach.setIdNo(sBaseCoachImport.getIdNo());
+						sysBaseCoach.setEmail(sBaseCoachImport.getEmail());
+						sysBaseCoach.setAddress(sBaseCoachImport.getAddress());
+						sysBaseCoach.setEducationLevel(sBaseCoachImport.getEducationLevel());
+						sysBaseCoach.setEntryPosition(sBaseCoachImport.getEntryPosition());
+						sysBaseCoach.setEntryHourWage(sBaseCoachImport.getEntryHourWage());
+						sysBaseCoach.setPresentPosition(sBaseCoachImport.getPresentPosition());
+						sysBaseCoach.setPresentHourWage(sBaseCoachImport.getPresentHourWage());
+						sysBaseCoach.setIndustryExperience(sBaseCoachImport.getIndustryExperience());
+						sysBaseCoach.setContractFlag(contractValue);
 						sysBaseCoachService.save(sysBaseCoach);
 						successNum++;
 					}catch(ConstraintViolationException ex){
@@ -239,8 +295,8 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
             String fileName = "教练员数据导入模板.xlsx";
-    		List<SysBaseCoach> list = Lists.newArrayList();
-    		new ExportExcel("教练员数据", SysBaseCoach.class, 1).setDataList(list).write(response, fileName).dispose();
+    		List<SysBaseCoachImport> list = Lists.newArrayList();
+    		new ExportExcel("教练员数据", SysBaseCoachImport.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
 			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());

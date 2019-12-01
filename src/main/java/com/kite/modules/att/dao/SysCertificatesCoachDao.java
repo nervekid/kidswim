@@ -3,6 +3,10 @@
  */
 package com.kite.modules.att.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SysCertificatesCoach;
@@ -15,5 +19,17 @@ import com.kite.modules.att.entity.SysCertificatesCoach;
 @MyBatisDao
 public interface SysCertificatesCoachDao extends CrudDao<SysCertificatesCoach> {
 
-	
+	/**
+	 *
+	 * @param coachId
+	 * @return
+	 */
+	public List<SysCertificatesCoach> findSysCertificatesCoachListByCoachId(@Param("coachId")String coachId);
+
+	/**
+	 * 根据coachId删除教练资格
+	 * @param coachId
+	 */
+	public void deleteSysCertificatesCoachByCoachId(@Param("coachId") String coachId);
+
 }

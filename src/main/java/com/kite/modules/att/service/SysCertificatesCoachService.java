@@ -25,46 +25,52 @@ import com.kite.modules.att.dao.SysCertificatesCoachDao;
 public class SysCertificatesCoachService extends CrudService<SysCertificatesCoachDao, SysCertificatesCoach> {
 
     @Autowired
-	SysCertificatesCoachDao sysCertificatesCoachDao;
+	private SysCertificatesCoachDao sysCertificatesCoachDao;
+
 	@Override
 	public SysCertificatesCoach get(String id) {
 		return super.get(id);
 	}
+
 	@Override
 	public List<SysCertificatesCoach> findList(SysCertificatesCoach sysCertificatesCoach) {
 		return super.findList(sysCertificatesCoach);
 	}
+
 	@Override
 	public Page<SysCertificatesCoach> findPage(Page<SysCertificatesCoach> page, SysCertificatesCoach sysCertificatesCoach) {
 		return super.findPage(page, sysCertificatesCoach);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void save(SysCertificatesCoach sysCertificatesCoach) {
 		super.save(sysCertificatesCoach);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SysCertificatesCoach sysCertificatesCoach) {
 		super.delete(sysCertificatesCoach);
 	}
-	
-		@Transactional(readOnly = false)
+
+	@Transactional(readOnly = false)
 	public String findCodeNumber(String tablename,String codename,String beginString){
 		StringBuffer serial=new StringBuffer();
-		
 		serial.append(beginString);
 		serial.append("-");
 		serial.append(StringUtils.getNowYearMonth());
 		serial.append("-");
 		serial.append(String.format("%04d", Integer.parseInt(sysCertificatesCoachDao.findCodeNumber(tablename, codename, beginString))));
-		
 		return serial.toString();
 	}
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 根据教练ID查找教练资料列表
+	 * @param coachId
+	 * @return
+	 */
+	public List<SysCertificatesCoach> findSysCertificatesCoachListByCoachId(String coachId) {
+		return this.dao.findSysCertificatesCoachListByCoachId(coachId);
+	}
 }

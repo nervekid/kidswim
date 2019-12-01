@@ -4,6 +4,8 @@
 package com.kite.modules.att.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kite.common.persistence.DataEntity;
 import com.kite.common.utils.excel.annotation.ExcelField;
@@ -34,6 +36,8 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 	private String contractFlag;		// 有否合约 字典枚举 yes_no 1:是 0:否
 	private BigDecimal accumulatedTeachingHours;		// 累计教导时数 单位(小时) 从点名课时数累计
 
+	private List<SysCertificatesCoach> sysCertificatesCoachList = new ArrayList<SysCertificatesCoach>();
+
 	public SysBaseCoach() {
 		super();
 	}
@@ -42,7 +46,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		super(id);
 	}
 
-	@ExcelField(title="教练编码 C0001 C0002 自增字段", align=2, sort=1)
+	@ExcelField(title="教练编码", align=2, sort=1)
 	public String getCode() {
 		return code;
 	}
@@ -69,7 +73,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.nameEn = nameEn;
 	}
 
-	@ExcelField(title="性别 字典枚举 sex_flag 1:男 2:女", align=2, sort=4)
+	@ExcelField(title="性别", dictType="sex_flag", align=2, sort=4)
 	public String getSex() {
 		return sex;
 	}
@@ -123,7 +127,6 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.educationLevel = educationLevel;
 	}
 
-	@ExcelField(title="入职年月", align=2, sort=10)
 	public String getEntryYear() {
 		return entryYear;
 	}
@@ -177,7 +180,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.industryExperience = industryExperience;
 	}
 
-	@ExcelField(title="有否合约 字典枚举 yes_no 1:是 0:否", align=2, sort=16)
+	@ExcelField(title="有否合约", dictType="yes_no", align=2, sort=16)
 	public String getContractFlag() {
 		return contractFlag;
 	}
@@ -186,13 +189,21 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.contractFlag = contractFlag;
 	}
 
-	@ExcelField(title="累计教导时数 单位(小时) 从点名课时数累计", align=2, sort=17)
+	@ExcelField(title="累计教导时数 单位(小时)", align=2, sort=17)
 	public BigDecimal getAccumulatedTeachingHours() {
 		return accumulatedTeachingHours;
 	}
 
 	public void setAccumulatedTeachingHours(BigDecimal accumulatedTeachingHours) {
 		this.accumulatedTeachingHours = accumulatedTeachingHours;
+	}
+
+	public List<SysCertificatesCoach> getSysCertificatesCoachList() {
+		return sysCertificatesCoachList;
+	}
+
+	public void setSysCertificatesCoachList(List<SysCertificatesCoach> sysCertificatesCoachList) {
+		this.sysCertificatesCoachList = sysCertificatesCoachList;
 	}
 
 }

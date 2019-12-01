@@ -190,4 +190,18 @@
 		select * FROM sys_base_coach  where ${propertyName} = '${value}'
 	</select>
 
+	<select id="findSysBaseCoachCount" resultType="Integer">
+		select count(1)
+		FROM sys_base_coach a
+		where a.del_flag = '0'
+	</select>
+
+	<select id="findSysBaseCoachIdByCode" resultType="String">
+		select a.id
+		FROM sys_base_coach a
+		where a.code = #{code} and a.del_flag = '0'
+		order by a.create_date desc
+		limit 1
+	</select>
+
 </mapper>

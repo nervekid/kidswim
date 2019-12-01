@@ -13,12 +13,12 @@ import com.kite.common.utils.excel.annotation.ExcelField;
  * @version 2019-11-13
  */
 public class SysCertificatesCoach extends DataEntity<SysCertificatesCoach> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String coathId;		// 教练员id
 	private String qualification;		// 资格名称
-	private Integer obtainYearMonth;		// 考获年月
-	
+	private String obtainYearMonth;		// 考获年月
+
 	public SysCertificatesCoach() {
 		super();
 	}
@@ -35,7 +35,7 @@ public class SysCertificatesCoach extends DataEntity<SysCertificatesCoach> {
 	public void setCoathId(String coathId) {
 		this.coathId = coathId;
 	}
-	
+
 	@ExcelField(title="资格名称", align=2, sort=2)
 	public String getQualification() {
 		return qualification;
@@ -44,14 +44,14 @@ public class SysCertificatesCoach extends DataEntity<SysCertificatesCoach> {
 	public void setQualification(String qualification) {
 		this.qualification = qualification;
 	}
-	
+
 	@ExcelField(title="考获年月", align=2, sort=3)
-	public Integer getObtainYearMonth() {
+	public String getObtainYearMonth() {
 		return obtainYearMonth;
 	}
 
-	public void setObtainYearMonth(Integer obtainYearMonth) {
+	public void setObtainYearMonth(String obtainYearMonth) {
 		this.obtainYearMonth = obtainYearMonth;
 	}
-	
+
 }
