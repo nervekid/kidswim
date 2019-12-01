@@ -2,11 +2,11 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>教练员编辑</title>
+	<title>教練員編輯</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		var validateForm;
-		function doSubmit(){//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
+		function doSubmit(){//回調函數，在編輯和保存動作時，供openDialog調用提交表單。
 		  if(validateForm.form()){
 			  $("#inputForm").submit();
 			  return true;
@@ -17,12 +17,12 @@
 		$(document).ready(function() {
 			validateForm = $("#inputForm").validate({
 				submitHandler: function(form){
-					loading('正在提交，请稍等...');
+					loading('正在提交，請稍等...');
 					form.submit();
 				},
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
+					$("#messageBox").text("輸入有誤，請先更正。");
 					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
 						error.appendTo(element.parent().parent());
 					} else {
@@ -90,25 +90,25 @@
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">身份证：</label></td>
+					<td class="width-15 active"><label class="pull-right">身份證：</label></td>
 					<td class="width-35">
 						<form:input path="idNo" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">性别:</label></td>
+					<td class="width-15 active"><label class="pull-right">性別:</label></td>
 					<td class="width-35">
-						<form:select placeholder="性别" path="sex"  class="form-control m-b"  >
-							<form:option value="" label="请选择"/>
+						<form:select placeholder="性別" path="sex"  class="form-control m-b"  >
+							<form:option value="" label="請選擇"/>
 							<form:options items="${fns:getDictList('sex_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">电邮：</label></td>
+					<td class="width-15 active"><label class="pull-right">電郵：</label></td>
 					<td class="width-35">
 						<form:input path="email" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">电话号码：</label></td>
+					<td class="width-15 active"><label class="pull-right">電話號碼：</label></td>
 					<td class="width-35">
 						<form:input path="phone" htmlEscape="false"    class="form-control"/>
 					</td>
@@ -126,50 +126,50 @@
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">入职年月：</label></td>
+					<td class="width-15 active"><label class="pull-right">入職年月：</label></td>
 					<td class="width-35">
 						<form:input path="entryYear" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">入职职位：</label></td>
+					<td class="width-15 active"><label class="pull-right">入職職位：</label></td>
 					<td class="width-35">
 						<form:input path="entryPosition" htmlEscape="false"    class="form-control"/>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">入职时薪 单位(港币)：</label></td>
+					<td class="width-15 active"><label class="pull-right">入職時薪 單位(港幣)：</label></td>
 					<td class="width-35">
 						<form:input path="entryHourWage" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">现时职位：</label></td>
+					<td class="width-15 active"><label class="pull-right">現時職位：</label></td>
 					<td class="width-35">
 						<form:input path="presentPosition" htmlEscape="false"    class="form-control"/>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">现时时薪 单位(港币)：</label></td>
+					<td class="width-15 active"><label class="pull-right">現時時薪 單位(港幣)：</label></td>
 					<td class="width-35">
 						<form:input path="presentHourWage" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">行业经验 单位(年)：</label></td>
+					<td class="width-15 active"><label class="pull-right">行業經驗 單位(年)：</label></td>
 					<td class="width-35">
 						<form:input path="industryExperience" htmlEscape="false"    class="form-control"/>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">有否合约:</label></td>
+					<td class="width-15 active"><label class="pull-right">有否合約:</label></td>
 					<td class="width-35">
-						<form:select placeholder="有否合约" path="contractFlag"  class="form-control m-b"  >
-							<form:option value="" label="请选择"/>
+						<form:select placeholder="有否合約" path="contractFlag"  class="form-control m-b"  >
+							<form:option value="" label="請選擇"/>
 							<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">备注：</label></td>
+					<td class="width-15 active"><label class="pull-right">備註：</label></td>
 					<td class="width-35" colspan="3">
 						<form:textarea path="remarks" htmlEscape="false" rows="3"   class="form-control "/>
 					</td>
@@ -177,10 +177,10 @@
 		   </tbody>
 		</table>
 
-		<!-- 资格分录 -->
+		<!-- 資格分錄 -->
 		<div class="tabs-container">
             <ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">资格：</a>
+				<li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">資格：</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -190,8 +190,8 @@
 				<thead>
 					<tr>
 						<th class="hide"></th>
-						<th>资格名称</th>
-						<th>考获年月</th>
+						<th>資格名稱</th>
+						<th>考獲年月</th>
 						<th width="10">&nbsp;</th>
 					</tr>
 				</thead>
@@ -217,7 +217,7 @@
 					</td>
 
 					<td class="text-center" width="10">
-						{{#delBtn}}<span class="close" onclick="delRow(this, '#sysCertificatesCoachList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+						{{#delBtn}}<span class="close" onclick="delRow(this, '#sysCertificatesCoachList{{idx}}')" title="刪除">&times;</span>{{/delBtn}}
 					</td>
 				</tr>//-->
 			</script>

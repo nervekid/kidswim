@@ -2,14 +2,14 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>销售资料查看</title>
+	<title>銷售資料查看</title>
 	<meta name="decorator" content="default"/>
 </head>
 <body >
 	<div class="print-box">
 	    <div id="print">
 			 <div class="print-title">
-				销售资料
+				銷售資料
 			</div>
 			<div class="print-info">
 				<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">

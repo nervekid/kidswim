@@ -2,7 +2,7 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>学员管理</title>
+	<title>學員管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -40,20 +40,20 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-			<form:input placeholder="学员编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<form:input placeholder="學員編號" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
 			<form:input placeholder="中文名" path="nameCn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
 			<form:input placeholder="英文名" path="nameEn" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
 			<form:input placeholder="已懂泳式" path="studiedSwimmingStyle" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="20"  class=" form-control input-sm"/>
-			<form:select placeholder="性别" path="sex"  class="form-control m-b required" onchange="search()" >
-				<form:option value="" label="请选择"/>
+			<form:select placeholder="性別" path="sex"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('sex_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
-			<form:select placeholder="课程等级" path="courseLevelFlag"  class="form-control m-b required" onchange="search()" >
-				<form:option value="" label="请选择"/>
+			<form:select placeholder="課程等級" path="courseLevelFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
 			<form:select placeholder="是否曾遇溺" path="drownedFlag"  class="form-control m-b required" onchange="search()" >
-				<form:option value="" label="请选择"/>
+				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
 		 </div>
@@ -84,7 +84,7 @@
 
 			</div>
 		<div class="pull-right">
-			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查詢</button>
 			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
 		</div>
 	</div>
@@ -95,42 +95,42 @@
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
-				<th  class="sort-column code">学员编号</th>
+				<th  class="sort-column code">學員編號</th>
 				<th  class="sort-column nameCn">中文名</th>
 				<th  class="sort-column nameEn">英文名</th>
-				<th  class="sort-column idNo">身份证号码</th>
-				<th  class="sort-column sex">性别 字典枚举</th>
-				<th  class="sort-column email">电邮</th>
-				<th  class="sort-column phone">电话号码</th>
+				<th  class="sort-column idNo">身份證號碼</th>
+				<th  class="sort-column sex">性別 字典枚舉</th>
+				<th  class="sort-column email">電郵</th>
+				<th  class="sort-column phone">電話號碼</th>
 				<th  class="sort-column birthday">出生日期</th>
-				<th  class="sort-column contactAddress">联系地址</th>
-				<th  class="sort-column attendingSchool">就读学校</th>
-				<th  class="sort-column grade">年级</th>
-				<th  class="sort-column studiedSwimFlag">是否曾学习过游泳</th>
-				<th  class="sort-column studySwimmingOrgan">习泳机构</th>
+				<th  class="sort-column contactAddress">聯系地址</th>
+				<th  class="sort-column attendingSchool">就讀學校</th>
+				<th  class="sort-column grade">年級</th>
+				<th  class="sort-column studiedSwimFlag">是否曾學習過遊泳</th>
+				<th  class="sort-column studySwimmingOrgan">習泳機構</th>
 				<th  class="sort-column studiedSwimmingStyle">已懂泳式</th>
 				<th  class="sort-column drownedFlag">是否曾遇溺 </th>
-				<th  class="sort-column drownedAge">遇溺岁数</th>
-				<th  class="sort-column longTermDisease">长期病患</th>
-				<th  class="sort-column longTermMedicine">长期服药</th>
-				<th  class="sort-column courseLevelFlag">课程等级</th>
-				<th  class="sort-column contactPhone">联系人号码</th>
-				<th  class="sort-column contactRelationship">联系人关系</th>
-				<th  class="sort-column urgentPhone">紧急联系人号码</th>
-				<th  class="sort-column urgentRelationship">紧急联系人关系</th>
-				<th  class="sort-column guardianName">监护人姓名</th>
-				<th  class="sort-column guardianPhone">监护人手机号码</th>
-				<th  class="sort-column guardianIdNo">监护人身份证号码</th>
-				<th  class="sort-column guardianRelationship">监护人关系</th>
-				<th  class="sort-column facebook">facebook账号</th>
-				<th  class="sort-column whatsApp">whatsapp账号</th>
+				<th  class="sort-column drownedAge">遇溺歲數</th>
+				<th  class="sort-column longTermDisease">長期病患</th>
+				<th  class="sort-column longTermMedicine">長期服藥</th>
+				<th  class="sort-column courseLevelFlag">課程等級</th>
+				<th  class="sort-column contactPhone">聯系人號碼</th>
+				<th  class="sort-column contactRelationship">聯系人關系</th>
+				<th  class="sort-column urgentPhone">緊急聯系人號碼</th>
+				<th  class="sort-column urgentRelationship">緊急聯系人關系</th>
+				<th  class="sort-column guardianName">監護人姓名</th>
+				<th  class="sort-column guardianPhone">監護人手機號碼</th>
+				<th  class="sort-column guardianIdNo">監護人身份證號碼</th>
+				<th  class="sort-column guardianRelationship">監護人關系</th>
+				<th  class="sort-column facebook">facebook賬號</th>
+				<th  class="sort-column whatsApp">whatsapp賬號</th>
 			</tr>
 		</thead>
 		<tbody style="height: 600px">
 		<c:forEach items="${page.list}" var="sysBaseStudent">
 			<tr>
 				<td> <input type="checkbox" id="${sysBaseStudent.id}" class="i-checks"></td>
-				<td><a  href="#" onclick="openDialogView('查看学员', '${ctx}/att/sysBaseStudent/view?id=${sysBaseStudent.id}','800px', '500px')">
+				<td><a  href="#" onclick="openDialogView('查看學員', '${ctx}/att/sysBaseStudent/view?id=${sysBaseStudent.id}','800px', '500px')">
 					${sysBaseStudent.code}
 				</a></td>
 				<td>
