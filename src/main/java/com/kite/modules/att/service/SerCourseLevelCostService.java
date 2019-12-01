@@ -30,6 +30,7 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	public SerCourseLevelCost get(String id) {
 		return super.get(id);
 	}
+
 	@Override
 	public List<SerCourseLevelCost> findList(SerCourseLevelCost serCourseLevelCost) {
 		return super.findList(serCourseLevelCost);
@@ -38,33 +39,27 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	public Page<SerCourseLevelCost> findPage(Page<SerCourseLevelCost> page, SerCourseLevelCost serCourseLevelCost) {
 		return super.findPage(page, serCourseLevelCost);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void save(SerCourseLevelCost serCourseLevelCost) {
 		super.save(serCourseLevelCost);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SerCourseLevelCost serCourseLevelCost) {
-		super.delete(serCourseLevelCost);
+		super.deleteByLogic(serCourseLevelCost);
 	}
-	
-		@Transactional(readOnly = false)
+
+	@Transactional(readOnly = false)
 	public String findCodeNumber(String tablename,String codename,String beginString){
 		StringBuffer serial=new StringBuffer();
-		
 		serial.append(beginString);
 		serial.append("-");
 		serial.append(StringUtils.getNowYearMonth());
 		serial.append("-");
 		serial.append(String.format("%04d", Integer.parseInt(serCourseLevelCostDao.findCodeNumber(tablename, codename, beginString))));
-		
 		return serial.toString();
 	}
-	
-	
-	
-	
-	
-	
 }

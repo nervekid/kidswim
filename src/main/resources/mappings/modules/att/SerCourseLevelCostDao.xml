@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SerCourseLevelCostDao">
-    
+
 	<sql id="serCourseLevelCostColumns">
 		a.id AS "id",
 		a.courseLevel_flag AS "courseLevelFlag",
@@ -15,21 +15,48 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
 	</sql>
-	
+
 	<sql id="serCourseLevelCostJoins">
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="SerCourseLevelCost" >
-		SELECT 
+		SELECT
 			<include refid="serCourseLevelCostColumns"/>
 		FROM ser_course_level_cost a
 		<include refid="serCourseLevelCostJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SerCourseLevelCost" >
-		SELECT 
+		SELECT
+			<include refid="serCourseLevelCostColumns"/>
+		FROM ser_course_level_cost a
+		<include refid="serCourseLevelCostJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="courseLevelFlag != null and courseLevelFlag != ''">
+				AND a.courseLevel_flag = #{courseLevelFlag}
+			</if>
+			<if test="containEntranceFeeFlag != null and containEntranceFeeFlag != ''">
+				AND a.contain_entranceFee_flag = #{containEntranceFeeFlag}
+			</if>
+			<if test="costStandardFlag != null and costStandardFlag != ''">
+				AND a.cost_standard_flag =  #{costStandardFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SerCourseLevelCost" >
+		SELECT
 			<include refid="serCourseLevelCostColumns"/>
 		FROM ser_course_level_cost a
 		<include refid="serCourseLevelCostJoins"/>
@@ -45,25 +72,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	
-	<select id="findAllList" resultType="SerCourseLevelCost" >
-		SELECT 
-			<include refid="serCourseLevelCostColumns"/>
-		FROM ser_course_level_cost a
-		<include refid="serCourseLevelCostJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO ser_course_level_cost(
 			id,
@@ -91,9 +100,9 @@
 			#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE ser_course_level_cost SET 	
+		UPDATE ser_course_level_cost SET
 			courseLevel_flag = #{courseLevelFlag},
 			costAmount = #{costAmount},
 			contain_entranceFee_flag = #{containEntranceFeeFlag},
@@ -103,25 +112,25 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM ser_course_level_cost
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE ser_course_level_cost SET 
+		UPDATE ser_course_level_cost SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SerCourseLevelCost" statementType="STATEMENT">
 		select * FROM ser_course_level_cost  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

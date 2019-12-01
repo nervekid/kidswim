@@ -11,7 +11,7 @@
 			  $("#inputForm").submit();
 			  return true;
 		  }
-	
+
 		  return false;
 		}
 		$(document).ready(function() {
@@ -30,7 +30,7 @@
 					}
 				}
 			});
-			
+
 		});
 	</script>
 </head>
@@ -38,9 +38,47 @@
 		<form:form id="inputForm" modelAttribute="serCourseLevelCost" action="${ctx}/att/serCourseLevelCost/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="menuId"/>
-		<sys:message content="${message}"/>	
+		<sys:message content="${message}"/>
 		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
 		   <tbody>
+
+		   		<tr>
+					<td class="width-15 active"><label class="pull-right">课程等级：</label></td>
+					<td class="width-35">
+						<form:select placeholder="课程等级" path="courseLevelFlag"  class="form-control m-b"  >
+							<form:option value="" label="请选择"/>
+							<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</td>
+					<td class="width-15 active"><label class="pull-right">收费 单位(港币)：</label></td>
+					<td class="width-35">
+						<form:input path="costAmount" htmlEscape="false"    class="form-control"/>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="width-15 active"><label class="pull-right">是否包含入场费：</label></td>
+					<td class="width-35">
+						<form:select placeholder="是否包含入场费" path="containEntranceFeeFlag"  class="form-control m-b"  >
+							<form:option value="" label="请选择"/>
+							<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</td>
+					<td class="width-15 active"><label class="pull-right">收费标准：</label></td>
+					<td class="width-35">
+						<form:select placeholder="收费标准" path="costStandardFlag"  class="form-control m-b"  >
+							<form:option value="" label="请选择"/>
+							<form:options items="${fns:getDictList('cost_standard_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="width-15 active"><label class="pull-right">备注：</label></td>
+					<td class="width-35" colspan="3">
+						<form:textarea path="remarks" htmlEscape="false" rows="3"   class="form-control "/>
+					</td>
+				</tr>
 		 	</tbody>
 		</table>
 	</form:form>

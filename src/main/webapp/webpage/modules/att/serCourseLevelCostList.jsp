@@ -17,16 +17,10 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 	<div class="ibox">
-	<div class="ibox-title">
-		<h5></h5>
-		<div class="ibox-tools">
-				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
-	   </div>
-	</div>
-    
+
     <div class="ibox-content">
 	<sys:message content="${message}"/>
-	
+
 	<!--查询条件-->
 	<div class="row">
 	<div class="col-sm-12">
@@ -36,12 +30,24 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		 </div>	
+			<form:select placeholder="课程等级" path="courseLevelFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="是否包含入场费" path="containEntranceFeeFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="收费标准" path="costStandardFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="请选择"/>
+				<form:options items="${fns:getDictList('cost_standard_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+		 </div>
 	</form:form>
 	<br/>
 	</div>
 	</div>
-	
+
 	<!-- 工具栏 -->
 	<div class="row">
 	<div class="col-sm-12">
@@ -61,26 +67,24 @@
 			<shiro:hasPermission name="att:serCourseLevelCost:export">
 	       		<table:exportExcel url="${ctx}/att/serCourseLevelCost/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
 	       	</shiro:hasPermission>
-	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
-		
+
 			</div>
 		<div class="pull-right">
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
+			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
 		</div>
 	</div>
 	</div>
-	
+
 	<!-- 表格 -->
 	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
-				<th  class="sort-column courseLevelFlag">课程等级 字典枚举 courseLevel_flag 1:NA 2:BB 3:CA 4:CB 5:CC 6:AD 7:TA 8:TB</th>
+				<th  class="sort-column courseLevelFlag">课程等级</th>
 				<th  class="sort-column costAmount">收费 单位(港币)</th>
-				<th  class="sort-column containEntranceFeeFlag">是否包含入场费 字典枚举 yes_no 1:是 0:否</th>
-				<th  class="sort-column costStandardFlag">收费标准 字典枚举 cost_standard_flag 1:每小时 2:每两个月</th>
-				<th>操作</th>
+				<th  class="sort-column containEntranceFeeFlag">是否包含入场费</th>
+				<th  class="sort-column costStandardFlag">收费标准</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -88,33 +92,22 @@
 			<tr>
 				<td> <input type="checkbox" id="${serCourseLevelCost.id}" class="i-checks"></td>
 				<td><a  href="#" onclick="openDialogView('查看课程等级对应收费', '${ctx}/att/serCourseLevelCost/view?id=${serCourseLevelCost.id}','800px', '500px')">
-					${serCourseLevelCost.courseLevelFlag}
+					${fns:getDictLabel(serCourseLevelCost.courseLevelFlag, 'courseLevel_flag', '')}
 				</a></td>
 				<td>
 					${serCourseLevelCost.costAmount}
 				</td>
 				<td>
-					${serCourseLevelCost.containEntranceFeeFlag}
+					${fns:getDictLabel(serCourseLevelCost.containEntranceFeeFlag, 'yes_no', '')}
 				</td>
 				<td>
-					${serCourseLevelCost.costStandardFlag}
-				</td>
-				<td>
-					<shiro:hasPermission name="att:serCourseLevelCost:view">
-						<a href="#" onclick="openDialogView('查看课程等级对应收费', '${ctx}/att/serCourseLevelCost/view?id=${serCourseLevelCost.id}','950px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="att:serCourseLevelCost:edit">
-    					<a href="#" onclick="openDialog('修改课程等级对应收费', '${ctx}/att/serCourseLevelCost/form?id=${serCourseLevelCost.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
-    				</shiro:hasPermission>
-    				<shiro:hasPermission name="att:serCourseLevelCost:del">
-						<a href="${ctx}/att/serCourseLevelCost/delete?id=${serCourseLevelCost.id}" onclick="return confirmx('确认要删除该课程等级对应收费吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
-					</shiro:hasPermission>
+					${fns:getDictLabel(serCourseLevelCost.costStandardFlag, 'cost_standard_flag', '')}
 				</td>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	
+
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
 	<br/>

@@ -34,7 +34,6 @@
                 elem: '#birthday',
 				trigger:'click'
             });
-
 		});
 	</script>
 </head>

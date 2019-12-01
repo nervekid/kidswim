@@ -116,7 +116,10 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	@RequiresPermissions(value={"att:sysBaseCoach:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
 	public String view(SysBaseCoach sysBaseCoach, Model model) {
+		List<SysCertificatesCoach> sysCertificatesCoachList = this.sysCertificatesCoachService.findSysCertificatesCoachListByCoachId(sysBaseCoach.getId());
+		sysBaseCoach.setSysCertificatesCoachList(sysCertificatesCoachList);
 		model.addAttribute("sysBaseCoach", sysBaseCoach);
+		model.addAttribute("sysCertificatesCoachList", sysCertificatesCoachList);
 		return "modules/att/sysBaseCoachView";
 	}
 
