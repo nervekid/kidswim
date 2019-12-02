@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>玄武開發平臺</title>
+    <title>kidswim管理平臺</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/static/images/favicon.ico" type="image/x-icon" />
 	<%@ include file="/webpage/include/head.jsp"%>
 	<script src="${ctxStatic}/common/inspinia.js?v=3.2.0"></script>
