@@ -67,7 +67,7 @@
 
 			</div>
 		<div class="pull-right">
-			<shiro:hasPermission name="valuecard:vacTValuecard:exchange">
+			<shiro:hasPermission name="att:serCourse:edit">
 				<button  data-placement="left" class="btn btn-success btn-sm" data-toggle="modal" onclick="createOffset('1','0')" data-target="#createOffsetData" >个人飞象卡兑换</button>
 			</shiro:hasPermission>
 			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查詢</button>
