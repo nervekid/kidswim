@@ -123,4 +123,13 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 	public int findExitSysBaseCoachNum() {
 		return this.dao.findSysBaseCoachCount();
 	}
+
+	/**
+	 * 根据教练id查找教练编码
+	 * @param id
+	 * @return
+	 */
+	public String findCoachCodeByCoachId(String id) {
+		return this.dao.findSysBaseCoachByCoachid(id);
+	}
 }

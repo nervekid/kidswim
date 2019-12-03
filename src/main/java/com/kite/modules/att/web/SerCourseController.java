@@ -3,8 +3,12 @@
  */
 package com.kite.modules.att.web;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,18 +29,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
+import com.kite.common.config.Global;
+import com.kite.common.json.AjaxJson;
+import com.kite.common.persistence.Page;
 import com.kite.common.utils.DateUtils;
 import com.kite.common.utils.MyBeanUtils;
-import com.kite.common.config.Global;
-import com.kite.common.persistence.Page;
-import com.kite.common.utils.verification.BasicVerification;
-import com.kite.common.web.BaseController;
 import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
 import com.kite.common.utils.excel.ImportExcel;
-import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.common.utils.verification.BasicVerification;
+import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.service.SerCourseService;
+import com.kite.modules.att.service.SysBaseCoachService;
+import com.kite.modules.sys.service.SysUserCollectionMenuService;
 
 /**
  * 课程Controller
@@ -51,6 +57,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	private SerCourseService serCourseService;
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
+	@Autowired
+	private SysBaseCoachService sysBaseCoachService;
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -243,7 +251,81 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?repage";
     }
 
+	/**
+	 * 功能：兑换用户收到且未兑换打的飞象卡，更新飞象卡的状态，更新钱包的金额
+	 * @param userwallet
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "generateCourseScheduling")
+	@ResponseBody
+	public AjaxJson generateCourseScheduling(@RequestParam("courseAddressFlag") String courseAddressFlag, @RequestParam("coachId") String coachId,
+			@RequestParam("beginTimeStr") String beginTimeStr, @RequestParam("endTimeStr") String endTimeStr, @RequestParam("weekNum") String weekNum,
+			HttpServletRequest request, HttpServletResponse  response) throws ParseException {
+		AjaxJson ajaxJson = new AjaxJson();
+		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 
+		//1.获取开始时间与结束时间
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
+		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
+		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
+		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
+		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
+		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
+		if (days < 7) {
+			map.put("msg","生成課程失败,由於生成課程天數小於七天, 無法生成課程！");
+			return  ajaxJson;
+		}
 
+		//2.获取年份
+		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
+
+		//3.根据教练员ID获取教练员编号
+		String coachCode = this.sysBaseCoachService.findCoachCodeByCoachId(coachId);
+		if (coachCode == null || coachCode.equals("")) {
+			map.put("msg","生成課程失败,無法找到教練員！");
+			return  ajaxJson;
+		}
+
+		//4计算一段时间段内有多少天周几
+		int weekenNum = 0;
+		Date first = null;
+		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
+		for (int i = 0; i < weekenNum; i++) {
+			SerCourse serCourse = new SerCourse();
+			serCourse.setCode(yearStr + courseAddressFlag + coachCode);
+			serCourse.setCoathId(coachId);
+			serCourse.setBeginYearMonth(beginYearMonth);
+			serCourse.setEndYearMonth(endYearMonth);
+
+			//核算日期
+			if (i == 0) {
+				for (int j = 0; j < days; j++) {
+					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
+					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
+						//时间段内第一个符合指定周几的日期
+						serCourse.setCourseDate(first);
+					}
+				}
+			}
+			else {
+				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
+				serCourse.setCourseDate(first);
+			}
+
+			//继续添加
+			serCourse.setCourseNum(i ++);
+			serCourse.setCourseAddress(courseAddressFlag);
+			serCourse.setStrInWeek(weekNum);
+
+			this.serCourseService.save(serCourse);
+		}
+		map.put("msg","成功生成課程！");
+		ajaxJson.setBody(map);
+		return  ajaxJson;
+	}
 
 }

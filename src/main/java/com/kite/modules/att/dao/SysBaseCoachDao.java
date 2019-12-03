@@ -31,4 +31,11 @@ public interface SysBaseCoachDao extends CrudDao<SysBaseCoach> {
 	 * @return
 	 */
 	public String findSysBaseCoachIdByCode(@Param("code")String code);
+
+	/**
+	 * 根据教练员id获取教练员编码
+	 * @param id
+	 * @return
+	 */
+	public String findSysBaseCoachByCoachid(@Param("codchId")String id);
 }
