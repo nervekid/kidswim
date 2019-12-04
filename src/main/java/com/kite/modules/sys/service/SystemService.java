@@ -119,12 +119,8 @@ public class SystemService extends BaseService implements InitializingBean {
 
 
 	public List<Dict> listDict(Dict select) {
-
 		return dictDao.findList(select);
 	}
-
-
-
 
 	/**
 	 * 是否存在公司部门

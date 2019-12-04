@@ -204,7 +204,7 @@
 		limit 1
 	</select>
 
-	<select id="findSysBaseCoachIdByCode" resultType="String">
+	<select id="findSysBaseCoachByCoachid" resultType="String">
 		select a.code
 		FROM sys_base_coach a
 		where a.id = #{codchId} and a.del_flag = '0'

@@ -10,16 +10,75 @@
             if(checkBoxChecked){
                 $("#collectionId").attr("checked",true);
             }
+
+            $("#submitCreateOffsetData").click(function(){
+				duihuan();
+			});
+
             laydate.render({
-				elem: '#',
-				range: '~'
+				elem: '#beginTimeStrSelect'
 			});
             laydate.render({
-				elem: '#',
-				type: 'datetime'
+				elem: '#endTimeStrSelect'
 			});
 
 		});
+
+
+		function createOffset(flag,typeFlag) {
+            $("#accounttypeStr").val(flag);
+            $("#typeFlag").val(typeFlag);
+        }
+
+		function duihuan() {
+            console.log("提交,正在进行泳课排班生成...");
+            var coachSelectVal = $("#coachSelect").val();
+            if(null==coachSelect|| coachSelect==''){
+                alert("您还没有选择教练员,请选择！");
+                return;
+            }
+            var courseAddressSelectVal = $("#courseAddressSelect").val();
+            if(null==courseAddressSelectVal|| courseAddressSelectVal==''){
+                alert("您还没有选择泳池地址,请选择！");
+                return;
+            }
+            var weekNumSelectVal = $("#weekNumSelect").val();
+            if(null==weekNumSelectVal|| weekNumSelectVal==''){
+                alert("您还没有选择星期几,请选择！");
+                return;
+            }
+            var beginTimeStrSelectVal = $("#beginTimeStrSelect").val();
+            if(null==beginTimeStrSelectVal|| beginTimeStrSelectVal==''){
+                alert("您还没有选择开始日期,请选择！");
+                return;
+            }
+            var endTimeStrSelectVal = $("#endTimeStrSelect").val();
+            if(null==endTimeStrSelectVal|| endTimeStrSelectVal==''){
+                alert("您还没有选择结束日期,请选择！");
+                return;
+            }
+
+            if(confirm("确定要进行课程生成吗？")==true){
+                $.ajax({
+                    type:"post",
+                    url:"${ctx}/att/serCourse/generateCourseScheduling",
+                    data:{"courcouseAddressFlag":courseAddressSelectVal,
+                    	  "coachId":coachSelectVal,
+                    	  "beginTimeStr":beginTimeStrSelectVal,
+                    	  "endTimeStr":endTimeStrSelectVal,
+                    	  "weekNum":weekNumSelectVal},
+                    }
+                    success:function (data) {
+                    	alert("生成课程成功！");
+                    },
+                    fail:function (data) {
+                        alert("生成课程失败！");
+                        return;
+                    }
+                });
+            }
+        }
+
 	</script>
 	<script type="text/javascript" src="${ctxStatic}/common/collectionMenu.js"></script>
 </head>
@@ -29,6 +88,86 @@
 
     <div class="ibox-content">
 	<sys:message content="${message}"/>
+
+		<div class="modal fade" id="createOffsetData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4>
+							泳课课程排班生成
+						</h4>
+						说明：取一段时间范围，选择礼拜几，时间范围不可以少于7天。
+					</div>
+
+					<div class="modal-body">
+
+						<div class="dropdown-toggle" style="width: 50px;height: 20px" id="username">
+							<span style="text-align: left" ></span>
+						</div>
+						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
+							<tbody>
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>教练员：</label></td>
+								<td class="width-35">
+									<sys:treeselect  id="coachSelect"  name="sysBaseCoach.id" value="" labelName="sysBaseCoach.name" labelValue=""
+										 title="教练员" url="/att/sysBaseCoach/treeData" cssClass="form-control"
+										 allowClear="true"  placeholder="请选择教练员！" />
+								</td>
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>泳池：</label></td>
+								<td class="width-35">
+									<select id="courseAddressSelect" name="courseAddressSelect" class="form-control" type="select">
+										<c:forEach var="dict" items="${courseAddressDictList}" varStatus="status">
+											<option value="${dict.value}" title="${dict.description}" }>${dict.label}</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-35">
+									<select id="weekNumSelect" name="weekNumSelect" class="form-control" type="select">
+										<c:forEach var="dict" items="${weekNumDictList}" varStatus="status">
+											<option value="${dict.value}" title="${dict.description}" }>${dict.label}</option>
+										</c:forEach>
+									</select>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-35">
+								   <input id="beginTimeStrSelect" placeholder="开始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
+                                   value=""/>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-35">
+								   <input id="endTimeStrSelect" placeholder="结束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
+                                   value=""/>
+								</td>
+							</tr>
+
+							</tr>
+							</tbody>
+						</table>
+						<sys:message content="${message}"/>
+						<input type="hidden"  id="userId">
+					</div>
+					<div class="modal-footer">
+						<button id="submitCreateOffsetData"  type="button" class="btn btn-success btn-sm">
+							确认生成
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 
 	<!--查询条件-->
 	<div class="row">
@@ -67,8 +206,8 @@
 
 			</div>
 		<div class="pull-right">
-			<shiro:hasPermission name="att:serCourse:edit">
-				<button  data-placement="left" class="btn btn-success btn-sm" data-toggle="modal" onclick="createOffset('1','0')" data-target="#createOffsetData" >个人飞象卡兑换</button>
+			<shiro:hasPermission name="att:serCourse:generativeCourse">
+				<button  data-placement="left" class="btn btn-success btn-sm" data-toggle="modal" onclick="createOffset('1','0')" data-target="#createOffsetData" >生成课程</button>
 			</shiro:hasPermission>
 			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查詢</button>
 			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>

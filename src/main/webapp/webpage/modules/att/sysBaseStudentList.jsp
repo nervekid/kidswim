@@ -21,12 +21,6 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 	<div class="ibox">
-	<%-- <div class="ibox-title">
-		<h5></h5>
-		<div class="ibox-tools">
-				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
-	   </div>
-	</div> --%>
 
     <div class="ibox-content">
 	<sys:message content="${message}"/>

@@ -42,7 +42,9 @@ import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SysBaseCoachService;
+import com.kite.modules.sys.entity.Dict;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 课程Controller
@@ -59,6 +61,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
 	@Autowired
 	private SysBaseCoachService sysBaseCoachService;
+	@Autowired
+	private SystemService systemService;
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -82,7 +86,20 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	@RequestMapping(value = {"list", ""})
 	public String list(SerCourse serCourse, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<SerCourse> page = serCourseService.findPage(new Page<SerCourse>(request, response), serCourse);
+
+		//给出泳池地址字典列表
+		Dict courseAddressDict = new Dict();
+		courseAddressDict.setType("course_addrese_flag");
+		List<Dict> courseAddressDictList = this.systemService.listDict(courseAddressDict);
+
+		//给出星期几字典列表
+		Dict weekNumDict = new Dict();
+		weekNumDict.setType("week_flag");
+		List<Dict> weekNumDictList = this.systemService.listDict(weekNumDict);
+
 		model.addAttribute("page", page);
+		model.addAttribute("courseAddressDictList", courseAddressDictList);
+		model.addAttribute("weekNumDictList", weekNumDictList);
 		sysUserCollectionMenuService.initCollectionMenu(request,model);
 		return "modules/att/serCourseList";
 	}
@@ -259,7 +276,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	 * @return
 	 * @throws ParseException
 	 */
-	@RequestMapping(value = "generateCourseScheduling")
+	@RequestMapping(value = "/generateCourseScheduling")
 	@ResponseBody
 	public AjaxJson generateCourseScheduling(@RequestParam("courseAddressFlag") String courseAddressFlag, @RequestParam("coachId") String coachId,
 			@RequestParam("beginTimeStr") String beginTimeStr, @RequestParam("endTimeStr") String endTimeStr, @RequestParam("weekNum") String weekNum,

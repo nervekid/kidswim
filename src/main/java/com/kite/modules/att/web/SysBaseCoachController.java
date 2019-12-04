@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
 import com.kite.common.utils.DateUtils;
@@ -308,6 +309,25 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
     }
 
 
-
-
+	/**
+	 * 获取教练员列表
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		SysBaseCoach sysBaseCoach = new SysBaseCoach();
+		sysBaseCoach.setDelFlag("0");
+		List<SysBaseCoach> list = this.sysBaseCoachService.findList(sysBaseCoach);
+		for (int i=0; i<list.size(); i++){
+			SysBaseCoach e = list.get(i);
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", e.getId());
+			map.put("name", e.getNameCn() + e.getNameEn());
+			mapList.add(map);
+		}
+		return mapList;
+	}
 }
