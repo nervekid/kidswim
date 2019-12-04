@@ -47,7 +47,7 @@ import com.kite.modules.sys.service.SysUserCollectionMenuService;
 import com.kite.modules.sys.service.SystemService;
 
 /**
- * 课程Controller
+ * 課程Controller
  * @author lyb
  * @version 2019-11-13
  */
@@ -64,7 +64,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	@Autowired
 	private SystemService systemService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -80,7 +80,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	}
 
 	/**
-	 * 课程列表页面
+	 * 課程列表頁面
 	 * @throws ParseException
 	 */
 	@RequiresPermissions("att:serCourse:list")
@@ -88,12 +88,12 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	public String list(SerCourse serCourse, HttpServletRequest request, HttpServletResponse response, Model model) throws ParseException {
 		Page<SerCourse> page = serCourseService.findPage(new Page<SerCourse>(request, response), serCourse);
 
-		//给出泳池地址字典列表
+		//給出泳池地址字典列表
 		Dict courseAddressDict = new Dict();
 		courseAddressDict.setType("course_addrese_flag");
 		List<Dict> courseAddressDictList = this.systemService.listDict(courseAddressDict);
 
-		//给出星期几字典列表
+		//給出星期幾字典列表
 		Dict weekNumDict = new Dict();
 		weekNumDict.setType("week_flag");
 		List<Dict> weekNumDictList = this.systemService.listDict(weekNumDict);
@@ -118,7 +118,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 
 
 	/**
-	 * 查看，增加，编辑课程表单页面
+	 * 查看，增加，編輯課程表單頁面
 	 */
 	@RequiresPermissions(value={"att:serCourse:view","att:serCourse:add","att:serCourse:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -126,13 +126,13 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		model.addAttribute("serCourse", serCourse);
 		if(serCourse.getId()==null){
 			// serCourse.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/serCourseForm";
 	}
 
 	/**
-	 * 查看打印课程表单页面
+	 * 查看打印課程表單頁面
 	 */
 	@RequiresPermissions(value={"att:serCourse:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -142,7 +142,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	}
 
 	/**
-	 * 保存课程
+	 * 保存課程
 	 */
 	@RequiresPermissions(value={"att:serCourse:add","att:serCourse:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -150,30 +150,30 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		if (!beanValidator(model, serCourse)){
 			return form(serCourse, model);
 		}
-		if(!serCourse.getIsNewRecord()){//编辑表单保存
-			SerCourse t = serCourseService.get(serCourse.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(serCourse, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!serCourse.getIsNewRecord()){//編輯表單保存
+			SerCourse t = serCourseService.get(serCourse.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(serCourse, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			serCourseService.save(t);//保存
-		}else{//新增表单保存
+		}else{//新增表單保存
 			serCourseService.save(serCourse);//保存
 		}
-		addMessage(redirectAttributes, "保存课程成功");
+		addMessage(redirectAttributes, "保存課程成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?menuId="+serCourse.getMenuId();
 	}
 
 	/**
-	 * 删除课程
+	 * 刪除課程
 	 */
 	@RequiresPermissions("att:serCourse:del")
 	@RequestMapping(value = "delete")
 	public String delete(SerCourse serCourse, RedirectAttributes redirectAttributes) {
 		serCourseService.delete(serCourse);
-		addMessage(redirectAttributes, "删除课程成功");
+		addMessage(redirectAttributes, "刪除課程成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?repage";
 	}
 
 	/**
-	 * 批量删除课程
+	 * 批量刪除課程
 	 */
 	@RequiresPermissions("att:serCourse:del")
 	@RequestMapping(value = "deleteAll")
@@ -182,29 +182,29 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		for(String id : idArray){
 			serCourseService.delete(serCourseService.get(id));
 		}
-		addMessage(redirectAttributes, "删除课程成功");
+		addMessage(redirectAttributes, "刪除課程成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:serCourse:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SerCourse serCourse, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "课程"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "課程"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SerCourse> page = serCourseService.findPage(new Page<SerCourse>(request, response, -1), serCourse);
-    		new ExportExcel("课程", SerCourse.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("課程", SerCourse.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出课程记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出課程記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?menuId="+serCourse.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 
 	 */
 	@RequiresPermissions("att:serCourse:import")
@@ -218,7 +218,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "课程列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "課程列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -235,13 +235,13 @@ public class SerCourseController extends BaseController implements BasicVerifica
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条课程记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條課程記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条课程记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條課程記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入课程失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入課程失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?menuId="+menuId;
     }
@@ -264,24 +264,24 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	}
 
 	/**
-	 * 下载导入课程数据模板
+	 * 下載導入課程數據模板
 	 */
 	@RequiresPermissions("att:serCourse:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "课程数据导入模板.xlsx";
+            String fileName = "課程數據導入模板.xlsx";
     		List<SerCourse> list = Lists.newArrayList();
-    		new ExportExcel("课程数据", SerCourse.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("課程數據", SerCourse.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serCourse/?repage";
     }
 
 	/**
-	 * 功能：兑换用户收到且未兑换打的飞象卡，更新飞象卡的状态，更新钱包的金额
+	 * 功能：兌換用戶收到且未兌換打的飛象卡，更新飛象卡的狀態，更新錢包的金額
 	 * @param userwallet
 	 * @param request
 	 * @param response
@@ -296,7 +296,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		AjaxJson ajaxJson = new AjaxJson();
 		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 
-		//1.获取开始时间与结束时间
+		//1.獲取開始時間與結束時間
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
 		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
@@ -305,21 +305,21 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
 		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
 		if (days < 7) {
-			map.put("msg","生成課程失败,由於生成課程天數小於七天, 無法生成課程！");
+			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
 			return  ajaxJson;
 		}
 
-		//2.获取年份
+		//2.獲取年份
 		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
 
-		//3.根据教练员ID获取教练员编号
+		//3.根據教練員ID獲取教練員編號
 		String coachCode = this.sysBaseCoachService.findCoachCodeByCoachId(coachId);
 		if (coachCode == null || coachCode.equals("")) {
-			map.put("msg","生成課程失败,無法找到教練員！");
+			map.put("msg","生成課程失敗,無法找到教練員！");
 			return  ajaxJson;
 		}
 
-		//4计算一段时间段内有多少天周几
+		//4計算壹段時間段內有多少天周幾
 		int weekenNum = 0;
 		Date first = null;
 		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
@@ -335,7 +335,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 				for (int j = 0; j < days; j++) {
 					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
 					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
-						//时间段内第一个符合指定周几的日期
+						//時間段內第壹個符合指定周幾的日期
 						serCourse.setCourseDate(first);
 						break;
 					}
@@ -346,7 +346,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 				serCourse.setCourseDate(first);
 			}
 
-			//继续添加
+			//繼續添加
 			serCourse.setCourseNum(i + 1);
 			serCourse.setCourseAddress(courseAddressFlag);
 			serCourse.setStrInWeek(weekNum);

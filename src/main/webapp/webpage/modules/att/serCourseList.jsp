@@ -2,7 +2,7 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>课程管理</title>
+	<title>課程管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -33,35 +33,35 @@
         }
 
 		 function duihuan() {
-            console.log("提交,正在进行泳课排班生成...");
+            console.log("提交,正在進行泳課排班生成...");
             var coachSelectVal = $("#coachSelectId").val();
             if(null==coachSelectVal|| coachSelectVal==''){
-                alert("您还没有选择教练员,请选择！");
+                alert("您還沒有選擇教練員,請選擇！");
                 return;
             }
             var courseAddressSelectVal = $("#courseAddressSelect").val();
             if(null==courseAddressSelectVal|| courseAddressSelectVal==''){
-                alert("您还没有选择泳池地址,请选择！");
+                alert("您還沒有選擇泳池地址,請選擇！");
                 return;
             }
             var weekNumSelectVal = $("#weekNumSelect").val();
             if(null==weekNumSelectVal|| weekNumSelectVal==''){
-                alert("您还没有选择星期几,请选择！");
+                alert("您還沒有選擇星期幾,請選擇！");
                 return;
             }
             var beginTimeStrSelectVal = $("#beginTimeStrSelect").val();
             if(null==beginTimeStrSelectVal|| beginTimeStrSelectVal==''){
-                alert("您还没有选择开始日期,请选择！");
+                alert("您還沒有選擇開始日期,請選擇！");
                 return;
             }
             var endTimeStrSelectVal = $("#endTimeStrSelect").val();
             if(null==endTimeStrSelectVal|| endTimeStrSelectVal==''){
-                alert("您还没有选择结束日期,请选择！");
+                alert("您還沒有選擇結束日期,請選擇！");
                 return;
             }
 
-            if(confirm("确定要进行课程生成吗？")==true){
-            	loading('正在生成，请稍等...');
+            if(confirm("確定要進行課程生成嗎？")==true){
+            	loading('正在生成，請稍等...');
                 $.ajax({
                     type:"post",
                     url:"${ctx}/att/serCourse/generateCourseScheduling",
@@ -71,12 +71,12 @@
                     	  "beginTimeStr":beginTimeStrSelectVal,
                     	  "endTimeStr":endTimeStrSelectVal},
                     success:function (data) {
-                    	alert("生成课程成功！");
+                    	alert("生成課程成功！");
                     	$('#createOffsetData').modal('hide')
                     	search();
                     },
                     fail:function (data) {
-                        alert("生成课程失败！");
+                        alert("生成課程失敗！");
                         return;
                     }
                 });
@@ -100,9 +100,9 @@
 							&times;
 						</button>
 						<h4>
-							泳课课程排班生成
+							泳課課程排班生成
 						</h4>
-						说明：取一段时间范围，选择礼拜几，时间范围不可以少于7天。
+						說明：取壹段時間範圍，選擇禮拜幾，時間範圍不可以少於7天。
 					</div>
 
 					<div class="modal-body">
@@ -113,11 +113,11 @@
 						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
 							<tbody>
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>教练员：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>教練員：</label></td>
 								<td class="width-35">
 									<sys:treeselect  id="coachSelect"  name="sysBaseCoach.id" value="" labelName="sysBaseCoach.name" labelValue=""
-										 title="教练员" url="/att/sysBaseCoach/treeData" cssClass="form-control"
-										 allowClear="true"  placeholder="请选择教练员！" />
+										 title="教練員" url="/att/sysBaseCoach/treeData" cssClass="form-control"
+										 allowClear="true"  placeholder="請選擇教練員！" />
 								</td>
 							</tr>
 							<tr>
@@ -131,7 +131,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>禮拜幾：</label></td>
 								<td class="width-35">
 									<select id="weekNumSelect" name="weekNumSelect" class="form-control" type="select">
 										<c:forEach var="dict" items="${weekNumDictList}" varStatus="status">
@@ -142,17 +142,17 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>开始时间：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>開始時間：</label></td>
 								<td class="width-35">
-								   <input id="beginTimeStrSelect" placeholder="开始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
+								   <input id="beginTimeStrSelect" placeholder="開始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>结束时间：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>結束時間：</label></td>
 								<td class="width-35">
-								   <input id="endTimeStrSelect" placeholder="结束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
+								   <input id="endTimeStrSelect" placeholder="結束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>
@@ -164,7 +164,7 @@
 					</div>
 					<div class="modal-footer">
 						<button id="submitCreateOffsetData"  type="button" class="btn btn-success btn-sm">
-							确认生成
+							確認生成
 						</button>
 					</div>
 				</div>
@@ -172,7 +172,7 @@
 		</div>
 
 
-	<!--查询条件-->
+	<!--查詢條件-->
 	<div class="row">
 	<div class="col-sm-12">
 	<form:form id="searchForm" modelAttribute="serCourse" action="${ctx}/att/serCourse/" method="post" class="form-inline">
@@ -181,14 +181,14 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-			<form:input placeholder="课程编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
-			<input placeholder="课程时间范围" id="dateRange" name="dateRange" class="laydate-icon form-control layer-date" type="text"  value="${dateRange}" />
-			<form:input placeholder="教练员中文名" path="coachName" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
-			<form:select placeholder="星期几" path="strInWeek"  class="form-control m-b required" onchange="search()" >
+			<form:input placeholder="課程編號" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<input placeholder="課程時間範圍" id="dateRange" name="dateRange" class="laydate-icon form-control layer-date" type="text"  value="${dateRange}" />
+			<form:input placeholder="教練員中文名" path="coachName" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<form:select placeholder="星期幾" path="strInWeek"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('week_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
-			<form:select placeholder="课程地址" path="courseAddress"  class="form-control m-b required" onchange="search()" >
+			<form:select placeholder="課程地址" path="courseAddress"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('course_addrese_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
@@ -198,30 +198,30 @@
 	</div>
 	</div>
 
-	<!-- 工具栏 -->
+	<!-- 工具欄 -->
 	<div class="row">
 	<div class="col-sm-12">
 		<div class="pull-left">
 			<shiro:hasPermission name="att:serCourse:add">
-				<table:addRow url="${ctx}/att/serCourse/form?menuId=${menu.id}" title="课程"></table:addRow><!-- 增加按钮 -->
+				<table:addRow url="${ctx}/att/serCourse/form?menuId=${menu.id}" title="課程"></table:addRow><!-- 增加按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serCourse:edit">
-			    <table:editRow url="${ctx}/att/serCourse/form" title="课程" id="contentTable"></table:editRow><!-- 编辑按钮 -->
+			    <table:editRow url="${ctx}/att/serCourse/form" title="課程" id="contentTable"></table:editRow><!-- 編輯按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serCourse:del">
-				<table:delRow url="${ctx}/att/serCourse/deleteAll" id="contentTable"></table:delRow><!-- 删除按钮 -->
+				<table:delRow url="${ctx}/att/serCourse/deleteAll" id="contentTable"></table:delRow><!-- 刪除按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serCourse:import">
-				<table:importExcel url="${ctx}/att/serCourse/import"  menuId="${menu.id}" ></table:importExcel><!-- 导入按钮 -->
+				<table:importExcel url="${ctx}/att/serCourse/import"  menuId="${menu.id}" ></table:importExcel><!-- 導入按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serCourse:export">
-	       		<table:exportExcel url="${ctx}/att/serCourse/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
+	       		<table:exportExcel url="${ctx}/att/serCourse/export?menuId=${menu.id}"></table:exportExcel><!-- 導出按鈕 -->
 	       	</shiro:hasPermission>
 
 			</div>
 		<div class="pull-right">
 			<shiro:hasPermission name="att:serCourse:generativeCourse">
-				<button  data-placement="left" class="btn btn-success btn-sm" data-toggle="modal" onclick="createOffset('1','0')" data-target="#createOffsetData" >生成课程</button>
+				<button  data-placement="left" class="btn btn-success btn-sm" data-toggle="modal" onclick="createOffset('1','0')" data-target="#createOffsetData" >生成課程</button>
 			</shiro:hasPermission>
 			<button  class="btn btn-success btn-sm" onclick="search()" ><i class="fa fa-search"></i> 查詢</button>
 			<button  class="btn btn-success btn-sm" onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
@@ -242,8 +242,8 @@
 				<th  class="sort-column courseNum">課程所屬第幾堂</th>
 				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column strInWeek">星期幾</th>
-				<th  class="sort-column beginDate">课程开始时间</th>
-				<th  class="sort-column endDate">课程结束时间</th>
+				<th  class="sort-column beginDate">課程開始時間</th>
+				<th  class="sort-column endDate">課程結束時間</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -285,7 +285,7 @@
 		</tbody>
 	</table>
 
-		<!-- 分页代码 -->
+		<!-- 分頁代碼 -->
 	<table:page page="${page}"></table:page>
 	<br/>
 	<br/>
