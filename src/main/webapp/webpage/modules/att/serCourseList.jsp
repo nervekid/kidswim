@@ -14,14 +14,16 @@
             $("#submitCreateOffsetData").click(function(){
 				duihuan();
 			});
-
             laydate.render({
 				elem: '#beginTimeStrSelect'
 			});
             laydate.render({
 				elem: '#endTimeStrSelect'
 			});
-
+            laydate.render({
+                elem: '#dateRange',
+                range: '~'
+            });
 		});
 
 
@@ -30,10 +32,10 @@
             $("#typeFlag").val(typeFlag);
         }
 
-		function duihuan() {
+		 function duihuan() {
             console.log("提交,正在进行泳课排班生成...");
-            var coachSelectVal = $("#coachSelect").val();
-            if(null==coachSelect|| coachSelect==''){
+            var coachSelectVal = $("#coachSelectId").val();
+            if(null==coachSelectVal|| coachSelectVal==''){
                 alert("您还没有选择教练员,请选择！");
                 return;
             }
@@ -59,17 +61,19 @@
             }
 
             if(confirm("确定要进行课程生成吗？")==true){
+            	loading('正在生成，请稍等...');
                 $.ajax({
                     type:"post",
                     url:"${ctx}/att/serCourse/generateCourseScheduling",
-                    data:{"courcouseAddressFlag":courseAddressSelectVal,
+                    data:{"courseAddressFlag":courseAddressSelectVal,
                     	  "coachId":coachSelectVal,
+                    	  "weekNum":weekNumSelectVal,
                     	  "beginTimeStr":beginTimeStrSelectVal,
-                    	  "endTimeStr":endTimeStrSelectVal,
-                    	  "weekNum":weekNumSelectVal},
-                    }
+                    	  "endTimeStr":endTimeStrSelectVal},
                     success:function (data) {
                     	alert("生成课程成功！");
+                    	$('#createOffsetData').modal('hide')
+                    	search();
                     },
                     fail:function (data) {
                         alert("生成课程失败！");
@@ -77,8 +81,7 @@
                     }
                 });
             }
-        }
-
+		 }
 	</script>
 	<script type="text/javascript" src="${ctxStatic}/common/collectionMenu.js"></script>
 </head>
@@ -116,6 +119,7 @@
 										 title="教练员" url="/att/sysBaseCoach/treeData" cssClass="form-control"
 										 allowClear="true"  placeholder="请选择教练员！" />
 								</td>
+							</tr>
 							<tr>
 								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>泳池：</label></td>
 								<td class="width-35">
@@ -138,7 +142,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>开始时间：</label></td>
 								<td class="width-35">
 								   <input id="beginTimeStrSelect" placeholder="开始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
@@ -146,14 +150,13 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>礼拜几：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>结束时间：</label></td>
 								<td class="width-35">
 								   <input id="endTimeStrSelect" placeholder="结束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>
 
-							</tr>
 							</tbody>
 						</table>
 						<sys:message content="${message}"/>
@@ -178,6 +181,17 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
+			<form:input placeholder="课程编号" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<input placeholder="课程时间范围" id="dateRange" name="dateRange" class="laydate-icon form-control layer-date" type="text"  value="${dateRange}" />
+			<form:input placeholder="教练员中文名" path="coachName" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<form:select placeholder="星期几" path="strInWeek"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
+				<form:options items="${fns:getDictList('week_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="课程地址" path="courseAddress"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
+				<form:options items="${fns:getDictList('course_addrese_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
 		 </div>
 	</form:form>
 	<br/>
@@ -221,13 +235,15 @@
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column code">課程編號</th>
-				<th  class="sort-column coathId">教練員id</th>
+				<th  class="sort-column coathId">教練員</th>
 				<th  class="sort-column beginYearMonth">開始年月</th>
 				<th  class="sort-column endYearMonth">結束年月</th>
 				<th  class="sort-column courseDate">上課日期</th>
 				<th  class="sort-column courseNum">課程所屬第幾堂</th>
 				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column strInWeek">星期幾</th>
+				<th  class="sort-column beginDate">课程开始时间</th>
+				<th  class="sort-column endDate">课程结束时间</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -238,7 +254,7 @@
 					${serCourse.code}
 				</a></td>
 				<td>
-					${serCourse.coathId}
+					${serCourse.coachName}
 				</td>
 				<td>
 					${serCourse.beginYearMonth}
@@ -247,16 +263,22 @@
 					${serCourse.endYearMonth}
 				</td>
 				<td>
-					<fmt:formatDate value="${serCourse.courseDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${serCourse.courseDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					${serCourse.courseNum}
 				</td>
 				<td>
-					${serCourse.courseAddress}
+					${fns:getDictLabel(serCourse.courseAddress, 'course_addrese_flag', '')}
 				</td>
 				<td>
-					${serCourse.strInWeek}
+					${fns:getDictLabel(serCourse.strInWeek, 'week_flag', '')}
+				</td>
+				<td>
+					<fmt:formatDate value="${serCourse.beginDate}" pattern="yyyy-MM-dd"/>
+				</td>
+				<td>
+					<fmt:formatDate value="${serCourse.endDate}" pattern="yyyy-MM-dd"/>
 				</td>
 			</tr>
 		</c:forEach>

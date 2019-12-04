@@ -27,7 +27,11 @@ public class DateUtils {
 	     calendar.setTime(date);
 	     String y = String.valueOf(calendar.get(Calendar.YEAR));
 	     String m = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-	     String ym = y + m;
+	     String ym = "";
+	     if (Integer.parseInt(m) < 10) {
+	    	 m = "0" + m;
+	     }
+	     ym = y + m;
 	     return ym;
 	}
 

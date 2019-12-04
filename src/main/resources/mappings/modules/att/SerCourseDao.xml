@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SerCourseDao">
-    
+
 	<sql id="serCourseColumns">
 		a.id AS "id",
 		a.code AS "code",
@@ -17,23 +17,62 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.beginDate AS "beginDate",
+		a.endDate AS "endDate",
+		coach.nameCn AS "coachName"
+
 	</sql>
-	
+
 	<sql id="serCourseJoins">
+		LEFT JOIN sys_base_coach coach ON coach.id = a.coathId
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="SerCourse" >
-		SELECT 
+		SELECT
 			<include refid="serCourseColumns"/>
 		FROM ser_course a
 		<include refid="serCourseJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SerCourse" >
-		SELECT 
+		SELECT
+			<include refid="serCourseColumns"/>
+		FROM ser_course a
+		<include refid="serCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code like '%' #{code} '%'
+			</if>
+			<if test="coachName != null and coachName != ''">
+				AND coach.nameCn like '%' #{coachName} '%'
+			</if>
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.beginDate BETWEEN #{beginTime} and #{endTime}
+ 				AND a.endDate BETWEEN #{beginTime} and #{endTime}
+			</if>
+			<if test="strInWeek != null and strInWeek != ''">
+				AND a.strInWeek = #{strInWeek}
+			</if>
+			<if test="courseAddress != null and courseAddress != ''">
+				AND a.courseAddress = #{courseAddress}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SerCourse" >
+		SELECT
 			<include refid="serCourseColumns"/>
 		FROM ser_course a
 		<include refid="serCourseJoins"/>
@@ -49,25 +88,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	
-	<select id="findAllList" resultType="SerCourse" >
-		SELECT 
-			<include refid="serCourseColumns"/>
-		FROM ser_course a
-		<include refid="serCourseJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO ser_course(
 			id,
@@ -84,7 +105,9 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			beginDate,
+			endDate
 		) VALUES (
 			#{id},
 			#{code},
@@ -100,12 +123,14 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{beginDate},
+			#{endDate}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE ser_course SET 	
+		UPDATE ser_course SET
 			code = #{code},
 			coathId = #{coathId},
 			beginYearMonth = #{beginYearMonth},
@@ -116,28 +141,30 @@
 			strInWeek = #{strInWeek},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
+			beginDate = #{beginDate},
+			endDate = #{endDate},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM ser_course
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE ser_course SET 
+		UPDATE ser_course SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SerCourse" statementType="STATEMENT">
 		select * FROM ser_course  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

@@ -81,10 +81,11 @@ public class SerCourseController extends BaseController implements BasicVerifica
 
 	/**
 	 * 课程列表页面
+	 * @throws ParseException
 	 */
 	@RequiresPermissions("att:serCourse:list")
 	@RequestMapping(value = {"list", ""})
-	public String list(SerCourse serCourse, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String list(SerCourse serCourse, HttpServletRequest request, HttpServletResponse response, Model model) throws ParseException {
 		Page<SerCourse> page = serCourseService.findPage(new Page<SerCourse>(request, response), serCourse);
 
 		//给出泳池地址字典列表
@@ -96,6 +97,17 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		Dict weekNumDict = new Dict();
 		weekNumDict.setType("week_flag");
 		List<Dict> weekNumDictList = this.systemService.listDict(weekNumDict);
+
+		if (serCourse.getDateRange() != null && !serCourse.getDateRange().equals("")) {
+    		String [] attr = serCourse.getDateRange().split(" ~ ");
+    		String beginStr = attr[0];
+    		String endStr = attr[1];
+    		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    		Date begin = com.kite.common.utils.date.DateUtils.getFistTimeDate(sdf.parse(beginStr));
+    		Date end = com.kite.common.utils.date.DateUtils.getLastTimeDate(sdf.parse(endStr));
+    		serCourse.setBeginTime(begin);
+    		serCourse.setEndTime(end);
+    	}
 
 		model.addAttribute("page", page);
 		model.addAttribute("courseAddressDictList", courseAddressDictList);
@@ -285,7 +297,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 
 		//1.获取开始时间与结束时间
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
 		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
 		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
@@ -325,6 +337,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
 						//时间段内第一个符合指定周几的日期
 						serCourse.setCourseDate(first);
+						break;
 					}
 				}
 			}
@@ -334,9 +347,11 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			}
 
 			//继续添加
-			serCourse.setCourseNum(i ++);
+			serCourse.setCourseNum(i + 1);
 			serCourse.setCourseAddress(courseAddressFlag);
 			serCourse.setStrInWeek(weekNum);
+			serCourse.setBeginDate(beginTime);
+			serCourse.setEndDate(endTime);
 
 			this.serCourseService.save(serCourse);
 		}
