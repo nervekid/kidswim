@@ -5,27 +5,25 @@
 	<sql id="serCourseColumns">
 		a.id AS "id",
 		a.code AS "code",
-		a.coathId AS "coathId",
-		a.beginYearMonth AS "beginYearMonth",
-		a.endYearMonth AS "endYearMonth",
-		a.courseDate AS "courseDate",
-		a.courseNum AS "courseNum",
+		a.course_level AS "courseLevel",
+		a.course_beginTime AS "courseBeginTime",
+		a.course_endTimeTime AS "courseEndTimeTime",
+		a.learn_beginTime AS "learnBeginTime",
+		a.learn_endTimeTime AS "learnEndTimeTime",
+		a.learn_num AS "learnNum",
 		a.courseAddress AS "courseAddress",
 		a.strInWeek AS "strInWeek",
+		a.assessment_date AS "assessmentDate",
+		a.course_fee AS "courseFee",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag",
-		a.beginDate AS "beginDate",
-		a.endDate AS "endDate",
-		coach.nameCn AS "coachName"
-
+		a.del_flag AS "delFlag"
 	</sql>
 
 	<sql id="serCourseJoins">
-		LEFT JOIN sys_base_coach coach ON coach.id = a.coathId
 	</sql>
 
 
@@ -47,12 +45,12 @@
 			<if test="code != null and code != ''">
 				AND a.code like '%' #{code} '%'
 			</if>
-			<if test="coachName != null and coachName != ''">
-				AND coach.nameCn like '%' #{coachName} '%'
+			<if test="courseBeginTime != null and courseBeginTime != '' and courseEndTimeTime != null and courseEndTimeTime != ''">
+				AND a.course_beginTime BETWEEN #{courseBeginTime} and #{courseEndTimeTime}
+ 				AND a.course_endTimeTime BETWEEN #{courseBeginTime} and #{courseEndTimeTime}
 			</if>
-			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
-				AND a.beginDate BETWEEN #{beginTime} and #{endTime}
- 				AND a.endDate BETWEEN #{beginTime} and #{endTime}
+			<if test="courseLevel != null and courseLevel != ''">
+				AND a.course_level = #{courseLevel}
 			</if>
 			<if test="strInWeek != null and strInWeek != ''">
 				AND a.strInWeek = #{strInWeek}
@@ -93,57 +91,60 @@
 		INSERT INTO ser_course(
 			id,
 			code,
-			coathId,
-			beginYearMonth,
-			endYearMonth,
-			courseDate,
-			courseNum,
+			course_level,
+			course_beginTime,
+			course_endTimeTime,
+			learn_beginTime,
+			learn_endTimeTime,
+			learn_num,
 			courseAddress,
 			strInWeek,
+			assessment_date,
+			course_fee,
 			create_by,
 			create_date,
 			update_by,
 			update_date,
 			remarks,
-			del_flag,
-			beginDate,
-			endDate
+			del_flag
 		) VALUES (
 			#{id},
 			#{code},
-			#{coathId},
-			#{beginYearMonth},
-			#{endYearMonth},
-			#{courseDate},
-			#{courseNum},
+			#{courseLevel},
+			#{courseBeginTime},
+			#{courseEndTimeTime},
+			#{learnBeginTime},
+			#{learnEndTimeTime},
+			#{learnNum},
 			#{courseAddress},
 			#{strInWeek},
+			#{assessmentDate},
+			#{courseFee},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag},
-			#{beginDate},
-			#{endDate}
+			#{delFlag}
 		)
 	</insert>
 
 	<update id="update">
 		UPDATE ser_course SET
 			code = #{code},
-			coathId = #{coathId},
-			beginYearMonth = #{beginYearMonth},
-			endYearMonth = #{endYearMonth},
-			courseDate = #{courseDate},
-			courseNum = #{courseNum},
+			course_level = #{courseLevel},
+			course_beginTime = #{courseBeginTime},
+			course_endTimeTime = #{courseEndTimeTime},
+			learn_beginTime = #{learnBeginTime},
+			learn_endTimeTime = #{learnEndTimeTime},
+			learn_num = #{learnNum},
 			courseAddress = #{courseAddress},
 			strInWeek = #{strInWeek},
+			assessment_date = #{assessmentDate},
+			course_fee = #{courseFee},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			beginDate = #{beginDate},
-			endDate = #{endDate},
-			remarks = #{remarks}
+			beginDate = #{beginDate}
 		WHERE id = #{id}
 	</update>
 
