@@ -790,4 +790,24 @@ public class DateUtils {
        return dayForWeek;
    }
 
+   /**
+    * 将日期转为HHmm格式，如1208
+    * @return
+    */
+   public static String changeDateToHHmm(Date date) {
+       Calendar c = Calendar.getInstance();
+       c.setTime(date);
+       int year = c.get(Calendar.HOUR_OF_DAY);
+       int month = c.get(Calendar.MINUTE);
+       String yearStr = String.valueOf(year);
+       String monthStr;
+       if (month < 10) {
+           monthStr = String.valueOf("0" + month);
+       }
+       else {
+           monthStr = String.valueOf(month);
+       }
+       return yearStr + monthStr;
+   }
+
 }

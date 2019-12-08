@@ -312,10 +312,10 @@ public class SerCourseController extends BaseController implements BasicVerifica
 
 		//1.獲取開始時間與結束時間
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
-		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
-		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
-		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
+		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
+		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
+//		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
+//		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
 		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
 		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
 		if (days < 7) {
@@ -326,12 +326,14 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		//2.獲取年份
 		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
 
-		//3.
-
-		//4計算壹段時間段內有多少天周幾
+		//3.获取课程堂数
 		int weekenNum = 0;
 		Date first = null;
 		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
+
+		//4.
+
+		//5.計算壹段時間段內有多少天周幾
 		for (int i = 0; i < weekenNum; i++) {
 			SerCourse serCourse = new SerCourse();
 
