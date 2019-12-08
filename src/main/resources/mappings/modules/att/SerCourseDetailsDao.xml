@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kite.modules.att.dao.SerCourseDetailsDao">
+
+	<sql id="serCourseDetailsColumns">
+		a.id AS "id",
+		a.courseId AS "courseId",
+		a.learn_date AS "learnDate",
+		a.learn_begin_date AS "learnBeginDate",
+		a.learn_end_date AS "learnEndDate",
+		a.coathId AS "coathId",
+		a.rollCall_status_flag AS "rollCallStatusFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="serCourseDetailsJoins">
+	</sql>
+
+
+	<select id="get" resultType="SerCourseDetails" >
+		SELECT
+			<include refid="serCourseDetailsColumns"/>
+		FROM ser_course_details a
+		<include refid="serCourseDetailsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SerCourseDetails" >
+		SELECT
+			<include refid="serCourseDetailsColumns"/>
+		FROM ser_course_details a
+		<include refid="serCourseDetailsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SerCourseDetails" >
+		SELECT
+			<include refid="serCourseDetailsColumns"/>
+		FROM ser_course_details a
+		<include refid="serCourseDetailsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO ser_course_details(
+			id,
+			courseId,
+			learn_date,
+			learn_begin_date,
+			learn_end_date,
+			coathId,
+			rollCall_status_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{courseId},
+			#{learnDate},
+			#{learnBeginDate},
+			#{learnEndDate},
+			#{coathId},
+			#{rollCallStatusFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE ser_course_details SET
+			courseId = #{courseId},
+			learn_date = #{learnDate},
+			learn_begin_date = #{learnBeginDate},
+			learn_end_date = #{learnEndDate},
+			coathId = #{coathId},
+			rollCall_status_flag = #{rollCallStatusFlag},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			beginDate = #{beginDate}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM ser_course_details
+		WHERE id = #{id}
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE ser_course_details SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="SerCourseDetails" statementType="STATEMENT">
+		select * FROM ser_course_details  where ${propertyName} = '${value}'
+	</select>
+
+</mapper>

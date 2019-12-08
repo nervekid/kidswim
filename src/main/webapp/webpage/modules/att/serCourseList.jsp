@@ -235,15 +235,15 @@
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column code">課程編號</th>
-				<th  class="sort-column coathId">教練員</th>
-				<th  class="sort-column beginYearMonth">開始年月</th>
-				<th  class="sort-column endYearMonth">結束年月</th>
-				<th  class="sort-column courseDate">上課日期</th>
-				<th  class="sort-column courseNum">課程所屬第幾堂</th>
+				<th  class="sort-column coathId">课程等级</th>
+				<th  class="sort-column beginYearMonth">课程时间范围</th>
+				<th  class="sort-column courseDate">上课开始时间</th>
+				<th  class="sort-column courseNum">上课结束时间</th>
+				<th  class="sort-column courseNum">堂数</th>
 				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column strInWeek">星期幾</th>
-				<th  class="sort-column beginDate">課程開始時間</th>
-				<th  class="sort-column endDate">課程結束時間</th>
+				<th  class="sort-column strInWeek">评估日期</th>
+				<th  class="sort-column strInWeek">费用</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -273,12 +273,6 @@
 				</td>
 				<td>
 					${fns:getDictLabel(serCourse.strInWeek, 'week_flag', '')}
-				</td>
-				<td>
-					<fmt:formatDate value="${serCourse.beginDate}" pattern="yyyy-MM-dd"/>
-				</td>
-				<td>
-					<fmt:formatDate value="${serCourse.endDate}" pattern="yyyy-MM-dd"/>
 				</td>
 			</tr>
 		</c:forEach>

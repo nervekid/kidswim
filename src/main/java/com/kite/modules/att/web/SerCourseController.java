@@ -288,76 +288,76 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	 * @return
 	 * @throws ParseException
 	 */
-	@RequestMapping(value = "/generateCourseScheduling")
-	@ResponseBody
-	public AjaxJson generateCourseScheduling(@RequestParam("courseAddressFlag") String courseAddressFlag, @RequestParam("coachId") String coachId,
-			@RequestParam("beginTimeStr") String beginTimeStr, @RequestParam("endTimeStr") String endTimeStr, @RequestParam("weekNum") String weekNum,
-			HttpServletRequest request, HttpServletResponse  response) throws ParseException {
-		AjaxJson ajaxJson = new AjaxJson();
-		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
-
-		//1.獲取開始時間與結束時間
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
-		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
-		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
-		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
-		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
-		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
-		if (days < 7) {
-			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
-			return  ajaxJson;
-		}
-
-		//2.獲取年份
-		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
-
-		//3.根據教練員ID獲取教練員編號
-		String coachCode = this.sysBaseCoachService.findCoachCodeByCoachId(coachId);
-		if (coachCode == null || coachCode.equals("")) {
-			map.put("msg","生成課程失敗,無法找到教練員！");
-			return  ajaxJson;
-		}
-
-		//4計算壹段時間段內有多少天周幾
-		int weekenNum = 0;
-		Date first = null;
-		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
-		for (int i = 0; i < weekenNum; i++) {
-			SerCourse serCourse = new SerCourse();
-			serCourse.setCode(yearStr + courseAddressFlag + coachCode);
-			serCourse.setCoathId(coachId);
-			serCourse.setBeginYearMonth(beginYearMonth);
-			serCourse.setEndYearMonth(endYearMonth);
-
-			//核算日期
-			if (i == 0) {
-				for (int j = 0; j < days; j++) {
-					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
-					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
-						//時間段內第壹個符合指定周幾的日期
-						serCourse.setCourseDate(first);
-						break;
-					}
-				}
-			}
-			else {
-				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
-				serCourse.setCourseDate(first);
-			}
-
-			//繼續添加
-			serCourse.setCourseNum(i + 1);
-			serCourse.setCourseAddress(courseAddressFlag);
-			serCourse.setStrInWeek(weekNum);
-			serCourse.setBeginDate(beginTime);
-			serCourse.setEndDate(endTime);
-
-			this.serCourseService.save(serCourse);
-		}
-		map.put("msg","成功生成課程！");
-		ajaxJson.setBody(map);
-		return  ajaxJson;
-	}
+//	@RequestMapping(value = "/generateCourseScheduling")
+//	@ResponseBody
+//	public AjaxJson generateCourseScheduling(@RequestParam("courseAddressFlag") String courseAddressFlag, @RequestParam("coachId") String coachId,
+//			@RequestParam("beginTimeStr") String beginTimeStr, @RequestParam("endTimeStr") String endTimeStr, @RequestParam("weekNum") String weekNum,
+//			HttpServletRequest request, HttpServletResponse  response) throws ParseException {
+//		AjaxJson ajaxJson = new AjaxJson();
+//		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
+//
+//		//1.獲取開始時間與結束時間
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
+//		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
+//		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
+//		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
+//		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
+//		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
+//		if (days < 7) {
+//			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
+//			return  ajaxJson;
+//		}
+//
+//		//2.獲取年份
+//		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
+//
+//		//3.根據教練員ID獲取教練員編號
+//		String coachCode = this.sysBaseCoachService.findCoachCodeByCoachId(coachId);
+//		if (coachCode == null || coachCode.equals("")) {
+//			map.put("msg","生成課程失敗,無法找到教練員！");
+//			return  ajaxJson;
+//		}
+//
+//		//4計算壹段時間段內有多少天周幾
+//		int weekenNum = 0;
+//		Date first = null;
+//		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
+//		for (int i = 0; i < weekenNum; i++) {
+//			SerCourse serCourse = new SerCourse();
+//			serCourse.setCode(yearStr + courseAddressFlag + coachCode);
+//			serCourse.setCoathId(coachId);
+//			serCourse.setBeginYearMonth(beginYearMonth);
+//			serCourse.setEndYearMonth(endYearMonth);
+//
+//			//核算日期
+//			if (i == 0) {
+//				for (int j = 0; j < days; j++) {
+//					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
+//					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
+//						//時間段內第壹個符合指定周幾的日期
+//						serCourse.setCourseDate(first);
+//						break;
+//					}
+//				}
+//			}
+//			else {
+//				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
+//				serCourse.setCourseDate(first);
+//			}
+//
+//			//繼續添加
+//			serCourse.setCourseNum(i + 1);
+//			serCourse.setCourseAddress(courseAddressFlag);
+//			serCourse.setStrInWeek(weekNum);
+//			serCourse.setBeginDate(beginTime);
+//			serCourse.setEndDate(endTime);
+//
+//			this.serCourseService.save(serCourse);
+//		}
+//		map.put("msg","成功生成課程！");
+//		ajaxJson.setBody(map);
+//		return  ajaxJson;
+//	}
 
 }

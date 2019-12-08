@@ -19,14 +19,14 @@ public class SerCourse extends DataEntity<SerCourse> {
 
 	private static final long serialVersionUID = 1L;
 	private String code;		// 课程编号 年份+地点编号+教练员编号 例如:2019MS-CAOO3 按照规则编码
-	private String courseAddress;		// 课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘
-	private String strInWeek;		// 星期几 字典枚举 week_flag 1:星期一 2:星期二 3:星期三 4:星期四 5:星期五 6:星期六 7:星期日
 	private String courseLevel; 	//课程等级 TB：泳隊-預備組 TA：泳隊-競賽組 BB：幼兒 CA：兒童A CB：兒童B CC：兒童C AD：成人 PP：私人
 	private Date courseBeginTime;   //课程开始时间
 	private Date courseEndTimeTime; //课程结束时间
 	private String learn_beginTime;	//上课开始时间字符串 1200 代表中午十二点
 	private String learn_endTimeTime; //上课结束时间字符串 1200 代表中午十二点
 	private int learn_num;			//堂数
+	private String courseAddress;		// 课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘
+	private String strInWeek;		// 星期几 字典枚举 week_flag 1:星期一 2:星期二 3:星期三 4:星期四 5:星期五 6:星期六 7:星期日
 	private Date assessmentDate;	//评估日期
 	private BigDecimal courseFee; 	//课程费用 按照课程收费标准及折扣进行计算 单位(港币)
 
