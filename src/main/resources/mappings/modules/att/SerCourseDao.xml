@@ -45,9 +45,9 @@
 			<if test="code != null and code != ''">
 				AND a.code like '%' #{code} '%'
 			</if>
-			<if test="courseBeginTime != null and courseBeginTime != '' and courseEndTimeTime != null and courseEndTimeTime != ''">
-				AND a.course_beginTime BETWEEN #{courseBeginTime} and #{courseEndTimeTime}
- 				AND a.course_endTimeTime BETWEEN #{courseBeginTime} and #{courseEndTimeTime}
+			<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+				AND a.course_beginTime BETWEEN #{beginTime} and #{endTime}
+ 				AND a.course_endTimeTime BETWEEN #{beginTime} and #{endTime}
 			</if>
 			<if test="courseLevel != null and courseLevel != ''">
 				AND a.course_level = #{courseLevel}

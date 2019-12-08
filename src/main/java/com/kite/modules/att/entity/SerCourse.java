@@ -22,13 +22,15 @@ public class SerCourse extends DataEntity<SerCourse> {
 	private String courseLevel; 	//课程等级 TB：泳隊-預備組 TA：泳隊-競賽組 BB：幼兒 CA：兒童A CB：兒童B CC：兒童C AD：成人 PP：私人
 	private Date courseBeginTime;   //课程开始时间
 	private Date courseEndTimeTime; //课程结束时间
-	private String learn_beginTime;	//上课开始时间字符串 1200 代表中午十二点
-	private String learn_endTimeTime; //上课结束时间字符串 1200 代表中午十二点
-	private int learn_num;			//堂数
+	private String learnBeginTime;	//上课开始时间字符串 1200 代表中午十二点
+	private String learnEndTimeTime; //上课结束时间字符串 1200 代表中午十二点
+	private int learnNum;			//堂数
 	private String courseAddress;		// 课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘
 	private String strInWeek;		// 星期几 字典枚举 week_flag 1:星期一 2:星期二 3:星期三 4:星期四 5:星期五 6:星期六 7:星期日
 	private Date assessmentDate;	//评估日期
 	private BigDecimal courseFee; 	//课程费用 按照课程收费标准及折扣进行计算 单位(港币)
+
+	private String beginTimeAndEndTimeStr; //课程开始于结束的时间范围
 
 	private String dateRange; //时间选择范围
 	private Date beginTime;	  //查询开始时间
@@ -65,18 +67,18 @@ public class SerCourse extends DataEntity<SerCourse> {
 	}
 
 	@ExcelField(title="上课开始时间", align=2, sort=5)
-	public String getLearn_beginTime() {
-		return learn_beginTime;
+	public String getLearnBeginTime() {
+		return learnBeginTime;
 	}
 
 	@ExcelField(title="上课结束时间", align=2, sort=6)
-	public String getLearn_endTimeTime() {
-		return learn_endTimeTime;
+	public String getLearnEndTimeTime() {
+		return learnEndTimeTime;
 	}
 
 	@ExcelField(title="堂数", align=2, sort=7)
-	public int getLearn_num() {
-		return learn_num;
+	public int getLearnNum() {
+		return learnNum;
 	}
 
 	@ExcelField(title="课程地址", dictType="course_addrese_flag", align=2, sort=8)
@@ -160,16 +162,16 @@ public class SerCourse extends DataEntity<SerCourse> {
 		this.courseEndTimeTime = courseEndTimeTime;
 	}
 
-	public void setLearn_beginTime(String learn_beginTime) {
-		this.learn_beginTime = learn_beginTime;
+	public void setLearnEndTimeTime(String learnEndTimeTime) {
+		this.learnEndTimeTime = learnEndTimeTime;
 	}
 
-	public void setLearn_endTimeTime(String learn_endTimeTime) {
-		this.learn_endTimeTime = learn_endTimeTime;
+	public void setLearnBeginTime(String learnBeginTime) {
+		this.learnBeginTime = learnBeginTime;
 	}
 
-	public void setLearn_num(int learn_num) {
-		this.learn_num = learn_num;
+	public void setLearnNum(int learnNum) {
+		this.learnNum = learnNum;
 	}
 
 	public void setAssessmentDate(Date assessmentDate) {
@@ -178,6 +180,15 @@ public class SerCourse extends DataEntity<SerCourse> {
 
 	public void setCourseFee(BigDecimal courseFee) {
 		this.courseFee = courseFee;
+	}
+
+	public String getBeginTimeAndEndTimeStr() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(courseBeginTime) + "~" + sdf.format(courseEndTimeTime);
+	}
+
+	public void setBeginTimeAndEndTimeStr(String beginTimeAndEndTimeStr) {
+		this.beginTimeAndEndTimeStr = beginTimeAndEndTimeStr;
 	}
 
 }

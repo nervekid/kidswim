@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.google.common.collect.Maps;
+import com.kite.modules.att.entity.SerSale;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -301,5 +303,21 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 
 
 
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String subName, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		List<SysBaseStudent> list = sysBaseStudentService.findByName(subName);
+		for (int i=0; i<list.size(); i++){
+			SysBaseStudent e = list.get(i);
 
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", e.getCode());
+			map.put("name", e.getNameCn() + "(" +e.getNameEn()+ ")");
+
+			mapList.add(map);
+		}
+		return mapList;
+	}
 }

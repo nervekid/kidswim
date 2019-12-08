@@ -4,6 +4,7 @@
 package com.kite.modules.att.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -24,4 +25,8 @@ public interface SysBaseStudentDao extends CrudDao<SysBaseStudent> {
 	 * @return
 	 */
 	public int findStudentCount(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
+
+	List<SysBaseStudent> findByName(@Param("name")String subName);
+
+    SysBaseStudent getByCode(@Param("code")String studentCode);
 }

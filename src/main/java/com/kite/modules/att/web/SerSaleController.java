@@ -3,6 +3,8 @@
  */
 package com.kite.modules.att.web;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.google.common.collect.Maps;
+import com.kite.common.utils.*;
+import com.kite.common.utils.verification.BasicVerificationUtil;
+import com.kite.modules.att.entity.SerCourseLevelCost;
+import com.kite.modules.att.entity.SysBaseStudent;
+import com.kite.modules.att.service.SerCourseLevelCostService;
+import com.kite.modules.att.service.SysBaseStudentService;
+import com.kite.modules.sys.entity.SysSequence;
+import com.kite.modules.sys.service.SysSequenceService;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +39,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
-import com.kite.common.utils.DateUtils;
-import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
 import com.kite.common.utils.verification.BasicVerification;
 import com.kite.common.web.BaseController;
-import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
 import com.kite.common.utils.excel.ImportExcel;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
@@ -40,8 +51,8 @@ import com.kite.modules.att.service.SerSaleService;
 
 /**
  * 销售资料Controller
- * @author lyb
- * @version 2019-11-13
+ * @author yyw
+ * @version 2019-12-01
  */
 @Controller
 @RequestMapping(value = "${adminPath}/att/serSale")
@@ -51,6 +62,14 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	private SerSaleService serSaleService;
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
+	@Autowired
+	private SysSequenceService sysSequenceService;
+	@Autowired
+	private SysBaseStudentService sysBaseStudentService;
+	@Autowired
+	private SerCourseLevelCostService serCourseLevelCostService;
+
+
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -60,6 +79,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 		SerSale entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = serSaleService.get(id);
+
 		}
 		if (entity == null){
 			entity = new SerSale();
@@ -118,6 +138,18 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			MyBeanUtils.copyBeanNotNull2Bean(serSale, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
 			serSaleService.save(t);//保存
 		}else{//新增表单保存
+
+//			Date nowDate = new Date();
+//			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
+//			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
+//			String yearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date());
+//			int nowStudents = serSaleService.findcount(beginTime, endTime) + 1;
+//			String code = yearMonth + com.kite.common.utils.date.DateUtils.transformNumString(nowStudents);
+
+			SysSequence waterNumber = sysSequenceService.getWaterNumber("SALE_CODE");
+			String s = String.format("%06d", waterNumber.getCurrentVal());
+			serSale.setCode("P" + String.valueOf(com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date()) + s));
+
 			serSaleService.save(serSale);//保存
 		}
 		addMessage(redirectAttributes, "保存销售资料成功");
@@ -130,7 +162,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	@RequiresPermissions("att:serSale:del")
 	@RequestMapping(value = "delete")
 	public String delete(SerSale serSale, RedirectAttributes redirectAttributes) {
-		serSaleService.delete(serSale);
+		serSaleService.deleteByLogic(serSale);
 		addMessage(redirectAttributes, "删除销售资料成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?repage";
 	}
@@ -143,7 +175,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	public String deleteAll(String ids, RedirectAttributes redirectAttributes) {
 		String idArray[] =ids.split(",");
 		for(String id : idArray){
-			serSaleService.delete(serSaleService.get(id));
+			serSaleService.deleteByLogic(serSaleService.get(id));
 		}
 		addMessage(redirectAttributes, "删除销售资料成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?repage";
@@ -187,9 +219,35 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			else {
 				this.isTip = false;
 				List<SerSale> list = ei.getDataList(SerSale.class);
+				List<SerCourseLevelCost> listCose = serCourseLevelCostService.findList(new SerCourseLevelCost());
+				Map<String, List<SerCourseLevelCost>> map = new HashMap<>();
+				if(ListUtils.isNotNull(listCose)) {
+					 map = MapUtil.toMapListByString(listCose, "courseLevelFlag");
+				}
+
 				for (SerSale serSale : list){
 					try{
+
+						Double discount = serSale.getDiscount();
+
+						SysSequence waterNumber = sysSequenceService.getWaterNumber("SALE_CODE");
+						String s = String.format("%06d", waterNumber.getCurrentVal());
+						serSale.setCode("P" + String.valueOf(com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date()) + s));
+						SysBaseStudent student = sysBaseStudentService.getByCode(serSale.getStudentCode());
+						String courseLevelFlag = student.getCourseLevelFlag();
+
+						if(StringUtils.isNotEmpty(courseLevelFlag)) {
+							List<SerCourseLevelCost> temp = map.get(courseLevelFlag);
+							if(ListUtils.isNotNull(temp)) {
+								SerCourseLevelCost serCourseLevelCost = temp.get(0);
+								BigDecimal costAmount = serCourseLevelCost.getCostAmount();
+								BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
+								serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
+							}
+						}
+
 						serSaleService.save(serSale);
+
 						successNum++;
 					}catch(ConstraintViolationException ex){
 						failureNum++;
@@ -212,7 +270,47 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	@Override
 	public void check(ImportExcel ei) {
 
+		for (int i = ei.getRowFirstNum(); i <= ei.getRowLastNum(); i ++) {
+			Row row = ei.getSheet().getRow(i);
+
+			//校驗學生編號
+			Cell studentCodeCell = row.getCell(1);
+			String studentCode = "";
+			try {
+				studentCodeCell.setCellType(Cell.CELL_TYPE_STRING);
+				studentCode = studentCodeCell.getStringCellValue();
+			} catch (Exception e) {
+				ei.structureCheckResult(1, row, "傳入學生編碼錯誤");
+			}
+
+			SysBaseStudent sysBaseStudent = sysBaseStudentService.getByCode(studentCode);
+			if (sysBaseStudent == null) {
+				ei.structureCheckResult(1, row, "該學生編碼不存在");
+			}
+
+			Cell paidPlagCell = row.getCell(3);
+			String paidPlag = "";
+			try {
+				paidPlagCell.setCellType(Cell.CELL_TYPE_STRING);
+				paidPlag = paidPlagCell.getStringCellValue();
+				if (StringUtils.equals(paidPlag,"是") && StringUtils.equals(paidPlag,"否")) {
+					ei.structureCheckResult(3, row, "'應該填入是'或者'否'字段");
+				}
+			} catch (Exception e) {
+				ei.structureCheckResult(1, row, "應該填入是'或者'否'字段");
+			}
+
+			Cell paidDateCell = row.getCell(4);
+			try {
+				Date dateCellValue = paidDateCell.getDateCellValue();
+			} catch(Exception e) {
+				ei.structureCheckResult(4, row, "日期格式為yyyy/MM/dd");
+			}
+
+
+		}
 	}
+
 
 	@ResponseBody
 	@RequestMapping(value = "import/tip")

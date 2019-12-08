@@ -6,7 +6,7 @@
 		a.id AS "id",
 		a.code AS "code",
 		a.courseCode AS "courseCode",
-		a.studentId AS "studentId",
+		a.studentCode AS "studentCode",
 		a.discount AS "discount",
 		a.payAmount AS "payAmount",
 		a.paid_flag AS "paidFlag",
@@ -21,6 +21,7 @@
 	</sql>
 
 	<sql id="serSaleJoins">
+
 	</sql>
 
 
@@ -34,11 +35,26 @@
 
 	<select id="findList" resultType="SerSale" >
 		SELECT
+			concat(sbt.nameCn,"(",sbt.nameEn,")") as studentName,
 			<include refid="serSaleColumns"/>
 		FROM ser_sale a
+		left join sys_base_student sbt on sbt.code = a.studentCode and sbt.del_flag = 0
 		<include refid="serSaleJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+
+			<if test="code != null and code != ''">
+				and a.code like concat('%',#{code},'%')
+			</if>
+
+			<if test="studentCode != null and studentCode != ''">
+				and a.studentCode like concat('%',#{studentCode},'%')
+			</if>
+
+			<if test="paidFlag != null and paidFlag != ''">
+				and a.paid_flag = #{paidFlag}
+			</if>
+
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -52,8 +68,10 @@
 
 	<select id="findAllList" resultType="SerSale" >
 		SELECT
+			concat(sbt.nameCn,"(",sbt.nameEn,")") as studentName,
 			<include refid="serSaleColumns"/>
 		FROM ser_sale a
+		left join sys_base_student sbt on sbt.code = a.studentCode and sbt.del_flag = 0
 		<include refid="serSaleJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
@@ -73,7 +91,7 @@
 			id,
 			code,
 			courseCode,
-			studentId,
+			studentCode,
 			discount,
 			payAmount,
 			paid_flag,
@@ -89,7 +107,7 @@
 			#{id},
 			#{code},
 			#{courseCode},
-			#{studentId},
+			#{studentCode},
 			#{discount},
 			#{payAmount},
 			#{paidFlag},
@@ -108,7 +126,7 @@
 		UPDATE ser_sale SET
 			code = #{code},
 			courseCode = #{courseCode},
-			studentId = #{studentId},
+			studentCode = #{studentCode},
 			discount = #{discount},
 			payAmount = #{payAmount},
 			paid_flag = #{paidFlag},
@@ -138,6 +156,13 @@
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SerSale" statementType="STATEMENT">
 		select * FROM ser_sale  where ${propertyName} = '${value}'
+	</select>
+
+
+	<select id="findStudentCount" resultType="Integer">
+		select count(1)
+		FROM ser_sale a
+		where a.create_date BETWEEN #{beginTime} and #{endTime}
 	</select>
 
 </mapper>

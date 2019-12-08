@@ -93,6 +93,11 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		courseAddressDict.setType("course_addrese_flag");
 		List<Dict> courseAddressDictList = this.systemService.listDict(courseAddressDict);
 
+		//給出课程级别字典列表
+		Dict courseLevelDict = new Dict();
+		courseLevelDict.setType("course_level");
+		List<Dict> courseLevelDictList = this.systemService.listDict(courseLevelDict);
+
 		//給出星期幾字典列表
 		Dict weekNumDict = new Dict();
 		weekNumDict.setType("week_flag");
@@ -111,6 +116,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 
 		model.addAttribute("page", page);
 		model.addAttribute("courseAddressDictList", courseAddressDictList);
+		model.addAttribute("courseLevelDictList", courseLevelDictList);
 		model.addAttribute("weekNumDictList", weekNumDictList);
 		sysUserCollectionMenuService.initCollectionMenu(request,model);
 		return "modules/att/serCourseList";
@@ -288,48 +294,47 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	 * @return
 	 * @throws ParseException
 	 */
-//	@RequestMapping(value = "/generateCourseScheduling")
-//	@ResponseBody
-//	public AjaxJson generateCourseScheduling(@RequestParam("courseAddressFlag") String courseAddressFlag, @RequestParam("coachId") String coachId,
-//			@RequestParam("beginTimeStr") String beginTimeStr, @RequestParam("endTimeStr") String endTimeStr, @RequestParam("weekNum") String weekNum,
-//			HttpServletRequest request, HttpServletResponse  response) throws ParseException {
-//		AjaxJson ajaxJson = new AjaxJson();
-//		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
-//
-//		//1.獲取開始時間與結束時間
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
-//		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
-//		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
-//		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
-//		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
-//		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
-//		if (days < 7) {
-//			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
-//			return  ajaxJson;
-//		}
-//
-//		//2.獲取年份
-//		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
-//
-//		//3.根據教練員ID獲取教練員編號
-//		String coachCode = this.sysBaseCoachService.findCoachCodeByCoachId(coachId);
-//		if (coachCode == null || coachCode.equals("")) {
-//			map.put("msg","生成課程失敗,無法找到教練員！");
-//			return  ajaxJson;
-//		}
-//
-//		//4計算壹段時間段內有多少天周幾
-//		int weekenNum = 0;
-//		Date first = null;
-//		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
-//		for (int i = 0; i < weekenNum; i++) {
-//			SerCourse serCourse = new SerCourse();
-//			serCourse.setCode(yearStr + courseAddressFlag + coachCode);
-//			serCourse.setCoathId(coachId);
-//			serCourse.setBeginYearMonth(beginYearMonth);
-//			serCourse.setEndYearMonth(endYearMonth);
-//
+	@RequestMapping(value = "/generateCourseScheduling")
+	@ResponseBody
+	public AjaxJson generateCourseScheduling(
+			@RequestParam("courseLevel") String courseLevel,
+			@RequestParam("beginLearn") String beginLearn,
+			@RequestParam("endLearn") String endLearn,
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("weekNum") String weekNum,
+			@RequestParam("beginTimeStr") String beginTimeStr,
+			@RequestParam("endTimeStrSe") String endTimeStr,
+			HttpServletRequest request,
+			HttpServletResponse  response) throws ParseException {
+
+		AjaxJson ajaxJson = new AjaxJson();
+		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
+
+		//1.獲取開始時間與結束時間
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(beginTimeStr)));
+		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(endTimeStr)));
+		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
+		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
+		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
+		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
+		if (days < 7) {
+			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
+			return  ajaxJson;
+		}
+
+		//2.獲取年份
+		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
+
+		//3.
+
+		//4計算壹段時間段內有多少天周幾
+		int weekenNum = 0;
+		Date first = null;
+		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
+		for (int i = 0; i < weekenNum; i++) {
+			SerCourse serCourse = new SerCourse();
+
 //			//核算日期
 //			if (i == 0) {
 //				for (int j = 0; j < days; j++) {
@@ -345,19 +350,14 @@ public class SerCourseController extends BaseController implements BasicVerifica
 //				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
 //				serCourse.setCourseDate(first);
 //			}
-//
-//			//繼續添加
-//			serCourse.setCourseNum(i + 1);
-//			serCourse.setCourseAddress(courseAddressFlag);
-//			serCourse.setStrInWeek(weekNum);
-//			serCourse.setBeginDate(beginTime);
-//			serCourse.setEndDate(endTime);
-//
-//			this.serCourseService.save(serCourse);
-//		}
-//		map.put("msg","成功生成課程！");
-//		ajaxJson.setBody(map);
-//		return  ajaxJson;
-//	}
+
+			//繼續添加
+
+			this.serCourseService.save(serCourse);
+		}
+		map.put("msg","成功生成課程！");
+		ajaxJson.setBody(map);
+		return  ajaxJson;
+	}
 
 }

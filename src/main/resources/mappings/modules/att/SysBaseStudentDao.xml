@@ -257,4 +257,22 @@
 		FROM sys_base_student a
 		where a.create_date BETWEEN #{beginTime} and #{endTime}
 	</select>
+
+	<select id="findByName" resultType="SysBaseStudent">
+		select * from sys_base_student where  1=1
+		<if test="name != null and name != ''">
+			and (
+				nameCn like concat('%',#{name},'%') or  nameEn like concat('%',#{name},'%')
+			)
+		</if>
+	</select>
+
+
+	<select id="getByCode" resultType="SysBaseStudent">
+		select * from sys_base_student where  1=1
+		<if test="code != null and code != ''">
+			and  code = #{code}
+		</if>
+	</select>
+
 </mapper>

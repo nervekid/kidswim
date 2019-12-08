@@ -74,4 +74,12 @@ public class SysBaseStudentService extends CrudService<SysBaseStudentDao, SysBas
 	public int findCountOfStudents(Date beginTime, Date endTime) {
 		return this.dao.findStudentCount(beginTime, endTime);
 	}
+
+	public List<SysBaseStudent> findByName(String subName) {
+		return sysBaseStudentDao.findByName(subName);
+    }
+
+    public SysBaseStudent getByCode(String studentCode) {
+		return sysBaseStudentDao.getByCode(studentCode);
+    }
 }

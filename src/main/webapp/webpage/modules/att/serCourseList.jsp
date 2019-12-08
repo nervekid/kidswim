@@ -21,8 +21,12 @@
 				elem: '#endTimeStrSelect'
 			});
             laydate.render({
-                elem: '#dateRange',
-                range: '~'
+            	elem: '#beginLearnSelect'
+          		,type: 'time'
+            });
+            laydate.render({
+            	elem: '#endLearnSelect'
+          		,type: 'time'
             });
 		});
 
@@ -34,9 +38,19 @@
 
 		 function duihuan() {
             console.log("提交,正在進行泳課排班生成...");
-            var coachSelectVal = $("#coachSelectId").val();
-            if(null==coachSelectVal|| coachSelectVal==''){
-                alert("您還沒有選擇教練員,請選擇！");
+            var courseLevelSelectVal = $("#courseLevelSelect").val();
+            if(null==courseLevelSelectVal|| courseLevelSelectVal==''){
+                alert("您還沒有选择课程级别,請選擇！");
+                return;
+            }
+            var beginLearnSelectVal = $("#beginLearnSelect").val();
+            if(null==beginLearnSelectVal|| beginLearnSelectVal==''){
+                alert("您還沒有选择上课时间,請選擇！");
+                return;
+            }
+            var endLearnSelectVal = $("#endLearnSelect").val();
+            if(null==endLearnSelectVal|| endLearnSelectVal==''){
+                alert("您還沒有选择下课时间,請選擇！");
                 return;
             }
             var courseAddressSelectVal = $("#courseAddressSelect").val();
@@ -65,11 +79,13 @@
                 $.ajax({
                     type:"post",
                     url:"${ctx}/att/serCourse/generateCourseScheduling",
-                    data:{"courseAddressFlag":courseAddressSelectVal,
-                    	  "coachId":coachSelectVal,
+                    data:{"courseLevel"courseLevelSelectVal:,
+                    	  "beginLearn":beginLearnSelectVal,
+                    	  "endLearn":endLearnSelectVal,
+                    	  "courseAddress":courseAddressSelectVal,
                     	  "weekNum":weekNumSelectVal,
                     	  "beginTimeStr":beginTimeStrSelectVal,
-                    	  "endTimeStr":endTimeStrSelectVal},
+                    	  "endTimeStrSe":endTimeStrSelectVal},
                     success:function (data) {
                     	alert("生成課程成功！");
                     	$('#createOffsetData').modal('hide')
@@ -113,13 +129,32 @@
 						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
 							<tbody>
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>教練員：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程级别：</label></td>
 								<td class="width-35">
-									<sys:treeselect  id="coachSelect"  name="sysBaseCoach.id" value="" labelName="sysBaseCoach.name" labelValue=""
-										 title="教練員" url="/att/sysBaseCoach/treeData" cssClass="form-control"
-										 allowClear="true"  placeholder="請選擇教練員！" />
+									<select id="courseLevelSelect" name="courseLevelSelect" class="form-control" type="select">
+										<c:forEach var="dict" items="${courseLevelDictList}" varStatus="status">
+											<option value="${dict.value}" title="${dict.description}" }>${dict.label} ${dict.value}</option>
+										</c:forEach>
+									</select>
 								</td>
 							</tr>
+
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>上课时间：</label></td>
+								<td class="width-35">
+								   <input id="beginLearnSelect" placeholder="上课时间" name="beginLearnSelect" type="text" length="20" class="form-control"
+                                   value=""/>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>下课时间：</label></td>
+								<td class="width-35">
+								   <input id="endLearnSelect" placeholder="下课时间" name="endLearnSelect" type="text" length="20" class="form-control"
+                                   value=""/>
+								</td>
+							</tr>
+
 							<tr>
 								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>泳池：</label></td>
 								<td class="width-35">
@@ -130,6 +165,7 @@
 									</select>
 								</td>
 							</tr>
+
 							<tr>
 								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>禮拜幾：</label></td>
 								<td class="width-35">
@@ -142,7 +178,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>開始時間：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程開始日期：</label></td>
 								<td class="width-35">
 								   <input id="beginTimeStrSelect" placeholder="開始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
@@ -150,7 +186,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>結束時間：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程結束日期：</label></td>
 								<td class="width-35">
 								   <input id="endTimeStrSelect" placeholder="結束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
@@ -183,7 +219,10 @@
 		<div class="form-group">
 			<form:input placeholder="課程編號" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
 			<input placeholder="課程時間範圍" id="dateRange" name="dateRange" class="laydate-icon form-control layer-date" type="text"  value="${dateRange}" />
-			<form:input placeholder="教練員中文名" path="coachName" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
+			<form:select placeholder="课程级别" path="courseLevel"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
+				<form:options items="${fns:getDictList('course_level')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
 			<form:select placeholder="星期幾" path="strInWeek"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('week_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
@@ -243,7 +282,7 @@
 				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column strInWeek">星期幾</th>
 				<th  class="sort-column strInWeek">评估日期</th>
-				<th  class="sort-column strInWeek">费用</th>
+				<th  class="sort-column strInWeek">费用(港币)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -254,25 +293,31 @@
 					${serCourse.code}
 				</a></td>
 				<td>
-					${serCourse.coachName}
+					${fns:getDictLabel(serCourse.courseLevel, 'course_level', '')}
 				</td>
 				<td>
-					${serCourse.beginYearMonth}
+					${serCourse.beginTimeAndEndTimeStr}
 				</td>
 				<td>
-					${serCourse.endYearMonth}
+					${serCourse.learnBeginTime}
 				</td>
 				<td>
-					<fmt:formatDate value="${serCourse.courseDate}" pattern="yyyy-MM-dd"/>
+					${serCourse.learnEndTimeTime}
 				</td>
 				<td>
-					${serCourse.courseNum}
+					${serCourse.learnNum}
 				</td>
 				<td>
 					${fns:getDictLabel(serCourse.courseAddress, 'course_addrese_flag', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(serCourse.strInWeek, 'week_flag', '')}
+				</td>
+				<td>
+					<fmt:formatDate value="${sysBaseStudent.assessmentDate}" pattern="yyyy-MM-dd"/>
+				</td>
+				<td>
+					${serCourse.courseFee}
 				</td>
 			</tr>
 		</c:forEach>

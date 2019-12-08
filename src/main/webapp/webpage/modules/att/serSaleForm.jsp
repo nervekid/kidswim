@@ -11,7 +11,7 @@
 			  $("#inputForm").submit();
 			  return true;
 		  }
-	
+
 		  return false;
 		}
 		$(document).ready(function() {
@@ -30,7 +30,12 @@
 					}
 				}
 			});
-			
+
+            laydate.render({
+                elem: '#paidDate',
+                trigger:'click'
+            });
+
 		});
 	</script>
 </head>
@@ -38,11 +43,71 @@
 		<form:form id="inputForm" modelAttribute="serSale" action="${ctx}/att/serSale/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="menuId"/>
-		<sys:message content="${message}"/>	
+		<sys:message content="${message}"/>
 		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
-		   <tbody>
-		 	</tbody>
-		</table>
+			<tbody>
+			<tr>
+				<td class="width-15 active"><label class="pull-right">銷售單編號：</label></td>
+				<td class="width-35">
+					<form:input path="code" htmlEscape="false" disabled="true"    class="form-control"/>
+				</td>
+				<td class="width-15 active"><label class="pull-right">課程編號：</label></td>
+				<td class="width-35">
+					<form:input path="courseCode" htmlEscape="false" class="form-control required"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">學員名稱：</label></td>
+				<td class="width-35">
+					<%--<form:input path="studentCode" htmlEscape="false"    class="form-control"/>--%>
+					<sys:treeselect  id="student"  name="studentCode" value="${serSale.studentCode}" labelName="studentName"
+										  labelValue="${serSale.studentName}" title="学生" url="/att/sysBaseStudent/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
+				</td>
+				<td class="width-15 active"><label class="pull-right">折扣:</label></td>
+				<td class="width-35">
+					<form:input path="discount" htmlEscape="false"    class="form-control"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">付款金額：</label></td>
+				<td class="width-35">
+					<form:input path="payAmount" htmlEscape="false"    class="form-control"/>
+				</td>
+				<td class="width-15 active"><label class="pull-right">是否付款：</label></td>
+				<td class="width-35">
+					<form:select placeholder="是否付款" path="paidFlag"  class="form-control required"  >
+						<form:option value="" label="請選擇"/>
+						<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+					</form:select>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">付款日期：</label></td>
+				<td class="width-35">
+					<input id="paidDate" name="paidDate"  type="text"  class="form-control required"
+						   value="<fmt:formatDate value="${serSale.paidDate}" pattern="yyyy-MM-dd"/>"/>
+				</td>
+				<%--<td class="width-35">--%>
+					<%--<form:input path="paidDate" htmlEscape="false"    class="form-control"/>--%>
+				<%--</td>--%>
+				<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
+				<td class="width-35">
+					<form:input path="paymentType" htmlEscape="false" class="form-control"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">备注：</label></td>
+				<td class="width-35" colspan="3">
+					<form:textarea path="remarks" htmlEscape="false" rows="3"   class="form-control "/>
+				</td>
+			</tr>
+
+
+			</tbody>
 	</form:form>
 </body>
 </html>
