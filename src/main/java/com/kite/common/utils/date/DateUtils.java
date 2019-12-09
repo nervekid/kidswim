@@ -94,6 +94,27 @@ public class DateUtils {
 	}
 
 	/**
+	 * 将对当前整形转换为百位，带零
+	 * @param i
+	 * @return
+	 */
+	public static String transformHundredBitNumString(int i) {
+		String iStr = String.valueOf(i);
+		if(iStr.length() == 1) {
+			return "00" + iStr;
+		}
+		else if(iStr.length() == 2) {
+			return "0" + iStr;
+		}
+		else if(iStr.length() == 3) {
+			return iStr;
+		}
+		else {
+			return iStr;
+		}
+	}
+
+	/**
 	 * 获取指定日期当天开始时间
 	 * @param date
 	 * @return

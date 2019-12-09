@@ -18,10 +18,16 @@ import com.kite.modules.att.entity.SerCourse;
 public interface SerCourseDao extends CrudDao<SerCourse> {
 
 	/**
-	 * 根据课程等级查找
+	 * 根据课程等级及上课地址查找
 	 * @param courseLevel
 	 * @return
 	 */
-	public int findCourseByLevel(@Param("level") String courseLevel);
+	public int findCourseByLevelAndAddress(@Param("level") String courseLevel, @Param("address") String courseAddress);
 
+	/**
+	 * 根据课程编号查找课程id
+	 * @param code
+	 * @return
+	 */
+	public String findCourseIdByCode(@Param("code") String code);
 }

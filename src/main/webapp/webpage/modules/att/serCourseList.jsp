@@ -28,6 +28,9 @@
             	elem: '#endLearnSelect'
           		,type: 'time'
             });
+            laydate.render({
+            	elem: '#assessmentDateStrSelect'
+            });
 		});
 
 
@@ -73,19 +76,25 @@
                 alert("您還沒有選擇結束日期,請選擇！");
                 return;
             }
+            var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
+            if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
+                alert("您還沒有选择评估日期,請選擇！");
+                return;
+            }
 
             if(confirm("確定要進行課程生成嗎？")==true){
             	loading('正在生成，請稍等...');
                 $.ajax({
                     type:"post",
                     url:"${ctx}/att/serCourse/generateCourseScheduling",
-                    data:{"courseLevel"courseLevelSelectVal:,
+                    data:{"courseLevel":courseLevelSelectVal,
                     	  "beginLearn":beginLearnSelectVal,
                     	  "endLearn":endLearnSelectVal,
                     	  "courseAddress":courseAddressSelectVal,
                     	  "weekNum":weekNumSelectVal,
                     	  "beginTimeStr":beginTimeStrSelectVal,
-                    	  "endTimeStrSe":endTimeStrSelectVal},
+                    	  "endTimeStr":endTimeStrSelectVal,
+                    	  "assessmentDateStr":assessmentDateStrSelectVal},
                     success:function (data) {
                     	alert("生成課程成功！");
                     	$('#createOffsetData').modal('hide')
@@ -189,6 +198,14 @@
 								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程結束日期：</label></td>
 								<td class="width-35">
 								   <input id="endTimeStrSelect" placeholder="結束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
+                                   value=""/>
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>评估日期：</label></td>
+								<td class="width-35">
+								   <input id="assessmentDateStrSelect" placeholder="結束日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>

@@ -168,4 +168,16 @@
 		select * FROM ser_course  where ${propertyName} = '${value}'
 	</select>
 
+	<select id="findCourseByLevelAndAddress" resultType="Integer">
+		select count(1)
+		FROM ser_course
+		where course_level = #{level} and courseAddress = #{address} and del_flag = '0'
+	</select>
+
+	<select id="findCourseIdByCode" resultType="String">
+		select id
+		FROM ser_course
+		where code = #{code} and del_flag = '0'
+	</select>
+
 </mapper>

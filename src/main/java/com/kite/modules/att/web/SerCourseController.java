@@ -40,8 +40,10 @@ import com.kite.common.utils.excel.ImportExcel;
 import com.kite.common.utils.verification.BasicVerification;
 import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
+import com.kite.modules.att.entity.SerCourseDetails;
+import com.kite.modules.att.enums.KidSwimDictEnum;
+import com.kite.modules.att.service.SerCourseDetailsService;
 import com.kite.modules.att.service.SerCourseService;
-import com.kite.modules.att.service.SysBaseCoachService;
 import com.kite.modules.sys.entity.Dict;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
 import com.kite.modules.sys.service.SystemService;
@@ -60,9 +62,9 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
 	@Autowired
-	private SysBaseCoachService sysBaseCoachService;
-	@Autowired
 	private SystemService systemService;
+	@Autowired
+	private SerCourseDetailsService serCourseDetailsService;
 
 	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
@@ -303,59 +305,97 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			@RequestParam("courseAddress") String courseAddress,
 			@RequestParam("weekNum") String weekNum,
 			@RequestParam("beginTimeStr") String beginTimeStr,
-			@RequestParam("endTimeStrSe") String endTimeStr,
+			@RequestParam("endTimeStr") String endTimeStr,
+			@RequestParam("assessmentDateStr") String assessmentDateStr,
 			HttpServletRequest request,
 			HttpServletResponse  response) throws ParseException {
 
 		AjaxJson ajaxJson = new AjaxJson();
 		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 
-		//1.獲取開始時間與結束時間
+		//1.獲取開始時間與結束時間以及评估日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
 		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
-//		String beginYearMonth =  com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(beginTime);
-//		String endYearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(endTime);
-		SimpleDateFormat sdfD = new SimpleDateFormat("yyyy-MM-dd");
-		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdfD.format(beginTime), sdfD.format(endTime));
+		Date assessmentDate = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(assessmentDateStr));
+
+		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdf.format(beginTime), sdf.format(endTime));
 		if (days < 7) {
 			map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
 			return  ajaxJson;
 		}
 
-		//2.獲取年份
-		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
-
-		//3.获取课程堂数
+		//2.获取课程堂数
 		int weekenNum = 0;
 		Date first = null;
 		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
 
-		//4.
+		//3.后去课程编号
+		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
+		int count = this.serCourseService.findCountByLevelAndAddress(courseLevel, courseAddress) + 1;
+		String countStr = com.kite.common.utils.date.DateUtils.transformHundredBitNumString(count);
+		String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
+
+		//3.获取上课的开始时间与结束时间HH:mm形式
+		String learnBeginTimeStr = beginLearn.replace(":", "").substring(0, beginLearn.replace(":", "").length() - 2);
+		String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
+
+		//4.计算费用 TODO
+
+		//5.写入课程表
+		SerCourse serCourse = new SerCourse();
+		serCourse.setCode(code);
+		serCourse.setCourseLevel(courseLevel);
+		serCourse.setCourseBeginTime(beginTime);
+		serCourse.setCourseEndTimeTime(endTime);
+		serCourse.setLearnBeginTime(learnBeginTimeStr);
+		serCourse.setLearnEndTimeTime(learnEndTimeTimeStr);
+		serCourse.setLearnNum(weekenNum);
+		serCourse.setCourseAddress(courseAddress);
+		serCourse.setStrInWeek(weekNum);
+		serCourse.setAssessmentDate(assessmentDate);
+		serCourse.setCourseFee(null); //TODO
+		this.serCourseService.save(serCourse);
+
+		String courseId = this.serCourseService.findCourseIdByCode(code);
 
 		//5.計算壹段時間段內有多少天周幾
 		for (int i = 0; i < weekenNum; i++) {
-			SerCourse serCourse = new SerCourse();
-
-//			//核算日期
-//			if (i == 0) {
-//				for (int j = 0; j < days; j++) {
-//					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
-//					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
-//						//時間段內第壹個符合指定周幾的日期
-//						serCourse.setCourseDate(first);
-//						break;
-//					}
-//				}
-//			}
-//			else {
-//				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
-//				serCourse.setCourseDate(first);
-//			}
+			SerCourseDetails serCourseDetails = new SerCourseDetails();
+			serCourseDetails.setCourseId(courseId);
+			serCourseDetails.setCoathId(null);
+			serCourseDetails.setRollCallStatusFlag(KidSwimDictEnum.yesNo.否.getName());
+			//核算日期
+			if (i == 0) {
+				for (int j = 0; j < days; j++) {
+					first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
+					if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
+						//時間段內第壹個符合指定周幾的日期
+						serCourseDetails.setLearnDate(first);
+						String beginlearnTimeStr = sdf.format(first) + " " + beginLearn;
+						String endLearnTimeStr = sdf.format(first) + " " + endLearn;
+						Date beginlearnTime = sdfTime.parse(beginlearnTimeStr);
+						Date endLearnTime = sdfTime.parse(endLearnTimeStr);
+						serCourseDetails.setLearnBeginDate(beginlearnTime);
+						serCourseDetails.setLearnEndDate(endLearnTime);
+						break;
+					}
+				}
+			}
+			else {
+				first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
+				serCourseDetails.setLearnDate(first);
+				String beginlearnTimeStr = sdf.format(first) + " " + beginLearn;
+				String endLearnTimeStr = sdf.format(first) + " " + endLearn;
+				Date beginlearnTime = sdfTime.parse(beginlearnTimeStr);
+				Date endLearnTime = sdfTime.parse(endLearnTimeStr);
+				serCourseDetails.setLearnBeginDate(beginlearnTime);
+				serCourseDetails.setLearnEndDate(endLearnTime);
+			}
 
 			//繼續添加
-
-			this.serCourseService.save(serCourse);
+			this.serCourseDetailsService.save(serCourseDetails);
 		}
 		map.put("msg","成功生成課程！");
 		ajaxJson.setBody(map);

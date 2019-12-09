@@ -67,4 +67,23 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 		return serial.toString();
 	}
 
+	/**
+	 * 根据地址及课程等级查找当前表格的数量
+	 * @param level
+	 * @param address
+	 * @return
+	 */
+	public int findCountByLevelAndAddress(String level, String address) {
+		return this.dao.findCourseByLevelAndAddress(level, address);
+	}
+
+	/**
+	 * 根据课程编号查找课程id
+	 * @param code
+	 * @return
+	 */
+	public String findCourseIdByCode(String code) {
+		return this.dao.findCourseIdByCode(code);
+	}
+
 }

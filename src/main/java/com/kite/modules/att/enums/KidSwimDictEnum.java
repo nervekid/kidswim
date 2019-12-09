@@ -36,4 +36,29 @@ public class KidSwimDictEnum {
             this.name = name;
         }
     }
+
+	/**
+	 * 是否标记
+	 * @author lyb
+	 *
+	 */
+	public enum yesNo {
+
+		否("0"),
+		是("1");
+
+        private String name;
+
+        private yesNo(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }
