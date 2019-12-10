@@ -47,16 +47,24 @@
 					<td class="width-35">
 						<form:select placeholder="課程等級" path="courseLevelFlag"  class="form-control m-b"  >
 							<form:option value="" label="請選擇"/>
-							<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+							<form:options items="${fns:getDictList('course_level')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
+					<td class="width-15 active"><label class="pull-right">課程地址：</label></td>
+					<td class="width-35">
+						<form:select placeholder="課程等級" path="courseAddress"  class="form-control m-b"  >
+							<form:option value="" label="請選擇"/>
+							<form:options items="${fns:getDictList('course_addrese_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</td>
+
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">收費 單位(港幣)：</label></td>
 					<td class="width-35">
 						<form:input path="costAmount" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">是否包含入場費：</label></td>
 					<td class="width-35">
 						<form:select placeholder="是否包含入場費" path="containEntranceFeeFlag"  class="form-control m-b"  >
@@ -64,6 +72,9 @@
 							<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">收費標準：</label></td>
 					<td class="width-35">
 						<form:select placeholder="收費標準" path="costStandardFlag"  class="form-control m-b"  >

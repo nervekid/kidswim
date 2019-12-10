@@ -68,12 +68,16 @@ public class SerCourse extends DataEntity<SerCourse> {
 
 	@ExcelField(title="上课开始时间", align=2, sort=5)
 	public String getLearnBeginTime() {
-		return learnBeginTime;
+		String firstStr = learnBeginTime.substring(0,2);
+		String secondStr = learnBeginTime.substring(2,4);
+		return firstStr + ":" + secondStr;
 	}
 
 	@ExcelField(title="上课结束时间", align=2, sort=6)
 	public String getLearnEndTimeTime() {
-		return learnEndTimeTime;
+		String firstStr = learnEndTimeTime.substring(0,2);
+		String secondStr = learnEndTimeTime.substring(2,4);
+		return firstStr + ":" + secondStr;
 	}
 
 	@ExcelField(title="堂数", align=2, sort=7)
@@ -183,7 +187,7 @@ public class SerCourse extends DataEntity<SerCourse> {
 	}
 
 	public String getBeginTimeAndEndTimeStr() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		return sdf.format(courseBeginTime) + "~" + sdf.format(courseEndTimeTime);
 	}
 

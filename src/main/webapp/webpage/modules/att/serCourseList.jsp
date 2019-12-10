@@ -331,7 +331,7 @@
 					${fns:getDictLabel(serCourse.strInWeek, 'week_flag', '')}
 				</td>
 				<td>
-					<fmt:formatDate value="${sysBaseStudent.assessmentDate}" pattern="yyyy-MM-dd"/>
+					<fmt:formatDate value="${serCourse.assessmentDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					${serCourse.courseFee}

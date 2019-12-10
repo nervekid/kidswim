@@ -12,19 +12,26 @@
 		<tr>
 			<td class="width-15 active"><label class="pull-right">課程等級：</label></td>
 			<td class="width-35">
-				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(serCourseLevelCost.courseLevelFlag, 'courseLevel_flag', '')}" />
+				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(serCourseLevelCost.courseLevelFlag, 'course_level', '')}" />
 			</td>
-			<td class="width-15 active"><label class="pull-right">收費：</label></td>
+			<td class="width-15 active"><label class="pull-right">課程地址：</label></td>
 			<td class="width-35">
-				<input type="text" readonly="readonly" class="form-control" value="${serCourseLevelCost.costAmount}" />
+				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(serCourseLevelCost.courseAddress, 'course_addrese_flag', '')}" />
 			</td>
 		</tr>
 
 		<tr>
+			<td class="width-15 active"><label class="pull-right">收費：</label></td>
+				<td class="width-35">
+					<input type="text" readonly="readonly" class="form-control" value="${serCourseLevelCost.costAmount}" />
+			</td>
 			<td class="width-15 active"><label class="pull-right">是否包含入場費：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(serCourseLevelCost.containEntranceFeeFlag, 'yes_no', '')}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">收費標準：</label></td>
 			<td class="width-35">
 			<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(serCourseLevelCost.costStandardFlag, 'cost_standard_flag', '')}" />

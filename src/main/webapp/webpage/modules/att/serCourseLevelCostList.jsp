@@ -32,7 +32,11 @@
 		<div class="form-group">
 			<form:select placeholder="課程等級" path="courseLevelFlag"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
-				<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+				<form:options items="${fns:getDictList('course_level')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
+			<form:select placeholder="課程地址" path="courseAddress"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
+				<form:options items="${fns:getDictList('course_addrese_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
 			<form:select placeholder="是否包含入場費" path="containEntranceFeeFlag"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
@@ -82,6 +86,7 @@
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column courseLevelFlag">課程等級</th>
+				<th  class="sort-column courseAddress">课程地址</th>
 				<th  class="sort-column costAmount">收費 單位(港幣)</th>
 				<th  class="sort-column containEntranceFeeFlag">是否包含入場費</th>
 				<th  class="sort-column costStandardFlag">收費標準</th>
@@ -92,8 +97,11 @@
 			<tr>
 				<td> <input type="checkbox" id="${serCourseLevelCost.id}" class="i-checks"></td>
 				<td><a  href="#" onclick="openDialogView('查看課程等級對應收費', '${ctx}/att/serCourseLevelCost/view?id=${serCourseLevelCost.id}','800px', '500px')">
-					${fns:getDictLabel(serCourseLevelCost.courseLevelFlag, 'courseLevel_flag', '')}
+					${fns:getDictLabel(serCourseLevelCost.courseLevelFlag, 'course_level', '')}
 				</a></td>
+				<td>
+					${fns:getDictLabel(serCourseLevelCost.courseAddress, 'course_addrese_flag', '')}
+				</td>
 				<td>
 					${serCourseLevelCost.costAmount}
 				</td>

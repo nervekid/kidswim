@@ -13,7 +13,8 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.courseAddress AS "courseAddress"
 	</sql>
 
 	<sql id="serCourseLevelCostJoins">
@@ -43,6 +44,9 @@
 			</if>
 			<if test="costStandardFlag != null and costStandardFlag != ''">
 				AND a.cost_standard_flag =  #{costStandardFlag}
+			</if>
+			<if test="courseAddress != null and courseAddress != ''">
+				AND a.courseAddress =  #{courseAddress}
 			</if>
 		</where>
 		<choose>
@@ -85,7 +89,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			courseAddress
 		) VALUES (
 			#{id},
 			#{courseLevelFlag},
@@ -97,7 +102,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{courseAddress}
 		)
 	</insert>
 
@@ -109,7 +115,8 @@
 			cost_standard_flag = #{costStandardFlag},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			courseAddress = #{courseAddress}
 		WHERE id = #{id}
 	</update>
 
