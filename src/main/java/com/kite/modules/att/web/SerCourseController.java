@@ -3,6 +3,7 @@
  */
 package com.kite.modules.att.web;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,6 +44,7 @@ import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.entity.SerCourseDetails;
 import com.kite.modules.att.enums.KidSwimDictEnum;
 import com.kite.modules.att.service.SerCourseDetailsService;
+import com.kite.modules.att.service.SerCourseLevelCostService;
 import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.sys.entity.Dict;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
@@ -65,6 +67,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	private SystemService systemService;
 	@Autowired
 	private SerCourseDetailsService serCourseDetailsService;
+	@Autowired
+	private SerCourseLevelCostService serCourseLevelCostService;
 
 	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
@@ -106,7 +110,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		List<Dict> weekNumDictList = this.systemService.listDict(weekNumDict);
 
 		if (serCourse.getDateRange() != null && !serCourse.getDateRange().equals("")) {
-    		String [] attr = serCourse.getDateRange().split(" ~ ");
+    		String [] attr = serCourse.getDateRange().split(" 至 ");
     		String beginStr = attr[0];
     		String endStr = attr[1];
     		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -341,7 +345,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		String learnBeginTimeStr = beginLearn.replace(":", "").substring(0, beginLearn.replace(":", "").length() - 2);
 		String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
 
-		//4.计算费用 TODO
+		//4.计算费用
+		BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 
 		//5.写入课程表
 		SerCourse serCourse = new SerCourse();
@@ -355,7 +360,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		serCourse.setCourseAddress(courseAddress);
 		serCourse.setStrInWeek(weekNum);
 		serCourse.setAssessmentDate(assessmentDate);
-		serCourse.setCourseFee(null); //TODO
+		serCourse.setCourseFee(costAmount);
 		this.serCourseService.save(serCourse);
 
 		String courseId = this.serCourseService.findCourseIdByCode(code);

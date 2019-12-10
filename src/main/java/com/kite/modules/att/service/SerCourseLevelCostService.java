@@ -3,17 +3,18 @@
  */
 package com.kite.modules.att.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.kite.modules.att.entity.SerCourseLevelCost;
 import com.kite.modules.att.dao.SerCourseLevelCostDao;
+import com.kite.modules.att.entity.SerCourseLevelCost;
 
 /**
  * 课程等级对应收费Service
@@ -61,5 +62,15 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 		serial.append("-");
 		serial.append(String.format("%04d", Integer.parseInt(serCourseLevelCostDao.findCodeNumber(tablename, codename, beginString))));
 		return serial.toString();
+	}
+
+	/**
+	 * 根据泳池地址及课程等级查找收费标准
+	 * @param courseLevelFlag
+	 * @param courseAddress
+	 * @return
+	 */
+	public BigDecimal findCostAmountByCourseAddressAndCourseLevelFlag(String courseLevelFlag, String courseAddress) {
+		return this.dao.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevelFlag, courseAddress);
 	}
 }

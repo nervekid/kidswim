@@ -45,7 +45,6 @@ public class SysBaseStudent extends DataEntity<SysBaseStudent> {
 	private String guardianIdNo;		// 监护人身份证号码
 	private String guardianRelationship;		// 监护人关系
 	private String facebook;		// facebook账号
-	private String whatsApp;		// whatsapp账号
 	private String photoId;		// 照片id (暂缺,留位)
 
 	public SysBaseStudent() {
@@ -307,15 +306,6 @@ public class SysBaseStudent extends DataEntity<SysBaseStudent> {
 
 	public void setFacebook(String facebook) {
 		this.facebook = facebook;
-	}
-
-	@ExcelField(title="whatsapp账号", align=2, sort=29)
-	public String getWhatsApp() {
-		return whatsApp;
-	}
-
-	public void setWhatsApp(String whatsApp) {
-		this.whatsApp = whatsApp;
 	}
 
 	public String getPhotoId() {

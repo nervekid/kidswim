@@ -164,13 +164,6 @@
 		</tr>
 
 		<tr>
-			<td class="width-15 active"><label class="pull-right">whatsapp賬號：</label></td>
-			<td class="width-35">
-				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.whatsApp}" />
-			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">備註：</label></td>
 			<td class="width-35" colspan="3">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" readonly="true"   class="form-control "/>

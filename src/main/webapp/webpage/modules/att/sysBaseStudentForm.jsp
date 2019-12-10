@@ -206,10 +206,6 @@
 					<td class="width-35">
 						<form:input path="facebook" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">whatsapp賬號：</label></td>
-					<td class="width-35">
-						<form:input path="whatsApp" htmlEscape="false"    class="form-control"/>
-					</td>
 				</tr>
 
 				<tr>

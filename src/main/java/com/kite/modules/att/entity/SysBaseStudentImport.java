@@ -35,7 +35,6 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 	private String guardianIdNo;		// 监护人身份证号码
 	private String guardianRelationship;		// 监护人关系
 	private String facebook;		// facebook账号
-	private String whatsApp;		// whatsapp账号
 
 	@ExcelField(title="中文名", align=2, sort=1)
 	public String getNameCn() {
@@ -172,11 +171,6 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 		return facebook;
 	}
 
-	@ExcelField(title="whatsapp账号", align=2, sort=28)
-	public String getWhatsApp() {
-		return whatsApp;
-	}
-
 	public void setNameCn(String nameCn) {
 		this.nameCn = nameCn;
 	}
@@ -258,8 +252,4 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 	public void setFacebook(String facebook) {
 		this.facebook = facebook;
 	}
-	public void setWhatsApp(String whatsApp) {
-		this.whatsApp = whatsApp;
-	}
-
 }

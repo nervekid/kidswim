@@ -316,10 +316,10 @@
 					${serCourse.beginTimeAndEndTimeStr}
 				</td>
 				<td>
-					${serCourse.learnBeginTime}
+					${serCourse.showLearnBeginTime}
 				</td>
 				<td>
-					${serCourse.learnEndTimeTime}
+					${serCourse.showLearnEndTimeTime}
 				</td>
 				<td>
 					${serCourse.learnNum}

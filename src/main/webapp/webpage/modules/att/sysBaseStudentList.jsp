@@ -117,7 +117,6 @@
 				<th  class="sort-column guardianIdNo">監護人身份證號碼</th>
 				<th  class="sort-column guardianRelationship">監護人關系</th>
 				<th  class="sort-column facebook">facebook賬號</th>
-				<th  class="sort-column whatsApp">whatsapp賬號</th>
 			</tr>
 		</thead>
 		<tbody style="height: 600px">
@@ -207,9 +206,6 @@
 				</td>
 				<td>
 					${sysBaseStudent.facebook}
-				</td>
-				<td>
-					${sysBaseStudent.whatsApp}
 				</td>
 			</tr>
 		</c:forEach>

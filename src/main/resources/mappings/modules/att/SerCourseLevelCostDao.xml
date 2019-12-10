@@ -140,4 +140,10 @@
 		select * FROM ser_course_level_cost  where ${propertyName} = '${value}'
 	</select>
 
+	<select id="findCostAmountByCourseAddressAndCourseLevelFlag" resultType="java.math.BigDecimal">
+		select costAmount
+		FROM ser_course_level_cost
+		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress}
+	</select>
+
 </mapper>
