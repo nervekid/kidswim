@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.kite.common.config.Global;
 import com.kite.common.json.AjaxJson;
 import com.kite.common.persistence.Page;
@@ -42,6 +43,7 @@ import com.kite.common.utils.verification.BasicVerification;
 import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.entity.SerCourseDetails;
+import com.kite.modules.att.entity.SysBaseStudent;
 import com.kite.modules.att.enums.KidSwimDictEnum;
 import com.kite.modules.att.service.SerCourseDetailsService;
 import com.kite.modules.att.service.SerCourseLevelCostService;
@@ -49,6 +51,7 @@ import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.sys.entity.Dict;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
 import com.kite.modules.sys.service.SystemService;
+import com.kite.modules.sys.utils.DictUtils;
 
 /**
  * 課程Controller
@@ -149,6 +152,14 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	@RequiresPermissions(value={"att:serCourse:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
 	public String view(SerCourse serCourse, Model model) {
+		List<SerCourseDetails> serCourseDetailsList = this.serCourseService.findSerCourseDetailsByCourseId(serCourse.getId());
+		for (int i = 0; i < serCourseDetailsList.size(); i++) {
+			if (serCourseDetailsList.get(i).getCoathId() == null || serCourseDetailsList.get(i).getCoathId().equals("")) {
+				serCourseDetailsList.get(i).setCoathName("暂缺");
+			}
+		}
+		serCourse.setSerCourseDetailsList(serCourseDetailsList);
+		model.addAttribute("yesNoList", DictUtils.getDictList("yes_no"));
 		model.addAttribute("serCourse", serCourse);
 		return "modules/att/serCourseView";
 	}
@@ -405,6 +416,116 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		map.put("msg","成功生成課程！");
 		ajaxJson.setBody(map);
 		return  ajaxJson;
+	}
+
+
+	/**
+	 * 功能：查询课程预生成结果
+	 */
+	@RequestMapping(value = "preGeneration")
+	@ResponseBody
+	public AjaxJson preGeneration(
+			@RequestParam("courseLevel") String courseLevel,
+			@RequestParam("beginLearn") String beginLearn,
+			@RequestParam("endLearn") String endLearn,
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("weekNum") String weekNum,
+			@RequestParam("beginTimeStr") String beginTimeStr,
+			@RequestParam("endTimeStr") String endTimeStr,
+			@RequestParam("assessmentDateStr") String assessmentDateStr,
+			HttpServletRequest request,
+			HttpServletResponse  response){
+		AjaxJson ajaxJson = new AjaxJson();
+		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
+		try {
+			//1.獲取開始時間與結束時間以及评估日期
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
+			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
+			Date assessmentDate = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(assessmentDateStr));
+
+			int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdf.format(beginTime), sdf.format(endTime));
+			if (days < 7) {
+				map.put("msg","生成課程失敗,由於生成課程天數小於七天, 無法生成課程！");
+				return  ajaxJson;
+			}
+
+			//2.获取课程堂数
+			int weekenNum = 0;
+			Date first = null;
+			weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
+
+			//3.后去课程编号
+			String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
+			int count = this.serCourseService.findCountByLevelAndAddress(courseLevel, courseAddress) + 1;
+			String countStr = com.kite.common.utils.date.DateUtils.transformHundredBitNumString(count);
+			String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
+
+			//3.获取上课的开始时间与结束时间HH:mm形式
+			String learnBeginTimeStr = beginLearn.replace(":", "").substring(0, beginLearn.replace(":", "").length() - 2);
+			String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
+
+			//4.计算费用
+			BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+
+			//5.获取星期几
+			String weekNumStr = DictUtils.getDictLabel(weekNum, "week_flag", null);
+
+			//5.計算壹段時間段內有多少天周幾
+			SimpleDateFormat ss = new SimpleDateFormat("M月d日");
+			StringBuilder strBulider = new StringBuilder();
+			for (int i = 0; i < weekenNum; i++) {
+				//核算日期
+				if (i == 0) {
+					for (int j = 0; j < days; j++) {
+						first = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(com.kite.common.utils.date.DateUtils.getPreNumDate(beginTime, j));
+						if (String.valueOf(com.kite.common.utils.date.DateUtils.getWeekByDate(first)).equals(weekNum)) {
+							//時間段內第壹個符合指定周幾的日期
+							strBulider.append(ss.format(first));
+							strBulider.append(",");
+							break;
+						}
+					}
+				}
+				else {
+					first = com.kite.common.utils.date.DateUtils.getPreNumDate(first, 7);
+					strBulider.append(ss.format(first));
+					strBulider.append(",");
+				}
+			}
+
+			map.put("code", code);
+			map.put("weekenNum", weekenNum);
+			map.put("dates", strBulider.toString());
+			map.put("weekNumStr",weekNumStr);
+			map.put("costAmount",costAmount);
+
+			ajaxJson.setBody(map);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		return  ajaxJson;
+	}
+
+
+	@RequiresPermissions("user")
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String code, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		List<SerCourse> list = this.serCourseService.findLikeByCode(code);
+		for (int i=0; i<list.size(); i++){
+			SerCourse e = list.get(i);
+
+			Map<String, Object> map = Maps.newHashMap();
+			map.put("id", e.getCode());
+			map.put("name", e.getCode());
+
+			mapList.add(map);
+		}
+		return mapList;
 	}
 
 }

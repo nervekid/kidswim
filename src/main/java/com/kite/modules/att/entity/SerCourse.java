@@ -5,7 +5,9 @@ package com.kite.modules.att.entity;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.kite.common.persistence.DataEntity;
 import com.kite.common.utils.excel.annotation.ExcelField;
@@ -30,14 +32,11 @@ public class SerCourse extends DataEntity<SerCourse> {
 	private Date assessmentDate;	//评估日期
 	private BigDecimal courseFee; 	//课程费用 按照课程收费标准及折扣进行计算 单位(港币)
 
-	private String showLearnBeginTime;	//上课开始时间字符串 1200 代表中午十二点
-	private String showLearnEndTimeTime; //上课结束时间字符串 1200 代表中午十二点
-
-	private String beginTimeAndEndTimeStr; //课程开始于结束的时间范围
-
 	private String dateRange; //时间选择范围
 	private Date beginTime;	  //查询开始时间
 	private Date endTime;	  //查询结束时间
+
+	private List<SerCourseDetails> serCourseDetailsList = new ArrayList<SerCourseDetails>();
 
 	public SerCourse() {
 		super();
@@ -204,16 +203,20 @@ public class SerCourse extends DataEntity<SerCourse> {
 	}
 
 	public void setBeginTimeAndEndTimeStr(String beginTimeAndEndTimeStr) {
-		this.beginTimeAndEndTimeStr = beginTimeAndEndTimeStr;
 	}
 
 	public void setShowLearnBeginTime(String showLearnBeginTime) {
-		this.showLearnBeginTime = showLearnBeginTime;
 	}
 
 	public void setShowLearnEndTimeTime(String showLearnEndTimeTime) {
-		this.showLearnEndTimeTime = showLearnEndTimeTime;
 	}
 
+	public List<SerCourseDetails> getSerCourseDetailsList() {
+		return serCourseDetailsList;
+	}
+
+	public void setSerCourseDetailsList(List<SerCourseDetails> serCourseDetailsList) {
+		this.serCourseDetailsList = serCourseDetailsList;
+	}
 
 }

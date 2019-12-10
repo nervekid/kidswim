@@ -241,7 +241,6 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 						sysBaseStudent.setGuardianIdNo(sysBaseStudentImport.getGuardianIdNo());
 						sysBaseStudent.setGuardianRelationship(sysBaseStudentImport.getGuardianRelationship());
 						sysBaseStudent.setFacebook(sysBaseStudentImport.getFacebook());
-						sysBaseStudent.setWhatsApp(sysBaseStudentImport.getWhatsApp());
 
 						sysBaseStudent.setSex(sexValue);
 						sysBaseStudent.setStudiedSwimFlag(studiedSwimValue);

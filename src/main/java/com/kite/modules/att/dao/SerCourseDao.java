@@ -3,6 +3,8 @@
  */
 package com.kite.modules.att.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
@@ -30,4 +32,11 @@ public interface SerCourseDao extends CrudDao<SerCourse> {
 	 * @return
 	 */
 	public String findCourseIdByCode(@Param("code") String code);
+
+	/**
+	 * 根据编号模糊查找
+	 * @param code
+	 * @return
+	 */
+	public List<SerCourse> findByLikeCode(@Param("code") String code);
 }

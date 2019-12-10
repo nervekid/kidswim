@@ -13,7 +13,9 @@ import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
 import com.kite.modules.att.dao.SerCourseDao;
+import com.kite.modules.att.dao.SerCourseDetailsDao;
 import com.kite.modules.att.entity.SerCourse;
+import com.kite.modules.att.entity.SerCourseDetails;
 
 /**
  * 课程Service
@@ -26,6 +28,8 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 
     @Autowired
 	private SerCourseDao serCourseDao;
+    @Autowired
+	private SerCourseDetailsDao serCourseDetailsDao;
 
 	@Override
 	public SerCourse get(String id) {
@@ -84,6 +88,24 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	 */
 	public String findCourseIdByCode(String code) {
 		return this.dao.findCourseIdByCode(code);
+	}
+
+	/**
+	 * 根据课程父id查找课程明细
+	 * @param courseId
+	 * @return
+	 */
+	public List<SerCourseDetails> findSerCourseDetailsByCourseId(String courseId) {
+		return this.serCourseDetailsDao.findSerCourseDetailsListByCourseId(courseId);
+	}
+
+	/**
+	 * 根据编号查找
+	 * @param code
+	 * @return
+	 */
+	public List<SerCourse> findLikeByCode(String code) {
+		return this.dao.findByLikeCode(code);
 	}
 
 }

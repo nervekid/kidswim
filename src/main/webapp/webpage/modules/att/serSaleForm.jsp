@@ -53,14 +53,14 @@
 				</td>
 				<td class="width-15 active"><label class="pull-right">課程編號：</label></td>
 				<td class="width-35">
-					<form:input path="courseCode" htmlEscape="false" class="form-control required"/>
+					<sys:treeselect  id="course"  name="courseCode" value="${serSale.courseCode}" labelName="courseName"
+										  labelValue="" title="课程编号" url="/att/serCourse/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
 				</td>
 			</tr>
 
 			<tr>
 				<td class="width-15 active"><label class="pull-right">學員名稱：</label></td>
 				<td class="width-35">
-					<%--<form:input path="studentCode" htmlEscape="false"    class="form-control"/>--%>
 					<sys:treeselect  id="student"  name="studentCode" value="${serSale.studentCode}" labelName="studentName"
 										  labelValue="${serSale.studentName}" title="学生" url="/att/sysBaseStudent/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
 				</td>

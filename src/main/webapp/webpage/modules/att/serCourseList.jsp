@@ -39,6 +39,79 @@
             $("#typeFlag").val(typeFlag);
         }
 
+		function myWallet() {
+			console.log("提交,正在進行泳課排班生成...");
+            var courseLevelSelectVal = $("#courseLevelSelect").val();
+            if(null==courseLevelSelectVal|| courseLevelSelectVal==''){
+                alert("您還沒有选择课程级别,請選擇！");
+                return;
+            }
+            var beginLearnSelectVal = $("#beginLearnSelect").val();
+            if(null==beginLearnSelectVal|| beginLearnSelectVal==''){
+                alert("您還沒有选择上课时间,請選擇！");
+                return;
+            }
+            var endLearnSelectVal = $("#endLearnSelect").val();
+            if(null==endLearnSelectVal|| endLearnSelectVal==''){
+                alert("您還沒有选择下课时间,請選擇！");
+                return;
+            }
+            var courseAddressSelectVal = $("#courseAddressSelect").val();
+            if(null==courseAddressSelectVal|| courseAddressSelectVal==''){
+                alert("您還沒有選擇泳池地址,請選擇！");
+                return;
+            }
+            var weekNumSelectVal = $("#weekNumSelect").val();
+            if(null==weekNumSelectVal|| weekNumSelectVal==''){
+                alert("您還沒有選擇星期幾,請選擇！");
+                return;
+            }
+            var beginTimeStrSelectVal = $("#beginTimeStrSelect").val();
+            if(null==beginTimeStrSelectVal|| beginTimeStrSelectVal==''){
+                alert("您還沒有選擇開始日期,請選擇！");
+                return;
+            }
+            var endTimeStrSelectVal = $("#endTimeStrSelect").val();
+            if(null==endTimeStrSelectVal|| endTimeStrSelectVal==''){
+                alert("您還沒有選擇結束日期,請選擇！");
+                return;
+            }
+            var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
+            if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
+                alert("您還沒有选择评估日期,請選擇！");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                dataType:"json",
+                url:"${ctx}/att/serCourse/preGeneration",
+                data:{"courseLevel":courseLevelSelectVal,
+              	  "beginLearn":beginLearnSelectVal,
+              	  "endLearn":endLearnSelectVal,
+              	  "courseAddress":courseAddressSelectVal,
+              	  "weekNum":weekNumSelectVal,
+              	  "beginTimeStr":beginTimeStrSelectVal,
+              	  "endTimeStr":endTimeStrSelectVal,
+              	  "assessmentDateStr":assessmentDateStrSelectVal},
+                success:function (data) {
+                        var code = data.body.code;
+                        var weekenNum = data.body.weekenNum;
+                        var dates = data.body.dates;
+                        var strInWeek = data.body.weekNumStr;
+                        var courseFee = data.body.costAmount;
+                        $("#codeShow").text(code);
+                        $("#learnNumShow").text(weekenNum);
+                        $("#dates").text(dates);
+                        $("#strInWeekShow").text(strInWeek);
+                        $("#courseFeeShow").text(courseFee);
+                },
+                fail:function (data) {
+                    alert("查询失败！");
+                    return;
+                }
+            });
+        }
+
 		 function duihuan() {
             console.log("提交,正在進行泳課排班生成...");
             var courseLevelSelectVal = $("#courseLevelSelect").val();
@@ -205,15 +278,75 @@
 							<tr>
 								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>评估日期：</label></td>
 								<td class="width-35">
-								   <input id="assessmentDateStrSelect" placeholder="結束日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
+								   <input id="assessmentDateStrSelect" placeholder="评估日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
+								</td>
+
+								<td width="5%">
+									<button  class="" onclick="myWallet()">预览课程生成结果</button>
 								</td>
 							</tr>
 
 							</tbody>
 						</table>
 						<sys:message content="${message}"/>
-						<input type="hidden"  id="userId">
+						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
+							<tbody style="border: 1px solid #ffffff">
+							<tr>
+								<td class="width-15"><label class="pull-right">课程编号</label></td>
+									<td class="width-35" id="codeShow">
+								</td>
+								<td class="width-15"><label class="pull-right">堂数</label></td>
+									<td class="width-35" id="learnNumShow">
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15"><label class="pull-right">上课日期</label></td>
+								<td colspan="3" class="width-35"  id="dates">
+								</td>
+							</tr>
+
+							<tr>
+								<td class="width-15"><label class="pull-right">星期几</label></td>
+								<td class="width-35"  id="strInWeekShow">
+
+								</td>
+
+								<td class="width-15"><label class="pull-right">课程费用(港币)</label></td>
+								<td class="width-35"  id="courseFeeShow">
+
+								</td>
+							</tr>
+
+							</tbody>
+						</table>
+
+						<%-- <table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
+						<thead>
+							<tr>
+								<th> <input type="checkbox" class="i-checks"></th>
+								<th >上课日期</th>
+								<th >上课开始时间</th>
+								<th >上课结束时间</th>
+							</tr>
+						</thead>
+						<tbody>
+						<c:forEach items="${page.list}" var="serCourse">
+							<tr>
+								<td>
+									${fns:getDictLabel(serCourse.courseLevel, 'course_level', '')}
+								</td>
+								<td>
+									${serCourse.beginTimeAndEndTimeStr}
+								</td>
+								<td>
+									${serCourse.showLearnBeginTime}
+								</td>
+							</tr>
+						</c:forEach>
+						</tbody>
+					</table> --%>
 					</div>
 					<div class="modal-footer">
 						<button id="submitCreateOffsetData"  type="button" class="btn btn-success btn-sm">
