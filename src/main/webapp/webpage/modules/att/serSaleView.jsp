@@ -54,7 +54,7 @@
 			</td>
 			<td class="width-15 active"><label class="pull-right">是否付款：</label></td>
 			<td class="width-35">
-				<form:select placeholder="性别" path="paidFlag" disabled="true" class="form-control m-b"  >
+				<form:select placeholder="是否付款" path="paidFlag" disabled="true" class="form-control m-b"  >
 					<form:option value="" label="请选择"/>
 					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 				</form:select>
@@ -69,6 +69,16 @@
 			<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
 			<td class="width-35">
 				<form:input path="paymentType" htmlEscape="false"  disabled="true"  class="form-control"/>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="width-15 active"><label class="pull-right">是否收取会员费：</label></td>
+			<td class="width-35">
+				<form:select placeholder="是否收取会员费" path="memberFeeFlag" disabled="true" class="form-control m-b"  >
+					<form:option value="" label="请选择"/>
+					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</td>
 		</tr>
 

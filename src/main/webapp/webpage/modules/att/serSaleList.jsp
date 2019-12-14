@@ -38,6 +38,11 @@
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
+
+			<form:select placeholder="是否收取会员费" path="memberFeeFlag"  class="form-control m-b required" onchange="search()" >
+				<form:option value="" label="請選擇"/>
+				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+			</form:select>
 		</div>
 	</form:form>
 	<br/>
@@ -86,6 +91,7 @@
 				<th  class="sort-column paid_flag">是否付款</th>
 				<th  class="sort-column paid_date">付款日期</th>
 				<th  class="sort-column paymentType">付款方式</th>
+				<th  class="sort-column memberFeeFlag">是否收取会员费</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -118,6 +124,9 @@
 				</td>
 				<td>
 					${serSale.paymentType}
+				</td>
+				<td>
+					${fns:getDictLabel(serSale.memberFeeFlag, 'yes_no', '')}
 				</td>
 			</tr>
 		</c:forEach>

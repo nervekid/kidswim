@@ -688,7 +688,14 @@ public class SystemService extends BaseService implements InitializingBean {
 		return this.userDao.findAllEffectiveUserNum();
 	}
 
-
-
+	/**
+	 * 根据类型以及值查找字典标签
+	 * @param type
+	 * @param value
+	 * @return
+	 */
+	public String findLabelByTypeAndValueStr(String type, String value) {
+		return this.dictDao.findLabeByTypeAndValue(type, value);
+	}
 
 }

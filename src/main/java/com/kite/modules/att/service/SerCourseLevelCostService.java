@@ -65,12 +65,22 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	}
 
 	/**
-	 * 根据泳池地址及课程等级查找收费标准
+	 * 根据泳池地址及课程等级查找收费
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return
 	 */
 	public BigDecimal findCostAmountByCourseAddressAndCourseLevelFlag(String courseLevelFlag, String courseAddress) {
 		return this.dao.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevelFlag, courseAddress);
+	}
+
+	/**
+	 * 根据泳池地址及课程等级查找收费标准
+	 * @param courseLevelFlag
+	 * @param courseAddress
+	 * @return
+	 */
+	public String findCostStandardFlagByCourseAddressAndCourseLevelFlag(String courseLevelFlag, String courseAddress) {
+		return this.dao.findcostStandardFlagByCourseAddressAndCourseLevelFlag(courseLevelFlag, courseAddress);
 	}
 }

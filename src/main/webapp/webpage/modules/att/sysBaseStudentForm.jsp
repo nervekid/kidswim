@@ -133,21 +133,31 @@
 				</tr>
 
 				<tr>
+					<td class="width-15 active"><label class="pull-right">遇溺地点:</label></td>
+					<td class="width-35">
+						<form:select placeholder="遇溺地点" path="drownedAddressFlag"  class="form-control m-b"  >
+							<form:option value="" label="請選擇"/>
+							<form:options items="${fns:getDictList('drowned_address_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+						</form:select>
+					</td>
 					<td class="width-15 active"><label class="pull-right">預溺歲數：</label></td>
 					<td class="width-35">
 						<form:input path="drownedAge" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">長期病患：</label></td>
 					<td class="width-35">
 						<form:input path="longTermDisease" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">長期服藥</label></td>
 					<td class="width-35">
 						<form:input path="longTermMedicine" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">課程等級:</label></td>
 					<td class="width-35">
 						<form:select placeholder="課程等級" path="courseLevelFlag"  class="form-control m-b"  >
@@ -155,53 +165,50 @@
 							<form:options items="${fns:getDictList('courseLevel_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">聯系人號碼：</label></td>
 					<td class="width-35">
 						<form:input path="contactPhone" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">聯系人關系：</label></td>
 					<td class="width-35">
 						<form:input path="contactRelationship" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">緊急聯系人號碼：</label></td>
 					<td class="width-35">
 						<form:input path="urgentPhone" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">緊急聯系人關系：</label></td>
 					<td class="width-35">
 						<form:input path="urgentRelationship" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">監護人姓名：</label></td>
 					<td class="width-35">
 						<form:input path="guardianName" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">監護人手機號碼：</label></td>
 					<td class="width-35">
 						<form:input path="guardianPhone" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">監護人身份證號碼：</label></td>
 					<td class="width-35">
 						<form:input path="guardianIdNo" htmlEscape="false"    class="form-control"/>
 					</td>
+				</tr>
+
+				<tr>
 					<td class="width-15 active"><label class="pull-right">監護人關系：</label></td>
 					<td class="width-35">
 						<form:input path="guardianRelationship" htmlEscape="false"    class="form-control"/>
 					</td>
-				</tr>
-
-				<tr>
 					<td class="width-15 active"><label class="pull-right">facebook賬號：</label></td>
 					<td class="width-35">
 						<form:input path="facebook" htmlEscape="false"    class="form-control"/>

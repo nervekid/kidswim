@@ -35,4 +35,12 @@ public interface DictDao extends CrudDao<Dict> {
 	public Map<String, String> getDictByTypeAndValue(@Param("type") String type, @Param("value") String value);
 
     void updateStatus(Dict dict);
+
+    /**
+     * 根据值以及类型返回label
+     * @param type
+     * @param value
+     * @return
+     */
+    public String findLabeByTypeAndValue(@Param("type")String type, @Param("value")String value);
 }

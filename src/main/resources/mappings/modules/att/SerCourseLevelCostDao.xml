@@ -146,4 +146,10 @@
 		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress}
 	</select>
 
+	<select id="findcostStandardFlagByCourseAddressAndCourseLevelFlag" resultType="String">
+		select cost_standard_flag
+		FROM ser_course_level_cost
+		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress}
+	</select>
+
 </mapper>

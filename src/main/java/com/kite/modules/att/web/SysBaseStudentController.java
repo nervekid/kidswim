@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import com.google.common.collect.Maps;
-import com.kite.modules.att.entity.SerSale;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
 import com.kite.common.utils.DateUtils;
@@ -216,6 +215,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 						String studiedSwimValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getStudiedSwimFlag());
 						String drownedValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getDrownedFlag());
 						String courseLevelValue = this.systemService.findDictValueByTypeAndLabel("courseLevel_flag", sysBaseStudentImport.getCourseLevelFlag());
+						String drownedAddressValue = this.systemService.findDictValueByTypeAndLabel("drowned_address_flag", sysBaseStudentImport.getDrownedAddressFlag());
 						SysBaseStudent sysBaseStudent = new SysBaseStudent();
 						sysBaseStudent.setCode(code);
 						sysBaseStudent.setNameCn(sysBaseStudentImport.getNameCn());
@@ -246,6 +246,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 						sysBaseStudent.setStudiedSwimFlag(studiedSwimValue);
 						sysBaseStudent.setDrownedFlag(drownedValue);
 						sysBaseStudent.setCourseLevelFlag(courseLevelValue);
+						sysBaseStudent.setDrownedAddressFlag(drownedAddressValue);
 						sysBaseStudentService.save(sysBaseStudent);
 						successNum++;
 					}catch(ConstraintViolationException ex){

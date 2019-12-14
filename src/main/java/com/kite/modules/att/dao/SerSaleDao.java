@@ -3,13 +3,13 @@
  */
 package com.kite.modules.att.dao;
 
+import java.util.Date;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SerSale;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 销售资料DAO接口

@@ -17,7 +17,8 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.memberFee_flag AS "memberFeeFlag"
 	</sql>
 
 	<sql id="serSaleJoins">
@@ -53,6 +54,9 @@
 
 			<if test="paidFlag != null and paidFlag != ''">
 				and a.paid_flag = #{paidFlag}
+			</if>
+			<if test="memberFeeFlag != null and memberFeeFlag != ''">
+				and a.memberFee_flag = #{memberFeeFlag}
 			</if>
 
 		</where>
@@ -102,7 +106,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			memberFee_flag
 		) VALUES (
 			#{id},
 			#{code},
@@ -118,7 +123,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{memberFeeFlag}
 		)
 	</insert>
 
@@ -134,7 +140,8 @@
 			paymentType = #{paymentType},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			memberFee_flag = #{memberFeeFlag}
 		WHERE id = #{id}
 	</update>
 

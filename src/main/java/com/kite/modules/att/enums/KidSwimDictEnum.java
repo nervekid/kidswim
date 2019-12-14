@@ -61,4 +61,30 @@ public class KidSwimDictEnum {
             this.name = name;
         }
     }
+
+	/**
+	 * 收费标准标记
+	 * @author lyb
+	 *
+	 */
+	public enum costStandardFlag {
+
+		按堂收費("1"),
+		按月收費("2"),
+		雙月收費("3");
+
+        private String name;
+
+        private costStandardFlag(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }

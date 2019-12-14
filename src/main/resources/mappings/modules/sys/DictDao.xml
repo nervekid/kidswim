@@ -173,4 +173,14 @@
 			status = #{status}
 		WHERE id = #{id}
 	</update>
+
+	<select id="findLabeByTypeAndValue" resultType="String">
+		SELECT
+			label
+		FROM sys_dict
+		WHERE
+			del_flag = '0'
+		AND type = #{type}
+		AND value = #{value}
+	</select>
 </mapper>

@@ -80,83 +80,90 @@
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(sysBaseStudent.drownedFlag, 'yes_no', '')}" />
 			</td>
+			<td class="width-15 active"><label class="pull-right">遇溺地点：</label></td>
+			<td class="width-35">
+				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(sysBaseStudent.drownedAddressFlag, 'drowned_address_flag', '')}" />
+			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">遇溺歲數：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.drownedAge}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">習泳機構：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.studySwimmingOrgan}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">已懂泳式：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.studiedSwimmingStyle}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">長期病患：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.longTermDisease}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">長期服藥：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.longTermMedicine}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">課程等級：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${fns:getDictLabel(sysBaseStudent.courseLevelFlag, 'courseLevel_flag', '')}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">聯系人號碼：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.contactPhone}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">聯系人關系：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.contactRelationship}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">緊急聯系人號碼：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.urgentPhone}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">緊急聯系人關系：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.urgentRelationship}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">監護人姓名：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.guardianName}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">監護人手機號碼：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.guardianPhone}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">監護人身份證號碼：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.guardianIdNo}" />
 			</td>
-		</tr>
-
-		<tr>
 			<td class="width-15 active"><label class="pull-right">監護人關系：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.guardianRelationship}" />
 			</td>
+		</tr>
+
+		<tr>
 			<td class="width-15 active"><label class="pull-right">facebook賬號：</label></td>
 			<td class="width-35">
 				<input type="text" readonly="readonly" class="form-control" value="${sysBaseStudent.facebook}" />

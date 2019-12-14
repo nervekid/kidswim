@@ -90,12 +90,19 @@
 					<input id="paidDate" name="paidDate"  type="text"  class="form-control required"
 						   value="<fmt:formatDate value="${serSale.paidDate}" pattern="yyyy-MM-dd"/>"/>
 				</td>
-				<%--<td class="width-35">--%>
-					<%--<form:input path="paidDate" htmlEscape="false"    class="form-control"/>--%>
-				<%--</td>--%>
 				<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
 				<td class="width-35">
 					<form:input path="paymentType" htmlEscape="false" class="form-control"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">是否收取会员费：</label></td>
+				<td class="width-35">
+					<form:select placeholder="是否收取会员费" path="memberFeeFlag"  class="form-control required"  >
+						<form:option value="" label="請選擇"/>
+						<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+					</form:select>
 				</td>
 			</tr>
 

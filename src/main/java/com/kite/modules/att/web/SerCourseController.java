@@ -357,6 +357,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
 
 		//4.计算费用
+		//规则:如果收费标准是按照课堂收费，那么需要计算出多少堂课，然后乘积计算，如果是按月收费或者按双月收费，则不需要
+		
 		BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 
 		//5.写入课程表
@@ -462,17 +464,13 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			String countStr = com.kite.common.utils.date.DateUtils.transformHundredBitNumString(count);
 			String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
 
-			//3.获取上课的开始时间与结束时间HH:mm形式
-			String learnBeginTimeStr = beginLearn.replace(":", "").substring(0, beginLearn.replace(":", "").length() - 2);
-			String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
-
 			//4.计算费用
 			BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 
 			//5.获取星期几
 			String weekNumStr = DictUtils.getDictLabel(weekNum, "week_flag", null);
 
-			//5.計算壹段時間段內有多少天周幾
+			//6.計算壹段時間段內有多少天周幾
 			SimpleDateFormat ss = new SimpleDateFormat("M月d日");
 			StringBuilder strBulider = new StringBuilder();
 			for (int i = 0; i < weekenNum; i++) {
@@ -495,11 +493,17 @@ public class SerCourseController extends BaseController implements BasicVerifica
 				}
 			}
 
+			//7.返回收费标准字符串
+			//4.计算费用
+			String costStandardFlag = this.serCourseLevelCostService.findCostStandardFlagByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+			String costStandardStr = this.systemService.findLabelByTypeAndValueStr("cost_standard_flag", costStandardFlag);
+
 			map.put("code", code);
 			map.put("weekenNum", weekenNum);
 			map.put("dates", strBulider.toString());
 			map.put("weekNumStr",weekNumStr);
 			map.put("costAmount",costAmount);
+			map.put("costStandardStr",costStandardStr);
 
 			ajaxJson.setBody(map);
 		}

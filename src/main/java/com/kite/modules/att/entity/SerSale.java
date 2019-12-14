@@ -26,6 +26,7 @@ public class SerSale extends DataEntity<SerSale> {
 	private String paidFlag;		// 是否付款 字典枚举 yes_no 1:是 0:否
 	private Date paidDate;		// 付款日期
 	private String paymentType;		// 付款方式
+	private String memberFeeFlag;	//是否收取会员费 字典枚举 yes_no 1:是 0:否
 
 	private String studentName;
 
@@ -118,4 +119,14 @@ public class SerSale extends DataEntity<SerSale> {
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
 	}
+
+	@ExcelField(title="是否收取会员费", dictType = "yes_no",align=2, sort=7)
+	public String getMemberFeeFlag() {
+		return memberFeeFlag;
+	}
+
+	public void setMemberFeeFlag(String memberFeeFlag) {
+		this.memberFeeFlag = memberFeeFlag;
+	}
+
 }

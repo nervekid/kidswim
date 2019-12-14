@@ -99,11 +99,14 @@
                         var dates = data.body.dates;
                         var strInWeek = data.body.weekNumStr;
                         var courseFee = data.body.costAmount;
+                        var costStandardStr = data.body.costStandardStr;
                         $("#codeShow").text(code);
                         $("#learnNumShow").text(weekenNum);
                         $("#dates").text(dates);
                         $("#strInWeekShow").text(strInWeek);
                         $("#courseFeeShow").text(courseFee);
+                        $("#chargesShow").text(costStandardStr);
+
                 },
                 fail:function (data) {
                     alert("查询失败！");
@@ -310,12 +313,16 @@
 							<tr>
 								<td class="width-15"><label class="pull-right">星期几</label></td>
 								<td class="width-35"  id="strInWeekShow">
-
 								</td>
 
 								<td class="width-15"><label class="pull-right">课程费用(港币)</label></td>
 								<td class="width-35"  id="courseFeeShow">
+								</td>
+							</tr>
 
+							<tr>
+								<td class="width-15"><label class="pull-right">收费标准</label></td>
+								<td class="width-35"  id="chargesShow">
 								</td>
 							</tr>
 

@@ -104,6 +104,7 @@
 				<th  class="sort-column studySwimmingOrgan">習泳機構</th>
 				<th  class="sort-column studiedSwimmingStyle">已懂泳式</th>
 				<th  class="sort-column drownedFlag">是否曾遇溺 </th>
+				<th  class="sort-column drownedAddressFlag">遇溺地点 </th>
 				<th  class="sort-column drownedAge">遇溺歲數</th>
 				<th  class="sort-column longTermDisease">長期病患</th>
 				<th  class="sort-column longTermMedicine">長期服藥</th>
@@ -167,6 +168,9 @@
 				</td>
 				<td>
 					${fns:getDictLabel(sysBaseStudent.drownedFlag, 'yes_no', '')}
+				</td>
+				<td>
+					${fns:getDictLabel(sysBaseStudent.drownedAddressFlag, 'drowned_address_flag', '')}
 				</td>
 				<td>
 					${sysBaseStudent.drownedAge}
