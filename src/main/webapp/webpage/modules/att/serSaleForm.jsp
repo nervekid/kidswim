@@ -15,6 +15,7 @@
 		  return false;
 		}
 		$(document).ready(function() {
+			memberFeeFlagChange ();
 			validateForm = $("#inputForm").validate({
 				submitHandler: function(form){
 					loading('正在提交，請稍等...');
@@ -64,7 +65,7 @@
 				<td class="width-15 active"><label class="pull-right">課程編號：</label></td>
 				<td class="width-35">
 					<sys:treeselect  id="course"  name="courseCode" value="${serSale.courseCode}" labelName="courseName"
-										  labelValue="" title="課程編號" url="/att/serCourse/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
+					  labelValue="${serSale.courseCode}" title="課程編號" url="/att/serCourse/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
 				</td>
 			</tr>
 
@@ -72,7 +73,7 @@
 				<td class="width-15 active"><label class="pull-right">學員名稱：</label></td>
 				<td class="width-35">
 					<sys:treeselect  id="student"  name="studentCode" value="${serSale.studentCode}" labelName="studentName"
-										  labelValue="${serSale.studentName}" title="學生" url="/att/sysBaseStudent/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
+					  labelValue="${serSale.studentName}" title="學生" url="/att/sysBaseStudent/treeData" cssClass="form-control required" allowClear="true" notAllowSelectParent="true"/>
 				</td>
 				<td class="width-15 active"><label class="pull-right">折扣:</label></td>
 				<td class="width-35">
@@ -105,7 +106,7 @@
 				</td>
 				<td class="width-15 active"><label class="pull-right">會員費金額：</label></td>
 				<td class="width-35">
-					<input id="memberFeeFlagStr" disabled="true" name = "memberFeeFlagStr" htmlEscape="false" class="form-control"/>
+					<input id="memberFeeFlagStr" name="memberFeeFlagStr" disabled="true" htmlEscape="false"    class="form-control"/>
 				</td>
 			</tr>
 

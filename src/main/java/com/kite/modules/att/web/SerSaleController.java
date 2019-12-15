@@ -140,13 +140,35 @@ public class SerSaleController extends BaseController implements BasicVerificati
 		SerCourse serCourse = this.serCourseService.findSerCourseByCode(serSale.getCode());
 		if(!serSale.getIsNewRecord()){//編輯表單保存
 			SerSale t = serSaleService.get(serSale.getId());//從數據庫取出記錄的值
+			boolean isChange = false;
+			boolean isAdd = false;
+			if (!serSale.getMemberFeeFlag().equals(t.getMemberFeeFlag())) {
+				isChange = true;
+				if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
+					//原先不用收取会员费，现在需要
+					isAdd = true;
+				}
+			}
 			MyBeanUtils.copyBeanNotNull2Bean(serSale, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
+			if (isChange) {
+				if (isAdd) {
+					//原先不用收取会员费，现在需要
+					t.setPayAmount(serSale.getPayAmount().add(new BigDecimal(170)));
+					serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "收取會員費$170");
+				}
+				else {
+					//原先收取了会员费，现在不需要
+					t.setPayAmount(serSale.getPayAmount().subtract(new BigDecimal(170)));
+					t.setRemarks("");
+				}
+			}
 			serSaleService.save(t);//保存
 		}else{//新增表單保存
 			//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
 			BigDecimal multiply = new BigDecimal(serSale.getDiscount()).multiply(serCourse.getCourseFee() == null ? BigDecimal.ZERO : serCourse.getCourseFee());
 			if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
 				multiply = multiply.add(new BigDecimal(170));
+				serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "收取會員費$170");
 			}
 			serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
 

@@ -133,7 +133,7 @@
 		<include refid="serCourseDetailsColumns"/>
 		FROM ser_course_details a
 		<include refid="serCourseDetailsJoins"/>
-		where a.courseId = #{courseId}
+		where a.courseId = #{courseId} and a.del_flag = '0'
 		ORDER BY a.learn_date asc
 	</select>
 

@@ -92,6 +92,7 @@
 				<th  class="sort-column paid_date">付款日期</th>
 				<th  class="sort-column paymentType">付款方式</th>
 				<th  class="sort-column memberFeeFlag">是否收取會員費</th>
+				<th  class="sort-column remarks">备注</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -127,6 +128,9 @@
 				</td>
 				<td>
 					${fns:getDictLabel(serSale.memberFeeFlag, 'yes_no', '')}
+				</td>
+				<td>
+					${serSale.remarks}
 				</td>
 			</tr>
 		</c:forEach>

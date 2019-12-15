@@ -55,7 +55,11 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SerCourse serCourse) {
-		super.delete(serCourse);
+		List<SerCourseDetails> serCourseDetailsList = this.serCourseDetailsDao.findSerCourseDetailsListByCourseId(serCourse.getId());
+		serCourseDetailsList.forEach(e -> {
+			this.serCourseDetailsDao.deleteByLogic(e);
+		});
+		super.deleteByLogic(serCourse);
 	}
 
 	@Transactional(readOnly = false)
