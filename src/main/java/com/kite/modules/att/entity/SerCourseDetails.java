@@ -16,8 +16,6 @@ public class SerCourseDetails extends DataEntity<SerCourseDetails> {
 	private Date learnDate; //上課日期
 	private Date learnBeginDate; //上課開始時間 yyyy-MM-dd HH:mm:ss
 	private Date learnEndDate; //上課結束時間 yyyy-MM-dd HH:mm:ss
-	private String coathId; //教練員id
-	private String coathName; //教練員名稱
 	private String rollCallStatusFlag; //是否已點名 字典枚舉 yes_no 0:否 1:是
 
 	private String learnDateStr; //上課日期
@@ -60,14 +58,6 @@ public class SerCourseDetails extends DataEntity<SerCourseDetails> {
 		this.learnEndDate = learnEndDate;
 	}
 
-	public String getCoathId() {
-		return coathId;
-	}
-
-	public void setCoathId(String coathId) {
-		this.coathId = coathId;
-	}
-
 	public String getRollCallStatusFlag() {
 		return rollCallStatusFlag;
 	}
@@ -102,14 +92,5 @@ public class SerCourseDetails extends DataEntity<SerCourseDetails> {
 	public void setLearnEndDateStr(String learnEndDateStr) {
 		this.learnEndDateStr = learnEndDateStr;
 	}
-
-	public String getCoathName() {
-		return coathName;
-	}
-
-	public void setCoathName(String coathName) {
-		this.coathName = coathName;
-	}
-
 
 }

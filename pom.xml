@@ -81,6 +81,13 @@
             <name>Central Repository 2</name>
             <url>http://repo1.maven.org/maven2/</url>
         </repository>
+
+        <repository>
+            <id>local_repo</id>
+            <name>local_repo_location</name>
+            <url>file:C:/Users/1147/.m2/repository/</url>
+		</repository>
+
     </repositories>
 <pluginRepositories>
     <pluginRepository>
@@ -130,13 +137,13 @@
     <dependencies>
         <dependency>
             <groupId>kite_base</groupId>
-            <artifactId>activity</artifactId>
-            <version>1.5-RELEASE</version>
+            <artifactId>common</artifactId>
+            <version>1.0-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>kite_base</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0-RELEASE</version>
+            <artifactId>activity</artifactId>
+            <version>1.5-RELEASE</version>
         </dependency>
         <!-- Swagger -->
         <dependency>

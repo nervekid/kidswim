@@ -153,11 +153,6 @@ public class SerCourseController extends BaseController implements BasicVerifica
 	@RequestMapping(value = "view")
 	public String view(SerCourse serCourse, Model model) {
 		List<SerCourseDetails> serCourseDetailsList = this.serCourseService.findSerCourseDetailsByCourseId(serCourse.getId());
-		for (int i = 0; i < serCourseDetailsList.size(); i++) {
-			if (serCourseDetailsList.get(i).getCoathId() == null || serCourseDetailsList.get(i).getCoathId().equals("")) {
-				serCourseDetailsList.get(i).setCoathName("暫缺");
-			}
-		}
 		serCourse.setSerCourseDetailsList(serCourseDetailsList);
 		model.addAttribute("yesNoList", DictUtils.getDictList("yes_no"));
 		model.addAttribute("serCourse", serCourse);
@@ -389,7 +384,6 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		for (int i = 0; i < weekenNum; i++) {
 			SerCourseDetails serCourseDetails = new SerCourseDetails();
 			serCourseDetails.setCourseId(courseId);
-			serCourseDetails.setCoathId(null);
 			serCourseDetails.setRollCallStatusFlag(KidSwimDictEnum.yesNo.否.getName());
 			//核算日期
 			if (i == 0) {

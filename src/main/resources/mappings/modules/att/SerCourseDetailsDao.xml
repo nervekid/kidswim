@@ -8,19 +8,16 @@
 		a.learn_date AS "learnDate",
 		a.learn_begin_date AS "learnBeginDate",
 		a.learn_end_date AS "learnEndDate",
-		a.coathId AS "coathId",
 		a.rollCall_status_flag AS "rollCallStatusFlag",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag",
-		coach.nameCn AS "coathName"
+		a.del_flag AS "delFlag"
 	</sql>
 
 	<sql id="serCourseDetailsJoins">
-		LEFT JOIN sys_base_coach coach on coach.id = a.coathId and coach.del_flag = '0'
 	</sql>
 
 
@@ -75,7 +72,6 @@
 			learn_date,
 			learn_begin_date,
 			learn_end_date,
-			coathId,
 			rollCall_status_flag,
 			create_by,
 			create_date,
@@ -89,7 +85,6 @@
 			#{learnDate},
 			#{learnBeginDate},
 			#{learnEndDate},
-			#{coathId},
 			#{rollCallStatusFlag},
 			#{createBy.id},
 			#{createDate},
@@ -106,7 +101,6 @@
 			learn_date = #{learnDate},
 			learn_begin_date = #{learnBeginDate},
 			learn_end_date = #{learnEndDate},
-			coathId = #{coathId},
 			rollCall_status_flag = #{rollCallStatusFlag},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},

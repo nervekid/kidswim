@@ -186,7 +186,6 @@
 						<th>上課日期</th>
 						<th>上課開始時間</th>
 						<th>上課結束時間</th>
-						<th>教練員</th>
 						<th>是否已點名</th>
 					</tr>
 				</thead>
@@ -215,11 +214,6 @@
 					<td>
 						<input  readonly="true" id="serCourseDetailsList{{idx}}_learnEndDateStr" name="serCourseDetailsList[{{idx}}].learnEndDateStr" type="text"   style="font-size:14px ;width:99%"  maxlength="20" class="laydate-icon form-control "
 						value="{{row.learnEndDateStr}}"/>
-					</td>
-
-					<td>
-						<input readonly="true" id="serCourseDetailsList{{idx}}_coathName" name="serCourseDetailsList[{{idx}}].coathName" type="text"   style="font-size:14px ;width:99%"  maxlength="20" class="laydate-icon form-control "
-						value="{{row.coathName}}"/>
 					</td>
 
 					<td>
