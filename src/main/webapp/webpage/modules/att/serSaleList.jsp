@@ -2,7 +2,7 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>销售资料管理</title>
+	<title>銷售資料管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -22,7 +22,7 @@
     <div class="ibox-content">
 	<sys:message content="${message}"/>
 
-	<!--查询条件-->
+	<!--查詢條件-->
 	<div class="row">
 	<div class="col-sm-12">
 	<form:form id="searchForm" modelAttribute="serSale" action="${ctx}/att/serSale/" method="post" class="form-inline">
@@ -39,7 +39,7 @@
 				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
 
-			<form:select placeholder="是否收取会员费" path="memberFeeFlag"  class="form-control m-b required" onchange="search()" >
+			<form:select placeholder="是否收取會員費" path="memberFeeFlag"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
@@ -49,24 +49,24 @@
 	</div>
 	</div>
 
-	<!-- 工具栏 -->
+	<!-- 工具欄 -->
 	<div class="row">
 	<div class="col-sm-12">
 		<div class="pull-left">
 			<shiro:hasPermission name="att:serSale:add">
-				<table:addRow url="${ctx}/att/serSale/form?menuId=${menu.id}" title="销售资料"></table:addRow><!-- 增加按钮 -->
+				<table:addRow url="${ctx}/att/serSale/form?menuId=${menu.id}" title="銷售資料"></table:addRow><!-- 增加按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serSale:edit">
-			    <table:editRow url="${ctx}/att/serSale/form" title="销售资料" id="contentTable"></table:editRow><!-- 编辑按钮 -->
+			    <table:editRow url="${ctx}/att/serSale/form" title="銷售資料" id="contentTable"></table:editRow><!-- 編輯按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serSale:del">
-				<table:delRow url="${ctx}/att/serSale/deleteAll" id="contentTable"></table:delRow><!-- 删除按钮 -->
+				<table:delRow url="${ctx}/att/serSale/deleteAll" id="contentTable"></table:delRow><!-- 刪除按鈕 -->
 			</shiro:hasPermission>
 			<shiro:hasPermission name="att:serSale:import">
-				<table:importExcel url="${ctx}/att/serSale/import"  menuId="${menu.id}" ></table:importExcel><!-- 导入按钮 -->
+				<table:importExcel url="${ctx}/att/serSale/import"  menuId="${menu.id}" ></table:importExcel><!-- 導入按鈕 -->
 			</shiro:hasPermission>
 			<%--<shiro:hasPermission name="att:serSale:export">--%>
-	       		<%--<table:exportExcel url="${ctx}/att/serSale/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->--%>
+	       		<%--<table:exportExcel url="${ctx}/att/serSale/export?menuId=${menu.id}"></table:exportExcel><!-- 導出按鈕 -->--%>
 	       	<%--</shiro:hasPermission>--%>
 	       <%--<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>--%>
 			</div>
@@ -87,18 +87,18 @@
 				<th  class="sort-column studentCode">學員編號</th>
 				<th  class="sort-column studentName">學員名稱</th>
 				<th  class="sort-column discount">折扣</th>
-				<th  class="sort-column payAmount">付款金額(港币)</th>
+				<th  class="sort-column payAmount">付款金額(港幣)</th>
 				<th  class="sort-column paid_flag">是否付款</th>
 				<th  class="sort-column paid_date">付款日期</th>
 				<th  class="sort-column paymentType">付款方式</th>
-				<th  class="sort-column memberFeeFlag">是否收取会员费</th>
+				<th  class="sort-column memberFeeFlag">是否收取會員費</th>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="serSale">
 			<tr>
 				<td> <input type="checkbox" id="${serSale.id}" class="i-checks"></td>
-				<td><a  href="#" onclick="openDialogView('查看销售资料', '${ctx}/att/serSale/view?id=${serSale.id}','800px', '500px')">
+				<td><a  href="#" onclick="openDialogView('查看銷售資料', '${ctx}/att/serSale/view?id=${serSale.id}','800px', '500px')">
 					${serSale.code}
 				</a></td>
 				<td>
@@ -133,7 +133,7 @@
 		</tbody>
 	</table>
 
-		<!-- 分页代码 -->
+		<!-- 分頁代碼 -->
 	<table:page page="${page}"></table:page>
 	<br/>
 	<br/>

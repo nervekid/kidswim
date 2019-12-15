@@ -39,7 +39,7 @@ import com.kite.modules.att.entity.SysCertificatesCoach;
 import com.kite.modules.att.service.SysCertificatesCoachService;
 
 /**
- * 教练员资格Controller
+ * 教練員資格Controller
  * @author lyb
  * @version 2019-11-13
  */
@@ -52,7 +52,7 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -68,7 +68,7 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 	}
 
 	/**
-	 * 教练员资格列表页面
+	 * 教練員資格列表頁面
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:list")
 	@RequestMapping(value = {"list", ""})
@@ -81,7 +81,7 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 
 
 	/**
-	 * 查看，增加，编辑教练员资格表单页面
+	 * 查看，增加，編輯教練員資格表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysCertificatesCoach:view","att:sysCertificatesCoach:add","att:sysCertificatesCoach:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -89,13 +89,13 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 		model.addAttribute("sysCertificatesCoach", sysCertificatesCoach);
 		if(sysCertificatesCoach.getId()==null){
 			// sysCertificatesCoach.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/sysCertificatesCoachForm";
 	}
 
 	/**
-	 * 查看打印教练员资格表单页面
+	 * 查看打印教練員資格表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysCertificatesCoach:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -105,7 +105,7 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 	}
 
 	/**
-	 * 保存教练员资格
+	 * 保存教練員資格
 	 */
 	@RequiresPermissions(value={"att:sysCertificatesCoach:add","att:sysCertificatesCoach:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -113,30 +113,30 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 		if (!beanValidator(model, sysCertificatesCoach)){
 			return form(sysCertificatesCoach, model);
 		}
-		if(!sysCertificatesCoach.getIsNewRecord()){//编辑表单保存
-			SysCertificatesCoach t = sysCertificatesCoachService.get(sysCertificatesCoach.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(sysCertificatesCoach, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!sysCertificatesCoach.getIsNewRecord()){//編輯表單保存
+			SysCertificatesCoach t = sysCertificatesCoachService.get(sysCertificatesCoach.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(sysCertificatesCoach, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			sysCertificatesCoachService.save(t);//保存
-		}else{//新增表单保存
+		}else{//新增表單保存
 			sysCertificatesCoachService.save(sysCertificatesCoach);//保存
 		}
-		addMessage(redirectAttributes, "保存教练员资格成功");
+		addMessage(redirectAttributes, "保存教練員資格成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?menuId="+sysCertificatesCoach.getMenuId();
 	}
 
 	/**
-	 * 删除教练员资格
+	 * 刪除教練員資格
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:del")
 	@RequestMapping(value = "delete")
 	public String delete(SysCertificatesCoach sysCertificatesCoach, RedirectAttributes redirectAttributes) {
 		sysCertificatesCoachService.delete(sysCertificatesCoach);
-		addMessage(redirectAttributes, "删除教练员资格成功");
+		addMessage(redirectAttributes, "刪除教練員資格成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?repage";
 	}
 
 	/**
-	 * 批量删除教练员资格
+	 * 批量刪除教練員資格
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:del")
 	@RequestMapping(value = "deleteAll")
@@ -145,29 +145,29 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 		for(String id : idArray){
 			sysCertificatesCoachService.delete(sysCertificatesCoachService.get(id));
 		}
-		addMessage(redirectAttributes, "删除教练员资格成功");
+		addMessage(redirectAttributes, "刪除教練員資格成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SysCertificatesCoach sysCertificatesCoach, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "教练员资格"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "教練員資格"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SysCertificatesCoach> page = sysCertificatesCoachService.findPage(new Page<SysCertificatesCoach>(request, response, -1), sysCertificatesCoach);
-    		new ExportExcel("教练员资格", SysCertificatesCoach.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("教練員資格", SysCertificatesCoach.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出教练员资格记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出教練員資格記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?menuId="+sysCertificatesCoach.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:import")
@@ -181,7 +181,7 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "教练员资格列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "教練員資格列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -198,13 +198,13 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条教练员资格记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條教練員資格記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条教练员资格记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條教練員資格記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入教练员资格失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入教練員資格失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?menuId="+menuId;
     }
@@ -227,18 +227,18 @@ public class SysCertificatesCoachController extends BaseController implements Ba
 	}
 
 	/**
-	 * 下载导入教练员资格数据模板
+	 * 下載導入教練員資格數據模板
 	 */
 	@RequiresPermissions("att:sysCertificatesCoach:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "教练员资格数据导入模板.xlsx";
+            String fileName = "教練員資格數據導入模板.xlsx";
     		List<SysCertificatesCoach> list = Lists.newArrayList();
-    		new ExportExcel("教练员资格数据", SysCertificatesCoach.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("教練員資格數據", SysCertificatesCoach.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysCertificatesCoach/?repage";
     }

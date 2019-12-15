@@ -11,7 +11,7 @@
 			  $("#inputForm").submit();
 			  return true;
 		  }
-	
+
 		  return false;
 		}
 		$(document).ready(function() {
@@ -30,7 +30,7 @@
 					}
 				}
 			});
-			
+
 		});
 	</script>
 </head>
@@ -38,7 +38,7 @@
 		<form:form id="inputForm" modelAttribute="sysCertificatesCoach" action="${ctx}/att/sysCertificatesCoach/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="menuId"/>
-		<sys:message content="${message}"/>	
+		<sys:message content="${message}"/>
 		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
 		   <tbody>
 		 	</tbody>

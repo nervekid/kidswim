@@ -18,7 +18,7 @@ import com.kite.modules.att.entity.SysBaseCoach;
 import com.kite.modules.att.entity.SysCertificatesCoach;
 
 /**
- * 教练员Service
+ * 教練員Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -49,7 +49,7 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 		Page<SysBaseCoach> pageSysBaseCoach =  super.findPage(page, sysBaseCoach);
 		List<SysBaseCoach> sysBaseCoachList = pageSysBaseCoach.getList();
 
-		//添加证书列表
+		//添加證書列表
 		for (int i = 0; i < sysBaseCoachList.size(); i++) {
 			List<SysCertificatesCoach> sysCertificatesCoachList = this.sysCertificatesCoachDao.findSysCertificatesCoachListByCoachId(sysBaseCoachList.get(i).getId());
 			sysBaseCoachList.get(i).setSysCertificatesCoachList(sysCertificatesCoachList);
@@ -61,7 +61,7 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 	@Override
 	@Transactional(readOnly = false)
 	public void save(SysBaseCoach sysBaseCoach) {
-		//修改教练资格表
+		//修改教練資格表
 		super.save(sysBaseCoach);
 
 		//查找coachId
@@ -100,7 +100,7 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SysBaseCoach sysBaseCoach) {
-		//删除分录
+		//刪除分錄
 		this.sysCertificatesCoachDao.deleteSysCertificatesCoachByCoachId(sysBaseCoach.getId());
 		super.deleteByLogic(sysBaseCoach);
 	}
@@ -118,14 +118,14 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 	}
 
 	/**
-	 * 查找已存在的教练员数量
+	 * 查找已存在的教練員數量
 	 */
 	public int findExitSysBaseCoachNum() {
 		return this.dao.findSysBaseCoachCount();
 	}
 
 	/**
-	 * 根据教练id查找教练编码
+	 * 根據教練id查找教練編碼
 	 * @param id
 	 * @return
 	 */

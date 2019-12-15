@@ -11,30 +11,30 @@ import com.kite.common.persistence.DataEntity;
 import com.kite.common.utils.excel.annotation.ExcelField;
 
 /**
- * 教练员Entity
+ * 教練員Entity
  * @author lyb
  * @version 2019-11-13
  */
 public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 
 	private static final long serialVersionUID = 1L;
-	private String code;		// 教练编码 C0001 C0002 自增字段
+	private String code;		// 教練編碼 C0001 C0002 自增字段
 	private String nameCn;		// 中文名
 	private String nameEn;		// 英文名
-	private String sex;		// 性别 字典枚举 sex_flag 1:男 2:女
-	private String phone;		// 电话号码
-	private String idNo;		// 身份证号码
-	private String email;		// 电邮
+	private String sex;		// 性別 字典枚舉 sex_flag 1:男 2:女
+	private String phone;		// 電話號碼
+	private String idNo;		// 身份證號碼
+	private String email;		// 電郵
 	private String address;		// 地址
 	private String educationLevel;		// 教育程度
-	private String entryYear;		// 入职年月
-	private String entryPosition;		// 入职职位
-	private BigDecimal entryHourWage;		// 入职时薪 单位(港币)
-	private String presentPosition;		// 现时职位
-	private BigDecimal presentHourWage;		// 现时时薪 单位(港币)
-	private BigDecimal industryExperience;		// 行业经验 单位(年)
-	private String contractFlag;		// 有否合约 字典枚举 yes_no 1:是 0:否
-	private BigDecimal accumulatedTeachingHours;		// 累计教导时数 单位(小时) 从点名课时数累计
+	private String entryYear;		// 入職年月
+	private String entryPosition;		// 入職職位
+	private BigDecimal entryHourWage;		// 入職時薪 單位(港幣)
+	private String presentPosition;		// 現時職位
+	private BigDecimal presentHourWage;		// 現時時薪 單位(港幣)
+	private BigDecimal industryExperience;		// 行業經驗 單位(年)
+	private String contractFlag;		// 有否合約 字典枚舉 yes_no 1:是 0:否
+	private BigDecimal accumulatedTeachingHours;		// 累計教導時數 單位(小時) 從點名課時數累計
 
 	private List<SysCertificatesCoach> sysCertificatesCoachList = new ArrayList<SysCertificatesCoach>();
 
@@ -46,7 +46,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		super(id);
 	}
 
-	@ExcelField(title="教练编码", align=2, sort=1)
+	@ExcelField(title="教練編碼", align=2, sort=1)
 	public String getCode() {
 		return code;
 	}
@@ -73,7 +73,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.nameEn = nameEn;
 	}
 
-	@ExcelField(title="性别", dictType="sex_flag", align=2, sort=4)
+	@ExcelField(title="性別", dictType="sex_flag", align=2, sort=4)
 	public String getSex() {
 		return sex;
 	}
@@ -82,7 +82,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.sex = sex;
 	}
 
-	@ExcelField(title="电话号码", align=2, sort=5)
+	@ExcelField(title="電話號碼", align=2, sort=5)
 	public String getPhone() {
 		return phone;
 	}
@@ -91,7 +91,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.phone = phone;
 	}
 
-	@ExcelField(title="身份证号码", align=2, sort=6)
+	@ExcelField(title="身份證號碼", align=2, sort=6)
 	public String getIdNo() {
 		return idNo;
 	}
@@ -100,7 +100,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.idNo = idNo;
 	}
 
-	@ExcelField(title="电邮", align=2, sort=7)
+	@ExcelField(title="電郵", align=2, sort=7)
 	public String getEmail() {
 		return email;
 	}
@@ -135,7 +135,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.entryYear = entryYear;
 	}
 
-	@ExcelField(title="入职职位", align=2, sort=11)
+	@ExcelField(title="入職職位", align=2, sort=11)
 	public String getEntryPosition() {
 		return entryPosition;
 	}
@@ -144,7 +144,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.entryPosition = entryPosition;
 	}
 
-	@ExcelField(title="入职时薪 单位(港币)", align=2, sort=12)
+	@ExcelField(title="入職時薪 單位(港幣)", align=2, sort=12)
 	public BigDecimal getEntryHourWage() {
 		return entryHourWage;
 	}
@@ -153,7 +153,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.entryHourWage = entryHourWage;
 	}
 
-	@ExcelField(title="现时职位", align=2, sort=13)
+	@ExcelField(title="現時職位", align=2, sort=13)
 	public String getPresentPosition() {
 		return presentPosition;
 	}
@@ -162,7 +162,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.presentPosition = presentPosition;
 	}
 
-	@ExcelField(title="现时时薪 单位(港币)", align=2, sort=14)
+	@ExcelField(title="現時時薪 單位(港幣)", align=2, sort=14)
 	public BigDecimal getPresentHourWage() {
 		return presentHourWage;
 	}
@@ -171,7 +171,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.presentHourWage = presentHourWage;
 	}
 
-	@ExcelField(title="行业经验 单位(年)", align=2, sort=15)
+	@ExcelField(title="行業經驗 單位(年)", align=2, sort=15)
 	public BigDecimal getIndustryExperience() {
 		return industryExperience;
 	}
@@ -180,7 +180,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.industryExperience = industryExperience;
 	}
 
-	@ExcelField(title="有否合约", dictType="yes_no", align=2, sort=16)
+	@ExcelField(title="有否合約", dictType="yes_no", align=2, sort=16)
 	public String getContractFlag() {
 		return contractFlag;
 	}
@@ -189,7 +189,7 @@ public class SysBaseCoach extends DataEntity<SysBaseCoach> {
 		this.contractFlag = contractFlag;
 	}
 
-	@ExcelField(title="累计教导时数 单位(小时)", align=2, sort=17)
+	@ExcelField(title="累計教導時數 單位(小時)", align=2, sort=17)
 	public BigDecimal getAccumulatedTeachingHours() {
 		return accumulatedTeachingHours;
 	}

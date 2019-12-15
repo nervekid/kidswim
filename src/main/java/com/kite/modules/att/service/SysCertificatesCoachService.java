@@ -16,7 +16,7 @@ import com.kite.modules.att.entity.SysCertificatesCoach;
 import com.kite.modules.att.dao.SysCertificatesCoachDao;
 
 /**
- * 教练员资格Service
+ * 教練員資格Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -66,7 +66,7 @@ public class SysCertificatesCoachService extends CrudService<SysCertificatesCoac
 	}
 
 	/**
-	 * 根据教练ID查找教练资料列表
+	 * 根據教練ID查找教練資料列表
 	 * @param coachId
 	 * @return
 	 */

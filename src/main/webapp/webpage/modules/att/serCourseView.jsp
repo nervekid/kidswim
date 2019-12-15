@@ -2,7 +2,7 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>课程查看</title>
+	<title>課程查看</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		var validateForm;
@@ -48,12 +48,12 @@
 					}
 				}
 			});
-			$(list+idx).find("select[type='select']").each(function(){//查找下拉选择框（后续如果一列数据有多个选择框，需要添加属性，目前只添加了type）
-				var numbers = $(list+idx).find("select[type='select']").find("option"); //获取选择框的值
-				numbers.each(function(){ //循环选择框
+			$(list+idx).find("select[type='select']").each(function(){//查找下拉選擇框（後續如果壹列數據有多個選擇框，需要添加屬性，目前只添加了type）
+				var numbers = $(list+idx).find("select[type='select']").find("option"); //獲取選擇框的值
+				numbers.each(function(){ //循環選擇框
 					if (typeof(row)!="undefined") {
 					var title = $(this).attr("title");
-					if($(this).val() == row.rollCallStatusFlag){//如果选择框的值与当前后台返回的一致，设置默认选中
+					if($(this).val() == row.rollCallStatusFlag){//如果選擇框的值與當前後臺返回的壹致，設置默認選中
 						$(this).attr("selected", "selected");
 					}
 					}
@@ -92,13 +92,13 @@
 		<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer">
 		   <tbody>
 				<tr>
-					<td class="width-15 active"><label class="pull-right">课程编号：</label></td>
+					<td class="width-15 active"><label class="pull-right">課程編號：</label></td>
 					<td class="width-35">
 						<form:input readonly="true" path="code" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">课程等级：</label></td>
+					<td class="width-15 active"><label class="pull-right">課程等級：</label></td>
 					<td class="width-35">
-						<form:select disabled="true" placeholder="课程等级" path="courseLevel"  class="form-control m-b"  >
+						<form:select disabled="true" placeholder="課程等級" path="courseLevel"  class="form-control m-b"  >
 							<form:option value="" label="請選擇"/>
 							<form:options items="${fns:getDictList('course_level')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
@@ -106,35 +106,35 @@
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">课程开始日期：</label></td>
+					<td class="width-15 active"><label class="pull-right">課程開始日期：</label></td>
 					<td class="width-35">
 						<input type="text"  readonly="true" class="form-control" value="<fmt:formatDate value="${serCourse.courseBeginTime}" pattern="yyyy-MM-dd"/>" />
 					</td>
-					<td class="width-15 active"><label class="pull-right">课程结束日期:</label></td>
+					<td class="width-15 active"><label class="pull-right">課程結束日期:</label></td>
 					<td class="width-35">
 						<input type="text" readonly="true" class="form-control" value="<fmt:formatDate value="${serCourse.courseEndTimeTime}" pattern="yyyy-MM-dd"/>" />
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">上课开始时间：</label></td>
+					<td class="width-15 active"><label class="pull-right">上課開始時間：</label></td>
 					<td class="width-35">
 						<form:input readonly="true" path="showLearnBeginTime" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">上课结束时间：</label></td>
+					<td class="width-15 active"><label class="pull-right">上課結束時間：</label></td>
 					<td class="width-35">
 						<form:input readonly="true" path="showLearnEndTimeTime" htmlEscape="false"    class="form-control"/>
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">堂数：</label></td>
+					<td class="width-15 active"><label class="pull-right">堂數：</label></td>
 					<td class="width-35">
 						<form:input readonly="true" path="learnNum" htmlEscape="false"    class="form-control"/>
 					</td>
-					<td class="width-15 active"><label class="pull-right">课程地址：</label></td>
+					<td class="width-15 active"><label class="pull-right">課程地址：</label></td>
 					<td class="width-35">
-						<form:select disabled="true" placeholder="课程地址" path="courseAddress"  class="form-control m-b"  >
+						<form:select disabled="true" placeholder="課程地址" path="courseAddress"  class="form-control m-b"  >
 							<form:option value="" label="請選擇"/>
 							<form:options items="${fns:getDictList('course_addrese_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
@@ -142,21 +142,21 @@
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">星期几：</label></td>
+					<td class="width-15 active"><label class="pull-right">星期幾：</label></td>
 					<td class="width-35">
-						<form:select disabled="true" placeholder="课程地址" path="strInWeek"  class="form-control m-b"  >
+						<form:select disabled="true" placeholder="課程地址" path="strInWeek"  class="form-control m-b"  >
 							<form:option value="" label="請選擇"/>
 							<form:options items="${fns:getDictList('week_flag')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 						</form:select>
 					</td>
-					<td class="width-15 active"><label class="pull-right">评估日期：</label></td>
+					<td class="width-15 active"><label class="pull-right">評估日期：</label></td>
 					<td class="width-35">
 						<input type="text" readonly="true" class="form-control" value="<fmt:formatDate value="${serCourse.assessmentDate}" pattern="yyyy-MM-dd"/>" />
 					</td>
 				</tr>
 
 				<tr>
-					<td class="width-15 active"><label class="pull-right">课程费用(港幣)：</label></td>
+					<td class="width-15 active"><label class="pull-right">課程費用(港幣)：</label></td>
 					<td class="width-35">
 						<form:input readonly="true" path="courseFee" htmlEscape="false"    class="form-control"/>
 					</td>
@@ -171,10 +171,10 @@
 		   </tbody>
 		</table>
 
-		<!-- 明细课程分錄 -->
+		<!-- 明細課程分錄 -->
 		<div class="tabs-container">
             <ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">课程明细：</a>
+				<li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">課程明細：</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -183,11 +183,11 @@
 				<thead>
 					<tr>
 						<th class="hide"></th>
-						<th>上课日期</th>
-						<th>上课开始时间</th>
-						<th>上课结束时间</th>
-						<th>教练员</th>
-						<th>是否已点名</th>
+						<th>上課日期</th>
+						<th>上課開始時間</th>
+						<th>上課結束時間</th>
+						<th>教練員</th>
+						<th>是否已點名</th>
 					</tr>
 				</thead>
 				<tbody id="serCourseDetailsList">

@@ -17,7 +17,7 @@ import com.kite.modules.att.dao.SerCourseLevelCostDao;
 import com.kite.modules.att.entity.SerCourseLevelCost;
 
 /**
- * 课程等级对应收费Service
+ * 課程等級對應收費Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -65,7 +65,7 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	}
 
 	/**
-	 * 根据泳池地址及课程等级查找收费
+	 * 根據泳池地址及課程等級查找收費
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return
@@ -75,7 +75,7 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	}
 
 	/**
-	 * 根据泳池地址及课程等级查找收费标准
+	 * 根據泳池地址及課程等級查找收費標準
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return
@@ -85,7 +85,7 @@ public class SerCourseLevelCostService extends CrudService<SerCourseLevelCostDao
 	}
 
 	/**
-	 * 根据泳池地址及课程等级查找收费标准
+	 * 根據泳池地址及課程等級查找收費標準
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return

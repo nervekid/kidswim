@@ -12,7 +12,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SysCertificatesCoach;
 
 /**
- * 教练员资格DAO接口
+ * 教練員資格DAO接口
  * @author lyb
  * @version 2019-11-13
  */
@@ -27,7 +27,7 @@ public interface SysCertificatesCoachDao extends CrudDao<SysCertificatesCoach> {
 	public List<SysCertificatesCoach> findSysCertificatesCoachListByCoachId(@Param("coachId")String coachId);
 
 	/**
-	 * 根据coachId删除教练资格
+	 * 根據coachId刪除教練資格
 	 * @param coachId
 	 */
 	public void deleteSysCertificatesCoachByCoachId(@Param("coachId") String coachId);

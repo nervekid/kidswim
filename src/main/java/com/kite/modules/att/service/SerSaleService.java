@@ -3,25 +3,23 @@
  */
 package com.kite.modules.att.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.kite.common.utils.ListUtils;
-import com.kite.modules.att.dao.SysBaseStudentDao;
-import com.kite.modules.att.entity.SysBaseStudent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.kite.modules.att.entity.SerSale;
 import com.kite.modules.att.dao.SerSaleDao;
+import com.kite.modules.att.dao.SysBaseStudentDao;
+import com.kite.modules.att.entity.SerSale;
+import com.kite.modules.att.entity.SysBaseStudent;
 
 /**
- * 销售资料Service
+ * 銷售資料Service
  * @author yyw
  * @version 2019-12-01
  */

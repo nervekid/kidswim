@@ -38,7 +38,7 @@ import com.kite.modules.att.service.SerCourseDetailsService;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
 
 /**
- * 課程明细Controller
+ * 課程明細Controller
  * @author lyb
  * @version 2019-12-08
  */
@@ -67,7 +67,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 	}
 
 	/**
-	 * 課程明细列表頁面
+	 * 課程明細列表頁面
 	 * @throws ParseException
 	 */
 	@RequiresPermissions("att:serCourseDetails:list")
@@ -81,7 +81,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 
 
 	/**
-	 * 查看，增加，編輯課程明细表單頁面
+	 * 查看，增加，編輯課程明細表單頁面
 	 */
 	@RequiresPermissions(value={"att:serCourseDetails:view","att:serCourseDetails:add","att:serCourseDetails:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -93,7 +93,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 	}
 
 	/**
-	 * 查看打印课程明细表單頁面
+	 * 查看打印課程明細表單頁面
 	 */
 	@RequiresPermissions(value={"att:serCourseDetails:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -118,7 +118,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 		}else{//新增表單保存
 			serCourseDetailsService.save(serCourseDetails);//保存
 		}
-		addMessage(redirectAttributes, "保存課程明细成功");
+		addMessage(redirectAttributes, "保存課程明細成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourseDetails/?menuId="+serCourseDetails.getMenuId();
 	}
 
@@ -129,12 +129,12 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 	@RequestMapping(value = "delete")
 	public String delete(SerCourseDetails serCourseDetails, RedirectAttributes redirectAttributes) {
 		this.serCourseDetailsService.delete(serCourseDetails);
-		addMessage(redirectAttributes, "刪除課程明细成功");
+		addMessage(redirectAttributes, "刪除課程明細成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourseDetails/?repage";
 	}
 
 	/**
-	 * 批量刪除課程明细
+	 * 批量刪除課程明細
 	 */
 	@RequiresPermissions("att:serCourseDetails:del")
 	@RequestMapping(value = "deleteAll")
@@ -143,7 +143,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 		for(String id : idArray){
 			this.serCourseDetailsService.delete(this.serCourseDetailsService.get(id));
 		}
-		addMessage(redirectAttributes, "刪除課程明细成功");
+		addMessage(redirectAttributes, "刪除課程明細成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serCourseDetails/?repage";
 	}
 
@@ -154,12 +154,12 @@ public class SerCourseDetailsController extends BaseController implements BasicV
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SerCourseDetails serCourseDetails, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "課程明细"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "課程明細"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SerCourseDetails> page = this.serCourseDetailsService.findPage(new Page<SerCourseDetails>(request, response, -1), serCourseDetails);
-    		new ExportExcel("課程明细", SerCourseDetails.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("課程明細", SerCourseDetails.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "導出課程明细記錄失敗！失敗信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出課程明細記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serCourseDetails/?menuId="+serCourseDetails.getMenuId();
     }
@@ -179,7 +179,7 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "課程明细列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "課程明細列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -196,9 +196,9 @@ public class SerCourseDetailsController extends BaseController implements BasicV
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失敗 "+failureNum+" 條課程明细記錄。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條課程明細記錄。");
 				}
-				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條課程明细記錄"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條課程明細記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {

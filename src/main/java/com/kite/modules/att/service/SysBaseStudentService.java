@@ -17,7 +17,7 @@ import com.kite.modules.att.dao.SysBaseStudentDao;
 import com.kite.modules.att.entity.SysBaseStudent;
 
 /**
- * 学员Service
+ * 學員Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -66,7 +66,7 @@ public class SysBaseStudentService extends CrudService<SysBaseStudentDao, SysBas
 	}
 
 	/**
-	 * 查找当前学生表数量
+	 * 查找當前學生表數量
 	 * @param beginTime
 	 * @param endTime
 	 * @return

@@ -12,7 +12,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SerCourse;
 
 /**
- * 课程DAO接口
+ * 課程DAO接口
  * @author lyb
  * @version 2019-11-13
  */
@@ -20,28 +20,28 @@ import com.kite.modules.att.entity.SerCourse;
 public interface SerCourseDao extends CrudDao<SerCourse> {
 
 	/**
-	 * 根据课程等级及上课地址查找
+	 * 根據課程等級及上課地址查找
 	 * @param courseLevel
 	 * @return
 	 */
 	public int findCourseByLevelAndAddress(@Param("level") String courseLevel, @Param("address") String courseAddress);
 
 	/**
-	 * 根据课程编号查找课程id
+	 * 根據課程編號查找課程id
 	 * @param code
 	 * @return
 	 */
 	public String findCourseIdByCode(@Param("code") String code);
 
 	/**
-	 * 根据编号模糊查找
+	 * 根據編號模糊查找
 	 * @param code
 	 * @return
 	 */
 	public List<SerCourse> findByLikeCode(@Param("code") String code);
 
 	/**
-	 * 根据编号唯一查找
+	 * 根據編號唯壹查找
 	 * @param code
 	 * @return
 	 */

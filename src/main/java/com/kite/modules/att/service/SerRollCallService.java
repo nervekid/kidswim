@@ -16,7 +16,7 @@ import com.kite.modules.att.entity.SerRollCall;
 import com.kite.modules.att.dao.SerRollCallDao;
 
 /**
- * 点名Service
+ * 點名Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -48,23 +48,23 @@ public class SerRollCallService extends CrudService<SerRollCallDao, SerRollCall>
 	public void delete(SerRollCall serRollCall) {
 		super.delete(serRollCall);
 	}
-	
+
 		@Transactional(readOnly = false)
 	public String findCodeNumber(String tablename,String codename,String beginString){
 		StringBuffer serial=new StringBuffer();
-		
+
 		serial.append(beginString);
 		serial.append("-");
 		serial.append(StringUtils.getNowYearMonth());
 		serial.append("-");
 		serial.append(String.format("%04d", Integer.parseInt(serRollCallDao.findCodeNumber(tablename, codename, beginString))));
-		
+
 		return serial.toString();
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

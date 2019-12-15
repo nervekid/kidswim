@@ -18,7 +18,7 @@ import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.entity.SerCourseDetails;
 
 /**
- * 课程Service
+ * 課程Service
  * @author lyb
  * @version 2019-11-13
  */
@@ -72,7 +72,7 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	}
 
 	/**
-	 * 根据地址及课程等级查找当前表格的数量
+	 * 根據地址及課程等級查找當前表格的數量
 	 * @param level
 	 * @param address
 	 * @return
@@ -82,7 +82,7 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	}
 
 	/**
-	 * 根据课程编号查找课程id
+	 * 根據課程編號查找課程id
 	 * @param code
 	 * @return
 	 */
@@ -91,7 +91,7 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	}
 
 	/**
-	 * 根据课程父id查找课程明细
+	 * 根據課程父id查找課程明細
 	 * @param courseId
 	 * @return
 	 */
@@ -100,7 +100,7 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	}
 
 	/**
-	 * 根据编号查找
+	 * 根據編號查找
 	 * @param code
 	 * @return
 	 */
@@ -109,7 +109,7 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	}
 
 	/**
-	 * 根据编号唯一查找
+	 * 根據編號唯壹查找
 	 * @param code
 	 * @return
 	 */

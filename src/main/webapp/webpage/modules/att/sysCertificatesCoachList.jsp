@@ -23,10 +23,10 @@
 				<label>	<input id="collectionId" type="checkbox" onclick="collectionMenu('${ctx}/sys/sysUserCollectionMenu/collectionMenu','${menu.href}','${menu.name}','${menu.id}')">&nbsp;&nbsp;&nbsp;是否收藏到主页面</label>
 	   </div>
 	</div>
-    
+
     <div class="ibox-content">
 	<sys:message content="${message}"/>
-	
+
 	<!--查询条件-->
 	<div class="row">
 	<div class="col-sm-12">
@@ -36,12 +36,12 @@
 		<input id="menuId" name="menuId" type="hidden" value="${menu.id}"/>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-		 </div>	
+		 </div>
 	</form:form>
 	<br/>
 	</div>
 	</div>
-	
+
 	<!-- 工具栏 -->
 	<div class="row">
 	<div class="col-sm-12">
@@ -62,7 +62,7 @@
 	       		<table:exportExcel url="${ctx}/att/sysCertificatesCoach/export?menuId=${menu.id}"></table:exportExcel><!-- 导出按钮 -->
 	       	</shiro:hasPermission>
 	       <button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
-		
+
 			</div>
 		<div class="pull-right">
 			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
@@ -70,7 +70,7 @@
 		</div>
 	</div>
 	</div>
-	
+
 	<!-- 表格 -->
 	<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
 		<thead>
@@ -110,7 +110,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	
+
 		<!-- 分页代码 -->
 	<table:page page="${page}"></table:page>
 	<br/>

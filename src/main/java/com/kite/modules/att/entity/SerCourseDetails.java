@@ -6,23 +6,23 @@ import java.util.Date;
 import com.kite.common.persistence.DataEntity;
 
 /**
- * 课程明细Entity
+ * 課程明細Entity
  * @author lyb
  * @version 2019-12-08
  */
 public class SerCourseDetails extends DataEntity<SerCourseDetails> {
 	private static final long serialVersionUID = 1L;
-	private String courseId; //课程id 父id
-	private Date learnDate; //上课日期
-	private Date learnBeginDate; //上课开始时间 yyyy-MM-dd HH:mm:ss
-	private Date learnEndDate; //上课结束时间 yyyy-MM-dd HH:mm:ss
-	private String coathId; //教练员id
-	private String coathName; //教练员名称
-	private String rollCallStatusFlag; //是否已点名 字典枚举 yes_no 0:否 1:是
+	private String courseId; //課程id 父id
+	private Date learnDate; //上課日期
+	private Date learnBeginDate; //上課開始時間 yyyy-MM-dd HH:mm:ss
+	private Date learnEndDate; //上課結束時間 yyyy-MM-dd HH:mm:ss
+	private String coathId; //教練員id
+	private String coathName; //教練員名稱
+	private String rollCallStatusFlag; //是否已點名 字典枚舉 yes_no 0:否 1:是
 
-	private String learnDateStr; //上课日期
-	private String learnBeginDateStr; //上课开始时间 yyyy-MM-dd HH:mm:ss
-	private String learnEndDateStr; //上课结束时间 yyyy-MM-dd HH:mm:ss
+	private String learnDateStr; //上課日期
+	private String learnBeginDateStr; //上課開始時間 yyyy-MM-dd HH:mm:ss
+	private String learnEndDateStr; //上課結束時間 yyyy-MM-dd HH:mm:ss
 
 	public SerCourseDetails() {
 		super();

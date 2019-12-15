@@ -12,7 +12,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SerCourseLevelCost;
 
 /**
- * 课程等级对应收费DAO接口
+ * 課程等級對應收費DAO接口
  * @author lyb
  * @version 2019-11-13
  */
@@ -20,7 +20,7 @@ import com.kite.modules.att.entity.SerCourseLevelCost;
 public interface SerCourseLevelCostDao extends CrudDao<SerCourseLevelCost> {
 
 	/**
-	 * 查找对应等级与泳池的收费
+	 * 查找對應等級與泳池的收費
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return
@@ -28,7 +28,7 @@ public interface SerCourseLevelCostDao extends CrudDao<SerCourseLevelCost> {
 	public BigDecimal findCostAmountByCourseAddressAndCourseLevelFlag(@Param("courseLevelFlag")String courseLevelFlag, @Param("courseAddress")String courseAddress);
 
 	/**
-	 * 找对应等级与泳池的收费标准
+	 * 找對應等級與泳池的收費標準
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return
@@ -36,7 +36,7 @@ public interface SerCourseLevelCostDao extends CrudDao<SerCourseLevelCost> {
 	public String findcostStandardFlagByCourseAddressAndCourseLevelFlag(@Param("courseLevelFlag")String courseLevelFlag, @Param("courseAddress")String courseAddress);
 
 	/**
-	 * 根据对应等级与泳池的收费标准
+	 * 根據對應等級與泳池的收費標準
 	 * @param courseLevelFlag
 	 * @param courseAddress
 	 * @return

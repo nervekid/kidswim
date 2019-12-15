@@ -39,7 +39,7 @@ import com.kite.modules.att.entity.SerRollCall;
 import com.kite.modules.att.service.SerRollCallService;
 
 /**
- * 点名Controller
+ * 點名Controller
  * @author lyb
  * @version 2019-11-13
  */
@@ -52,7 +52,7 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 	@Autowired
 	private SysUserCollectionMenuService sysUserCollectionMenuService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -68,7 +68,7 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 	}
 
 	/**
-	 * 点名列表页面
+	 * 點名列表頁面
 	 */
 	@RequiresPermissions("att:serRollCall:list")
 	@RequestMapping(value = {"list", ""})
@@ -81,7 +81,7 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 
 
 	/**
-	 * 查看，增加，编辑点名表单页面
+	 * 查看，增加，編輯點名表單頁面
 	 */
 	@RequiresPermissions(value={"att:serRollCall:view","att:serRollCall:add","att:serRollCall:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -89,13 +89,13 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 		model.addAttribute("serRollCall", serRollCall);
 		if(serRollCall.getId()==null){
 			// serRollCall.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/serRollCallForm";
 	}
 
 	/**
-	 * 查看打印点名表单页面
+	 * 查看打印點名表單頁面
 	 */
 	@RequiresPermissions(value={"att:serRollCall:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -105,7 +105,7 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 	}
 
 	/**
-	 * 保存点名
+	 * 保存點名
 	 */
 	@RequiresPermissions(value={"att:serRollCall:add","att:serRollCall:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -113,30 +113,30 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 		if (!beanValidator(model, serRollCall)){
 			return form(serRollCall, model);
 		}
-		if(!serRollCall.getIsNewRecord()){//编辑表单保存
-			SerRollCall t = serRollCallService.get(serRollCall.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(serRollCall, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!serRollCall.getIsNewRecord()){//編輯表單保存
+			SerRollCall t = serRollCallService.get(serRollCall.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(serRollCall, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			serRollCallService.save(t);//保存
-		}else{//新增表单保存
+		}else{//新增表單保存
 			serRollCallService.save(serRollCall);//保存
 		}
-		addMessage(redirectAttributes, "保存点名成功");
+		addMessage(redirectAttributes, "保存點名成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?menuId="+serRollCall.getMenuId();
 	}
 
 	/**
-	 * 删除点名
+	 * 刪除點名
 	 */
 	@RequiresPermissions("att:serRollCall:del")
 	@RequestMapping(value = "delete")
 	public String delete(SerRollCall serRollCall, RedirectAttributes redirectAttributes) {
 		serRollCallService.delete(serRollCall);
-		addMessage(redirectAttributes, "删除点名成功");
+		addMessage(redirectAttributes, "刪除點名成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?repage";
 	}
 
 	/**
-	 * 批量删除点名
+	 * 批量刪除點名
 	 */
 	@RequiresPermissions("att:serRollCall:del")
 	@RequestMapping(value = "deleteAll")
@@ -145,29 +145,29 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 		for(String id : idArray){
 			serRollCallService.delete(serRollCallService.get(id));
 		}
-		addMessage(redirectAttributes, "删除点名成功");
+		addMessage(redirectAttributes, "刪除點名成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:serRollCall:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SerRollCall serRollCall, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "点名"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "點名"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SerRollCall> page = serRollCallService.findPage(new Page<SerRollCall>(request, response, -1), serRollCall);
-    		new ExportExcel("点名", SerRollCall.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("點名", SerRollCall.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出点名记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出點名記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?menuId="+serRollCall.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 
 	 */
 	@RequiresPermissions("att:serRollCall:import")
@@ -181,7 +181,7 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "点名列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "點名列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -198,13 +198,13 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条点名记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條點名記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条点名记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條點名記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入点名失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入點名失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?menuId="+menuId;
     }
@@ -227,23 +227,19 @@ public class SerRollCallController extends BaseController implements BasicVerifi
 	}
 
 	/**
-	 * 下载导入点名数据模板
+	 * 下載導入點名數據模板
 	 */
 	@RequiresPermissions("att:serRollCall:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "点名数据导入模板.xlsx";
+            String fileName = "點名數據導入模板.xlsx";
     		List<SerRollCall> list = Lists.newArrayList();
-    		new ExportExcel("点名数据", SerRollCall.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("點名數據", SerRollCall.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serRollCall/?repage";
     }
-
-
-
-
 }

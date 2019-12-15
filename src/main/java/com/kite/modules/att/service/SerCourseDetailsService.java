@@ -11,11 +11,10 @@ import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
 import com.kite.modules.att.dao.SerCourseDao;
 import com.kite.modules.att.dao.SerCourseDetailsDao;
-import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.entity.SerCourseDetails;
 
 /**
- * 课程明细Service
+ * 課程明細Service
  * @author lyb
  * @version 2019-12-08
  */

@@ -55,7 +55,7 @@
 			<td class="width-15 active"><label class="pull-right">是否付款：</label></td>
 			<td class="width-35">
 				<form:select placeholder="是否付款" path="paidFlag" disabled="true" class="form-control m-b"  >
-					<form:option value="" label="请选择"/>
+					<form:option value="" label="請選擇"/>
 					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</td>
@@ -68,23 +68,23 @@
 			</td>
 			<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
 			<form:select placeholder="付款方式" path="paymentType" disabled="true" class="form-control m-b"  >
-					<form:option value="" label="请选择"/>
+					<form:option value="" label="請選擇"/>
 					<form:options items="${fns:getDictList('pay_type')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 				</form:select>
 		</tr>
 
 		<tr>
-			<td class="width-15 active"><label class="pull-right">是否收取会员费：</label></td>
+			<td class="width-15 active"><label class="pull-right">是否收取會員費：</label></td>
 			<td class="width-35">
-				<form:select placeholder="是否收取会员费" path="memberFeeFlag" disabled="true" class="form-control m-b"  >
-					<form:option value="" label="请选择"/>
+				<form:select placeholder="是否收取會員費" path="memberFeeFlag" disabled="true" class="form-control m-b"  >
+					<form:option value="" label="請選擇"/>
 					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</td>
 		</tr>
 
 		<tr>
-			<td class="width-15 active"><label class="pull-right">备注：</label></td>
+			<td class="width-15 active"><label class="pull-right">備註：</label></td>
 			<td class="width-35" colspan="3">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" disabled="true"  class="form-control "/>
 			</td>

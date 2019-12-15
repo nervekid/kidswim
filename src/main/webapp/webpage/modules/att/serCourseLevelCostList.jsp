@@ -86,7 +86,7 @@
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column courseLevelFlag">課程等級</th>
-				<th  class="sort-column courseAddress">课程地址</th>
+				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column costAmount">收費 單位(港幣)</th>
 				<th  class="sort-column containEntranceFeeFlag">是否包含入場費</th>
 				<th  class="sort-column costStandardFlag">收費標準</th>

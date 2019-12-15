@@ -102,7 +102,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		courseAddressDict.setType("course_addrese_flag");
 		List<Dict> courseAddressDictList = this.systemService.listDict(courseAddressDict);
 
-		//給出课程级别字典列表
+		//給出課程級別字典列表
 		Dict courseLevelDict = new Dict();
 		courseLevelDict.setType("course_level");
 		List<Dict> courseLevelDictList = this.systemService.listDict(courseLevelDict);
@@ -155,7 +155,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		List<SerCourseDetails> serCourseDetailsList = this.serCourseService.findSerCourseDetailsByCourseId(serCourse.getId());
 		for (int i = 0; i < serCourseDetailsList.size(); i++) {
 			if (serCourseDetailsList.get(i).getCoathId() == null || serCourseDetailsList.get(i).getCoathId().equals("")) {
-				serCourseDetailsList.get(i).setCoathName("暂缺");
+				serCourseDetailsList.get(i).setCoathName("暫缺");
 			}
 		}
 		serCourse.setSerCourseDetailsList(serCourseDetailsList);
@@ -328,7 +328,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		AjaxJson ajaxJson = new AjaxJson();
 		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 
-		//1.獲取開始時間與結束時間以及评估日期
+		//1.獲取開始時間與結束時間以及評估日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
@@ -341,34 +341,34 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			return  ajaxJson;
 		}
 
-		//2.获取课程堂数
+		//2.獲取課程堂數
 		int weekenNum = 0;
 		Date first = null;
 		weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
 
-		//3.后去课程编号
+		//3.後去課程編號
 		String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
 		int count = this.serCourseService.findCountByLevelAndAddress(courseLevel, courseAddress) + 1;
 		String countStr = com.kite.common.utils.date.DateUtils.transformHundredBitNumString(count);
-		String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
+		String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地點編號+ - +課程對應等級+百位流水號 例如:2019MS-CCOO1 按照規則編碼
 
-		//3.获取上课的开始时间与结束时间HH:mm形式
+		//3.獲取上課的開始時間與結束時間HH:mm形式
 		String learnBeginTimeStr = beginLearn.replace(":", "").substring(0, beginLearn.replace(":", "").length() - 2);
 		String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
 
-		//4.计算费用
+		//4.計算費用
 		BigDecimal costAmount = new BigDecimal("0.0");
-		//规则:如果收费标准是按照课堂收费，那么需要计算出多少堂课，然后乘积计算，如果是按月收费或者按双月收费，则不需要
+		//規則:如果收費標準是按照課堂收費，那麽需要計算出多少堂課，然後乘積計算，如果是按月收費或者按雙月收費，則不需要
 		SerCourseLevelCost serCourseLevelCost = this.serCourseLevelCostService.findByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 		if (serCourseLevelCost.getCostStandardFlag().equals(KidSwimDictEnum.costStandardFlag.按堂收費.getName())) {
-			//若是按堂收费，则需要将课堂数乘以收费得到收费总额
+			//若是按堂收費，則需要將課堂數乘以收費得到收費總額
 			costAmount =  serCourseLevelCost.getCostAmount().multiply(BigDecimal.valueOf(weekenNum));
 		}
 		else {
 			costAmount = serCourseLevelCost.getCostAmount();
 		}
 
-		//5.写入课程表
+		//5.寫入課程表
 		SerCourse serCourse = new SerCourse();
 		serCourse.setCode(code);
 		serCourse.setCourseLevel(courseLevel);
@@ -429,7 +429,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 
 
 	/**
-	 * 功能：查询课程预生成结果
+	 * 功能：查詢課程預生成結果
 	 */
 	@RequestMapping(value = "preGeneration")
 	@ResponseBody
@@ -447,7 +447,7 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		AjaxJson ajaxJson = new AjaxJson();
 		LinkedHashMap<String,Object>  map = new LinkedHashMap<String, Object>();
 		try {
-			//1.獲取開始時間與結束時間以及评估日期
+			//1.獲取開始時間與結束時間以及評估日期
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
 			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
@@ -458,30 +458,30 @@ public class SerCourseController extends BaseController implements BasicVerifica
 				return  ajaxJson;
 			}
 
-			//2.获取课程堂数
+			//2.獲取課程堂數
 			int weekenNum = 0;
 			Date first = null;
 			weekenNum = com.kite.common.utils.date.DateUtils.calculateTheNumberOfTimesFfTheWeek(beginTime, endTime, Integer.parseInt(weekNum));
 
-			//3.后去课程编号
+			//3.後去課程編號
 			String yearStr = com.kite.common.utils.date.DateUtils.changeDateToYYYY(beginTime);
 			int count = this.serCourseService.findCountByLevelAndAddress(courseLevel, courseAddress) + 1;
 			String countStr = com.kite.common.utils.date.DateUtils.transformHundredBitNumString(count);
-			String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
+			String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地點編號+ - +課程對應等級+百位流水號 例如:2019MS-CCOO1 按照規則編碼
 
-			//4.计算费用
+			//4.計算費用
 			BigDecimal costAmount = new BigDecimal("0.0");
-			//规则:如果收费标准是按照课堂收费，那么需要计算出多少堂课，然后乘积计算，如果是按月收费或者按双月收费，则不需要
+			//規則:如果收費標準是按照課堂收費，那麽需要計算出多少堂課，然後乘積計算，如果是按月收費或者按雙月收費，則不需要
 			SerCourseLevelCost serCourseLevelCost = this.serCourseLevelCostService.findByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 			if (serCourseLevelCost.getCostStandardFlag().equals(KidSwimDictEnum.costStandardFlag.按堂收費.getName())) {
-				//若是按堂收费，则需要将课堂数乘以收费得到收费总额
+				//若是按堂收費，則需要將課堂數乘以收費得到收費總額
 				costAmount =  serCourseLevelCost.getCostAmount().multiply(BigDecimal.valueOf(weekenNum));
 			}
 			else {
 				costAmount = serCourseLevelCost.getCostAmount();
 			}
 
-			//5.获取星期几
+			//5.獲取星期幾
 			String weekNumStr = DictUtils.getDictLabel(weekNum, "week_flag", null);
 
 			//6.計算壹段時間段內有多少天周幾
@@ -507,8 +507,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 				}
 			}
 
-			//7.返回收费标准字符串
-			//4.计算费用
+			//7.返回收費標準字符串
+			//4.計算費用
 			String costStandardFlag = this.serCourseLevelCostService.findCostStandardFlagByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
 			String costStandardStr = this.systemService.findLabelByTypeAndValueStr("cost_standard_flag", costStandardFlag);
 

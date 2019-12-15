@@ -12,7 +12,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SysBaseCoach;
 
 /**
- * 教练员DAO接口
+ * 教練員DAO接口
  * @author lyb
  * @version 2019-11-13
  */
@@ -20,20 +20,20 @@ import com.kite.modules.att.entity.SysBaseCoach;
 public interface SysBaseCoachDao extends CrudDao<SysBaseCoach> {
 
 	/**
-	 * 查找已存在的教练数量
+	 * 查找已存在的教練數量
 	 * @return
 	 */
 	public int findSysBaseCoachCount();
 
 	/**
-	 * 根据
+	 * 根據
 	 * @param code
 	 * @return
 	 */
 	public String findSysBaseCoachIdByCode(@Param("code")String code);
 
 	/**
-	 * 根据教练员id获取教练员编码
+	 * 根據教練員id獲取教練員編碼
 	 * @param id
 	 * @return
 	 */

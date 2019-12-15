@@ -54,7 +54,7 @@ import com.kite.modules.sys.service.SysSequenceService;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
 
 /**
- * 销售资料Controller
+ * 銷售資料Controller
  * @author yyw
  * @version 2019-12-01
  */
@@ -75,7 +75,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	@Autowired
 	private SerCourseService serCourseService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -92,7 +92,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	}
 
 	/**
-	 * 销售资料列表页面
+	 * 銷售資料列表頁面
 	 */
 	@RequiresPermissions("att:serSale:list")
 	@RequestMapping(value = {"list", ""})
@@ -105,7 +105,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 
 
 	/**
-	 * 查看，增加，编辑销售资料表单页面
+	 * 查看，增加，編輯銷售資料表單頁面
 	 */
 	@RequiresPermissions(value={"att:serSale:view","att:serSale:add","att:serSale:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -113,13 +113,13 @@ public class SerSaleController extends BaseController implements BasicVerificati
 		model.addAttribute("serSale", serSale);
 		if(serSale.getId()==null){
 			// serSale.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/serSaleForm";
 	}
 
 	/**
-	 * 查看打印销售资料表单页面
+	 * 查看打印銷售資料表單頁面
 	 */
 	@RequiresPermissions(value={"att:serSale:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -129,7 +129,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	}
 
 	/**
-	 * 保存销售资料
+	 * 保存銷售資料
 	 */
 	@RequiresPermissions(value={"att:serSale:add","att:serSale:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -138,12 +138,12 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			return form(serSale, model);
 		}
 		SerCourse serCourse = this.serCourseService.findSerCourseByCode(serSale.getCode());
-		if(!serSale.getIsNewRecord()){//编辑表单保存
-			SerSale t = serSaleService.get(serSale.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(serSale, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!serSale.getIsNewRecord()){//編輯表單保存
+			SerSale t = serSaleService.get(serSale.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(serSale, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			serSaleService.save(t);//保存
-		}else{//新增表单保存
-			//计算销售单费用，如果选择收取会员费，那么固定增加$170
+		}else{//新增表單保存
+			//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
 			BigDecimal multiply = new BigDecimal(serSale.getDiscount()).multiply(serCourse.getCourseFee() == null ? BigDecimal.ZERO : serCourse.getCourseFee());
 			if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
 				multiply = multiply.add(new BigDecimal(170));
@@ -156,23 +156,23 @@ public class SerSaleController extends BaseController implements BasicVerificati
 
 			serSaleService.save(serSale);//保存
 		}
-		addMessage(redirectAttributes, "保存销售资料成功");
+		addMessage(redirectAttributes, "保存銷售資料成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?menuId="+serSale.getMenuId();
 	}
 
 	/**
-	 * 删除销售资料
+	 * 刪除銷售資料
 	 */
 	@RequiresPermissions("att:serSale:del")
 	@RequestMapping(value = "delete")
 	public String delete(SerSale serSale, RedirectAttributes redirectAttributes) {
 		serSaleService.deleteByLogic(serSale);
-		addMessage(redirectAttributes, "删除销售资料成功");
+		addMessage(redirectAttributes, "刪除銷售資料成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?repage";
 	}
 
 	/**
-	 * 批量删除销售资料
+	 * 批量刪除銷售資料
 	 */
 	@RequiresPermissions("att:serSale:del")
 	@RequestMapping(value = "deleteAll")
@@ -181,29 +181,29 @@ public class SerSaleController extends BaseController implements BasicVerificati
 		for(String id : idArray){
 			serSaleService.deleteByLogic(serSaleService.get(id));
 		}
-		addMessage(redirectAttributes, "删除销售资料成功");
+		addMessage(redirectAttributes, "刪除銷售資料成功");
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:serSale:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SerSale serSale, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "销售资料"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "銷售資料"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SerSale> page = serSaleService.findPage(new Page<SerSale>(request, response, -1), serSale);
-    		new ExportExcel("销售资料", SerSale.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("銷售資料", SerSale.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出销售资料记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出銷售資料記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?menuId="+serSale.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 
 	 */
 	@RequiresPermissions("att:serSale:import")
@@ -217,7 +217,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "销售资料列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "銷售資料列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -236,7 +236,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 
 						if(StringUtils.isNotEmpty(courseLevelFlag)) {
 							BigDecimal costAmount = serCourse.getCourseFee();
-							//计算销售单费用，如果选择收取会员费，那么固定增加$170
+							//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
 							BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
 							if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
 								multiply = multiply.add(new BigDecimal(170));
@@ -254,13 +254,13 @@ public class SerSaleController extends BaseController implements BasicVerificati
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条销售资料记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條銷售資料記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条销售资料记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條銷售資料記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入销售资料失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入銷售資料失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?menuId="+menuId;
     }
@@ -323,23 +323,20 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	}
 
 	/**
-	 * 下载导入销售资料数据模板
+	 * 下載導入銷售資料數據模板
 	 */
 	@RequiresPermissions("att:serSale:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "销售资料数据导入模板.xlsx";
+            String fileName = "銷售資料數據導入模板.xlsx";
     		List<SerSale> list = Lists.newArrayList();
-    		new ExportExcel("销售资料数据", SerSale.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("銷售資料數據", SerSale.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/serSale/?repage";
     }
-
-
-
 
 }

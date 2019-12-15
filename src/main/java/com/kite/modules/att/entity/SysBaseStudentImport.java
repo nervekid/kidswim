@@ -10,32 +10,32 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 	private static final long serialVersionUID = 1L;
 	private String nameCn;		// 中文名
 	private String nameEn;		// 英文名
-	private String idNo;		// 身份证号码
-	private String sex;		// 性别 字典枚举 sex_flag 1:男 2:女
-	private String email;		// 电邮
-	private String phone;		// 电话号码
+	private String idNo;		// 身份證號碼
+	private String sex;		// 性別 字典枚舉 sex_flag 1:男 2:女
+	private String email;		// 電郵
+	private String phone;		// 電話號碼
 	private Date birthday;		// 出生日期
-	private String contactAddress;		// 联系地址
-	private String attendingSchool;		// 就读学校
-	private String grade;		// 年级
-	private String studiedSwimFlag;		// 是否曾学习过游泳 字典枚举 yes_no 1:是 0:否
-	private String studySwimmingOrgan;		// 习泳机构
-	private String studiedSwimmingStyle;		// 已懂泳式 以,号分割
-	private String drownedFlag;		// 是否曾遇溺 字典枚举 yes_no 1:是 0:否
-	private String drownedAddressFlag; //遇溺地点 字典枚举 drowned_address_flag 1:泳池 0:海滩
-	private Integer drownedAge;		// 预溺岁数
-	private String longTermDisease;		// 长期病患
-	private String longTermMedicine;		// 长期服药
-	private String courseLevelFlag;		// 课程等级 字典枚举 courseLevel_flag 1:NA 2:BB 3:CA 4:CB 5:CC 6:AD 7:TA 8:TB
-	private String contactPhone;		// 联系人号码
-	private String contactRelationship;		// 联系人关系
-	private String urgentPhone;		// 紧急联系人号码
-	private String urgentRelationship;		// 紧急联系人关系
-	private String guardianName;		// 监护人姓名
-	private String guardianPhone;		// 监护人手机号码
-	private String guardianIdNo;		// 监护人身份证号码
-	private String guardianRelationship;		// 监护人关系
-	private String facebook;		// facebook账号
+	private String contactAddress;		// 聯系地址
+	private String attendingSchool;		// 就讀學校
+	private String grade;		// 年級
+	private String studiedSwimFlag;		// 是否曾學習過遊泳 字典枚舉 yes_no 1:是 0:否
+	private String studySwimmingOrgan;		// 習泳機構
+	private String studiedSwimmingStyle;		// 已懂泳式 以,號分割
+	private String drownedFlag;		// 是否曾遇溺 字典枚舉 yes_no 1:是 0:否
+	private String drownedAddressFlag; //遇溺地點 字典枚舉 drowned_address_flag 1:泳池 0:海灘
+	private Integer drownedAge;		// 預溺歲數
+	private String longTermDisease;		// 長期病患
+	private String longTermMedicine;		// 長期服藥
+	private String courseLevelFlag;		// 課程等級 字典枚舉 courseLevel_flag 1:NA 2:BB 3:CA 4:CB 5:CC 6:AD 7:TA 8:TB
+	private String contactPhone;		// 聯系人號碼
+	private String contactRelationship;		// 聯系人關系
+	private String urgentPhone;		// 緊急聯系人號碼
+	private String urgentRelationship;		// 緊急聯系人關系
+	private String guardianName;		// 監護人姓名
+	private String guardianPhone;		// 監護人手機號碼
+	private String guardianIdNo;		// 監護人身份證號碼
+	private String guardianRelationship;		// 監護人關系
+	private String facebook;		// facebook賬號
 
 	@ExcelField(title="中文名", align=2, sort=1)
 	public String getNameCn() {
@@ -47,22 +47,22 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 		return nameEn;
 	}
 
-	@ExcelField(title="身份证号码", align=2, sort=3)
+	@ExcelField(title="身份證號碼", align=2, sort=3)
 	public String getIdNo() {
 		return idNo;
 	}
 
-	@ExcelField(title="性别 输入男或者女", align=2, sort=4)
+	@ExcelField(title="性別 輸入男或者女", align=2, sort=4)
 	public String getSex() {
 		return sex;
 	}
 
-	@ExcelField(title="电邮", align=2, sort=5)
+	@ExcelField(title="電郵", align=2, sort=5)
 	public String getEmail() {
 		return email;
 	}
 
-	@ExcelField(title="电话号码", align=2, sort=6)
+	@ExcelField(title="電話號碼", align=2, sort=6)
 	public String getPhone() {
 		return phone;
 	}
@@ -72,27 +72,27 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 		return birthday;
 	}
 
-	@ExcelField(title="联系地址", align=2, sort=8)
+	@ExcelField(title="聯系地址", align=2, sort=8)
 	public String getContactAddress() {
 		return contactAddress;
 	}
 
-	@ExcelField(title="就读学校", align=2, sort=9)
+	@ExcelField(title="就讀學校", align=2, sort=9)
 	public String getAttendingSchool() {
 		return attendingSchool;
 	}
 
-	@ExcelField(title="年级", align=2, sort=10)
+	@ExcelField(title="年級", align=2, sort=10)
 	public String getGrade() {
 		return grade;
 	}
 
-	@ExcelField(title="是否曾学习过游泳 输入是或否", align=2, sort=11)
+	@ExcelField(title="是否曾學習過遊泳 輸入是或否", align=2, sort=11)
 	public String getStudiedSwimFlag() {
 		return studiedSwimFlag;
 	}
 
-	@ExcelField(title="习泳机构", align=2, sort=12)
+	@ExcelField(title="習泳機構", align=2, sort=12)
 	public String getStudySwimmingOrgan() {
 		return studySwimmingOrgan;
 	}
@@ -102,77 +102,77 @@ public class SysBaseStudentImport extends DataEntity<SysBaseStudentImport> {
 		return studiedSwimmingStyle;
 	}
 
-	@ExcelField(title="是否曾遇溺  输入是或否", align=2, sort=14)
+	@ExcelField(title="是否曾遇溺  輸入是或否", align=2, sort=14)
 	public String getDrownedFlag() {
 		return drownedFlag;
 	}
 
-	@ExcelField(title="是否曾遇溺  输入泳池或海灘", align=2, sort=15)
+	@ExcelField(title="是否曾遇溺  輸入泳池或海灘", align=2, sort=15)
 	public String getDrownedAddressFlag() {
 		return drownedAddressFlag;
 	}
 
-	@ExcelField(title="预溺岁数", align=2, sort=16)
+	@ExcelField(title="預溺歲數", align=2, sort=16)
 	public Integer getDrownedAge() {
 		return drownedAge;
 	}
 
-	@ExcelField(title="长期病患", align=2, sort=17)
+	@ExcelField(title="長期病患", align=2, sort=17)
 	public String getLongTermDisease() {
 		return longTermDisease;
 	}
 
-	@ExcelField(title="长期服药", align=2, sort=18)
+	@ExcelField(title="長期服藥", align=2, sort=18)
 	public String getLongTermMedicine() {
 		return longTermMedicine;
 	}
 
-	@ExcelField(title="课程等级 输入:NA,BB,CA,CB,CC,AD,TA,TB", align=2, sort=19)
+	@ExcelField(title="課程等級 輸入:NA,BB,CA,CB,CC,AD,TA,TB", align=2, sort=19)
 	public String getCourseLevelFlag() {
 		return courseLevelFlag;
 	}
 
-	@ExcelField(title="联系人号码", align=2, sort=20)
+	@ExcelField(title="聯系人號碼", align=2, sort=20)
 	public String getContactPhone() {
 		return contactPhone;
 	}
 
-	@ExcelField(title="联系人关系", align=2, sort=21)
+	@ExcelField(title="聯系人關系", align=2, sort=21)
 	public String getContactRelationship() {
 		return contactRelationship;
 	}
 
-	@ExcelField(title="紧急联系人号码", align=2, sort=22)
+	@ExcelField(title="緊急聯系人號碼", align=2, sort=22)
 	public String getUrgentPhone() {
 		return urgentPhone;
 	}
 
-	@ExcelField(title="紧急联系人关系", align=2, sort=23)
+	@ExcelField(title="緊急聯系人關系", align=2, sort=23)
 	public String getUrgentRelationship() {
 		return urgentRelationship;
 	}
 
-	@ExcelField(title="监护人姓名", align=2, sort=24)
+	@ExcelField(title="監護人姓名", align=2, sort=24)
 	public String getGuardianName() {
 		return guardianName;
 	}
 
-	@ExcelField(title="监护人手机号码", align=2, sort=25)
+	@ExcelField(title="監護人手機號碼", align=2, sort=25)
 	public String getGuardianPhone() {
 		return guardianPhone;
 	}
 
-	@ExcelField(title="监护人身份证号码", align=2, sort=26)
+	@ExcelField(title="監護人身份證號碼", align=2, sort=26)
 	public String getGuardianIdNo() {
 		return guardianIdNo;
 	}
 
-	@ExcelField(title="监护人关系", align=2, sort=26)
+	@ExcelField(title="監護人關系", align=2, sort=26)
 	public String getGuardianRelationship() {
 		return guardianRelationship;
 	}
 
-	@ExcelField(title="facebook账号", align=2, sort=27)
+	@ExcelField(title="facebook賬號", align=2, sort=27)
 	public String getFacebook() {
 		return facebook;
 	}

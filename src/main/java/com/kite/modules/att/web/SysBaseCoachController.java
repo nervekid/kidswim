@@ -44,7 +44,7 @@ import com.kite.modules.sys.service.SysUserCollectionMenuService;
 import com.kite.modules.sys.service.SystemService;
 
 /**
- * 教练员Controller
+ * 教練員Controller
  * @author lyb
  * @version 2019-11-13
  */
@@ -61,7 +61,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	@Autowired
 	private SystemService systemService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -77,7 +77,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	}
 
 	/**
-	 * 教练员列表页面
+	 * 教練員列表頁面
 	 */
 	@RequiresPermissions("att:sysBaseCoach:list")
 	@RequestMapping(value = {"list", ""})
@@ -94,7 +94,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	}
 
 	/**
-	 * 查看，增加，编辑教练员表单页面
+	 * 查看，增加，編輯教練員表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysBaseCoach:view","att:sysBaseCoach:add","att:sysBaseCoach:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -106,13 +106,13 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 
 		if(sysBaseCoach.getId()==null){
 			// sysBaseCoach.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/sysBaseCoachForm";
 	}
 
 	/**
-	 * 查看打印教练员表单页面
+	 * 查看打印教練員表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysBaseCoach:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -125,7 +125,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	}
 
 	/**
-	 * 保存教练员
+	 * 保存教練員
 	 */
 	@RequiresPermissions(value={"att:sysBaseCoach:add","att:sysBaseCoach:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -133,9 +133,9 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 		if (!beanValidator(model, sysBaseCoach)){
 			return form(sysBaseCoach, model);
 		}
-		if(!sysBaseCoach.getIsNewRecord()){//编辑表单保存
-			SysBaseCoach t = sysBaseCoachService.get(sysBaseCoach.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(sysBaseCoach, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!sysBaseCoach.getIsNewRecord()){//編輯表單保存
+			SysBaseCoach t = sysBaseCoachService.get(sysBaseCoach.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(sysBaseCoach, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			//1.年月修改
 			if (sysBaseCoach.getEntryYear() != null && !sysBaseCoach.getEntryYear().equals("")) {
 				String yearMonth = sysBaseCoach.getEntryYear();
@@ -143,8 +143,8 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 				t.setEntryYear(yearMonth);
 			}
 			sysBaseCoachService.save(t);//保存
-		}else{//新增表单保存
-			//1.编码给定
+		}else{//新增表單保存
+			//1.編碼給定
 			int countLastNum = this.sysBaseCoachService.findExitSysBaseCoachNum();
 			int nextCodeNum = countLastNum ++;
 			String code = "C" + com.kite.common.utils.date.DateUtils.transformThousandBitNumString(nextCodeNum);
@@ -157,23 +157,23 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 			}
 			sysBaseCoachService.save(sysBaseCoach);//保存
 		}
-		addMessage(redirectAttributes, "保存教练员成功");
+		addMessage(redirectAttributes, "保存教練員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?menuId="+sysBaseCoach.getMenuId();
 	}
 
 	/**
-	 * 删除教练员
+	 * 刪除教練員
 	 */
 	@RequiresPermissions("att:sysBaseCoach:del")
 	@RequestMapping(value = "delete")
 	public String delete(SysBaseCoach sysBaseCoach, RedirectAttributes redirectAttributes) {
 		sysBaseCoachService.delete(sysBaseCoach);
-		addMessage(redirectAttributes, "删除教练员成功");
+		addMessage(redirectAttributes, "刪除教練員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?repage";
 	}
 
 	/**
-	 * 批量删除教练员
+	 * 批量刪除教練員
 	 */
 	@RequiresPermissions("att:sysBaseCoach:del")
 	@RequestMapping(value = "deleteAll")
@@ -182,29 +182,29 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 		for(String id : idArray){
 			sysBaseCoachService.delete(sysBaseCoachService.get(id));
 		}
-		addMessage(redirectAttributes, "删除教练员成功");
+		addMessage(redirectAttributes, "刪除教練員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:sysBaseCoach:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SysBaseCoach sysBaseCoach, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "教练员"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "教練員"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SysBaseCoach> page = sysBaseCoachService.findPage(new Page<SysBaseCoach>(request, response, -1), sysBaseCoach);
-    		new ExportExcel("教练员", SysBaseCoach.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("教練員", SysBaseCoach.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出教练员记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出教練員記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?menuId="+sysBaseCoach.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 	 */
 	@RequiresPermissions("att:sysBaseCoach:import")
     @RequestMapping(value = "import", method=RequestMethod.POST)
@@ -217,7 +217,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "教练员列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "教練員列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -226,7 +226,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 				for (SysBaseCoachImport sBaseCoachImport : list){
 					try{
 						SysBaseCoach sysBaseCoach = new SysBaseCoach();
-						//1.编码给定
+						//1.編碼給定
 						int countLastNum = this.sysBaseCoachService.findExitSysBaseCoachNum();
 						int nextCodeNum = countLastNum ++;
 						String code = "C" + com.kite.common.utils.date.DateUtils.transformThousandBitNumString(nextCodeNum);
@@ -237,7 +237,7 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 							yearMonth = yearMonth.replace("-", "");
 							sysBaseCoach.setEntryYear(yearMonth);
 						}
-						//字典转值
+						//字典轉值
 						String sexValue = this.systemService.findDictValueByTypeAndLabel("sex_flag", sBaseCoachImport.getSex());
 						String contractValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sBaseCoachImport.getContractFlag());
 						sysBaseCoach.setNameCn(sBaseCoachImport.getNameCn());
@@ -263,13 +263,13 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条教练员记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條教練員記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条教练员记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條教練員記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入教练员失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入教練員失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?menuId="+menuId;
     }
@@ -292,25 +292,25 @@ public class SysBaseCoachController extends BaseController implements BasicVerif
 	}
 
 	/**
-	 * 下载导入教练员数据模板
+	 * 下載導入教練員數據模板
 	 */
 	@RequiresPermissions("att:sysBaseCoach:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "教练员数据导入模板.xlsx";
+            String fileName = "教練員數據導入模板.xlsx";
     		List<SysBaseCoachImport> list = Lists.newArrayList();
-    		new ExportExcel("教练员数据", SysBaseCoachImport.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("教練員數據", SysBaseCoachImport.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseCoach/?repage";
     }
 
 
 	/**
-	 * 获取教练员列表
+	 * 獲取教練員列表
 	 * @param response
 	 * @return
 	 */

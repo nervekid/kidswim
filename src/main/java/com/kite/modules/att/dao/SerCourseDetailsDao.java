@@ -9,7 +9,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SerCourseDetails;
 
 /**
- * 课程明细DAO接口
+ * 課程明細DAO接口
  * @author lyb
  * @version 2019-12-08
  */
@@ -17,7 +17,7 @@ import com.kite.modules.att.entity.SerCourseDetails;
 public interface SerCourseDetailsDao extends CrudDao<SerCourseDetails> {
 
 	/**
-	 * 根据父id查找课程明细
+	 * 根據父id查找課程明細
 	 * @param courseId
 	 * @return
 	 */

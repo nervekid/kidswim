@@ -48,17 +48,17 @@
 			console.log("提交,正在進行泳課排班生成...");
             var courseLevelSelectVal = $("#courseLevelSelect").val();
             if(null==courseLevelSelectVal|| courseLevelSelectVal==''){
-                alert("您還沒有选择课程级别,請選擇！");
+                alert("您還沒有選擇課程級別,請選擇！");
                 return;
             }
             var beginLearnSelectVal = $("#beginLearnSelect").val();
             if(null==beginLearnSelectVal|| beginLearnSelectVal==''){
-                alert("您還沒有选择上课时间,請選擇！");
+                alert("您還沒有選擇上課時間,請選擇！");
                 return;
             }
             var endLearnSelectVal = $("#endLearnSelect").val();
             if(null==endLearnSelectVal|| endLearnSelectVal==''){
-                alert("您還沒有选择下课时间,請選擇！");
+                alert("您還沒有選擇下課時間,請選擇！");
                 return;
             }
             var courseAddressSelectVal = $("#courseAddressSelect").val();
@@ -83,7 +83,7 @@
             }
             var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
             if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
-                alert("您還沒有选择评估日期,請選擇！");
+                alert("您還沒有選擇評估日期,請選擇！");
                 return;
             }
             $.ajax({
@@ -114,7 +114,7 @@
 
                 },
                 fail:function (data) {
-                    alert("查询失败！");
+                    alert("查詢失敗！");
                     return;
                 }
             });
@@ -124,17 +124,17 @@
             console.log("提交,正在進行泳課排班生成...");
             var courseLevelSelectVal = $("#courseLevelSelect").val();
             if(null==courseLevelSelectVal|| courseLevelSelectVal==''){
-                alert("您還沒有选择课程级别,請選擇！");
+                alert("您還沒有選擇課程級別,請選擇！");
                 return;
             }
             var beginLearnSelectVal = $("#beginLearnSelect").val();
             if(null==beginLearnSelectVal|| beginLearnSelectVal==''){
-                alert("您還沒有选择上课时间,請選擇！");
+                alert("您還沒有選擇上課時間,請選擇！");
                 return;
             }
             var endLearnSelectVal = $("#endLearnSelect").val();
             if(null==endLearnSelectVal|| endLearnSelectVal==''){
-                alert("您還沒有选择下课时间,請選擇！");
+                alert("您還沒有選擇下課時間,請選擇！");
                 return;
             }
             var courseAddressSelectVal = $("#courseAddressSelect").val();
@@ -159,7 +159,7 @@
             }
             var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
             if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
-                alert("您還沒有选择评估日期,請選擇！");
+                alert("您還沒有選擇評估日期,請選擇！");
                 return;
             }
 
@@ -219,7 +219,7 @@
 						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
 							<tbody>
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程级别：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>課程級別：</label></td>
 								<td class="width-35">
 									<select id="courseLevelSelect" name="courseLevelSelect" class="form-control" type="select">
 										<c:forEach var="dict" items="${courseLevelDictList}" varStatus="status">
@@ -230,17 +230,17 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>上课时间：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>上課時間：</label></td>
 								<td class="width-35">
-								   <input id="beginLearnSelect" placeholder="上课时间" name="beginLearnSelect" type="text" length="20" class="form-control"
+								   <input id="beginLearnSelect" placeholder="上課時間" name="beginLearnSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>下课时间：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>下課時間：</label></td>
 								<td class="width-35">
-								   <input id="endLearnSelect" placeholder="下课时间" name="endLearnSelect" type="text" length="20" class="form-control"
+								   <input id="endLearnSelect" placeholder="下課時間" name="endLearnSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 							</tr>
@@ -268,7 +268,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程開始日期：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>課程開始日期：</label></td>
 								<td class="width-35">
 								   <input id="beginTimeStrSelect" placeholder="開始日期" name="beginTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
@@ -276,7 +276,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>课程結束日期：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>課程結束日期：</label></td>
 								<td class="width-35">
 								   <input id="endTimeStrSelect" placeholder="結束日期" name="endTimeStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
@@ -284,14 +284,14 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>评估日期：</label></td>
+								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>評估日期：</label></td>
 								<td class="width-35">
-								   <input id="assessmentDateStrSelect" placeholder="评估日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
+								   <input id="assessmentDateStrSelect" placeholder="評估日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
                                    value=""/>
 								</td>
 
 								<td width="5%">
-									<button  class="" onclick="myWallet()">预览课程生成结果</button>
+									<button  class="" onclick="myWallet()">預覽課程生成結果</button>
 								</td>
 							</tr>
 
@@ -301,32 +301,32 @@
 						<table class="table table-bordered  table-condensed dataTables-example dataTable no-footer"  >
 							<tbody style="border: 1px solid #ffffff">
 							<tr>
-								<td class="width-15"><label class="pull-right">课程编号</label></td>
+								<td class="width-15"><label class="pull-right">課程編號</label></td>
 									<td class="width-35" id="codeShow">
 								</td>
-								<td class="width-15"><label class="pull-right">堂数</label></td>
+								<td class="width-15"><label class="pull-right">堂數</label></td>
 									<td class="width-35" id="learnNumShow">
 								</td>
 							</tr>
 
 							<tr>
-								<td class="width-15"><label class="pull-right">上课日期</label></td>
+								<td class="width-15"><label class="pull-right">上課日期</label></td>
 								<td colspan="3" class="width-35"  id="dates">
 								</td>
 							</tr>
 
 							<tr>
-								<td class="width-15"><label class="pull-right">星期几</label></td>
+								<td class="width-15"><label class="pull-right">星期幾</label></td>
 								<td class="width-35"  id="strInWeekShow">
 								</td>
 
-								<td class="width-15"><label class="pull-right">课程费用(港币)</label></td>
+								<td class="width-15"><label class="pull-right">課程費用(港幣)</label></td>
 								<td class="width-35"  id="courseFeeShow">
 								</td>
 							</tr>
 
 							<tr>
-								<td class="width-15"><label class="pull-right">收费标准</label></td>
+								<td class="width-15"><label class="pull-right">收費標準</label></td>
 								<td class="width-35"  id="chargesShow">
 								</td>
 							</tr>
@@ -338,9 +338,9 @@
 						<thead>
 							<tr>
 								<th> <input type="checkbox" class="i-checks"></th>
-								<th >上课日期</th>
-								<th >上课开始时间</th>
-								<th >上课结束时间</th>
+								<th >上課日期</th>
+								<th >上課開始時間</th>
+								<th >上課結束時間</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -381,7 +381,7 @@
 		<div class="form-group">
 			<form:input placeholder="課程編號" path="code" htmlEscape="false"  onkeydown="keyDownEnter(event)"  maxlength="64"  class=" form-control input-sm"/>
 			<input placeholder="課程時間範圍" id="dateRange" name="dateRange" class="laydate-icon form-control layer-date" type="text"  value="${dateRange}" />
-			<form:select placeholder="课程级别" path="courseLevel"  class="form-control m-b required" onchange="search()" >
+			<form:select placeholder="課程級別" path="courseLevel"  class="form-control m-b required" onchange="search()" >
 				<form:option value="" label="請選擇"/>
 				<form:options items="${fns:getDictList('course_level')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 			</form:select>
@@ -436,15 +436,15 @@
 			<tr>
 				<th> <input type="checkbox" class="i-checks"></th>
 				<th  class="sort-column code">課程編號</th>
-				<th  class="sort-column coathId">课程等级</th>
-				<th  class="sort-column beginYearMonth">课程时间范围</th>
-				<th  class="sort-column courseDate">上课开始时间</th>
-				<th  class="sort-column courseNum">上课结束时间</th>
-				<th  class="sort-column courseNum">堂数</th>
+				<th  class="sort-column coathId">課程等級</th>
+				<th  class="sort-column beginYearMonth">課程時間範圍</th>
+				<th  class="sort-column courseDate">上課開始時間</th>
+				<th  class="sort-column courseNum">上課結束時間</th>
+				<th  class="sort-column courseNum">堂數</th>
 				<th  class="sort-column courseAddress">課程地址</th>
 				<th  class="sort-column strInWeek">星期幾</th>
-				<th  class="sort-column strInWeek">评估日期</th>
-				<th  class="sort-column strInWeek">费用(港币)</th>
+				<th  class="sort-column strInWeek">評估日期</th>
+				<th  class="sort-column strInWeek">費用(港幣)</th>
 			</tr>
 		</thead>
 		<tbody>

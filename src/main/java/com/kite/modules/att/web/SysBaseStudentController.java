@@ -43,7 +43,7 @@ import com.kite.modules.sys.service.SysUserCollectionMenuService;
 import com.kite.modules.sys.service.SystemService;
 
 /**
- * 学员Controller
+ * 學員Controller
  * @author lyb
  * @version 2019-11-13
  */
@@ -58,7 +58,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	@Autowired
 	private SystemService systemService;
 
-	/*** 是否导入错误提示*/
+	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
 
 	@ModelAttribute
@@ -74,7 +74,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	}
 
 	/**
-	 * 学员列表页面
+	 * 學員列表頁面
 	 */
 	@RequiresPermissions("att:sysBaseStudent:list")
 	@RequestMapping(value = {"list", ""})
@@ -86,7 +86,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	}
 
 	/**
-	 * 查看，增加，编辑学员表单页面
+	 * 查看，增加，編輯學員表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysBaseStudent:view","att:sysBaseStudent:add","att:sysBaseStudent:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
@@ -94,13 +94,13 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 		model.addAttribute("sysBaseStudent", sysBaseStudent);
 		if(sysBaseStudent.getId()==null){
 			// sysBaseStudent.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
-			//设置编码
+			//設置編碼
 		}
 		return "modules/att/sysBaseStudentForm";
 	}
 
 	/**
-	 * 查看打印学员表单页面
+	 * 查看打印學員表單頁面
 	 */
 	@RequiresPermissions(value={"att:sysBaseStudent:view"},logical=Logical.OR)
 	@RequestMapping(value = "view")
@@ -110,7 +110,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	}
 
 	/**
-	 * 保存学员
+	 * 保存學員
 	 */
 	@RequiresPermissions(value={"att:sysBaseStudent:add","att:sysBaseStudent:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
@@ -118,12 +118,12 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 		if (!beanValidator(model, sysBaseStudent)){
 			return form(sysBaseStudent, model);
 		}
-		if(!sysBaseStudent.getIsNewRecord()){//编辑表单保存
-			SysBaseStudent t = sysBaseStudentService.get(sysBaseStudent.getId());//从数据库取出记录的值
-			MyBeanUtils.copyBeanNotNull2Bean(sysBaseStudent, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
+		if(!sysBaseStudent.getIsNewRecord()){//編輯表單保存
+			SysBaseStudent t = sysBaseStudentService.get(sysBaseStudent.getId());//從數據庫取出記錄的值
+			MyBeanUtils.copyBeanNotNull2Bean(sysBaseStudent, t);//將編輯表單中的非NULL值覆蓋數據庫記錄中的值
 			sysBaseStudentService.save(t);//保存
-		}else{//新增表单保存
-			//1.计算学员编号 入学年份+月份+流水码 如:201901000001
+		}else{//新增表單保存
+			//1.計算學員編號 入學年份+月份+流水碼 如:201901000001
 			Date nowDate = new Date();
 			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
 			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
@@ -133,23 +133,23 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 			sysBaseStudent.setCode(code);
 			sysBaseStudentService.save(sysBaseStudent);//保存
 		}
-		addMessage(redirectAttributes, "保存学员成功");
+		addMessage(redirectAttributes, "保存學員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?menuId="+sysBaseStudent.getMenuId();
 	}
 
 	/**
-	 * 删除学员
+	 * 刪除學員
 	 */
 	@RequiresPermissions("att:sysBaseStudent:del")
 	@RequestMapping(value = "delete")
 	public String delete(SysBaseStudent sysBaseStudent, RedirectAttributes redirectAttributes) {
 		sysBaseStudentService.delete(sysBaseStudent);
-		addMessage(redirectAttributes, "删除学员成功");
+		addMessage(redirectAttributes, "刪除學員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?repage";
 	}
 
 	/**
-	 * 批量删除学员
+	 * 批量刪除學員
 	 */
 	@RequiresPermissions("att:sysBaseStudent:del")
 	@RequestMapping(value = "deleteAll")
@@ -158,29 +158,29 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 		for(String id : idArray){
 			sysBaseStudentService.delete(sysBaseStudentService.get(id));
 		}
-		addMessage(redirectAttributes, "删除学员成功");
+		addMessage(redirectAttributes, "刪除學員成功");
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?repage";
 	}
 
 	/**
-	 * 导出excel文件
+	 * 導出excel文件
 	 */
 	@RequiresPermissions("att:sysBaseStudent:export")
     @RequestMapping(value = "export", method=RequestMethod.POST)
     public String exportFile(SysBaseStudent sysBaseStudent, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "学员"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            String fileName = "學員"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<SysBaseStudent> page = sysBaseStudentService.findPage(new Page<SysBaseStudent>(request, response, -1), sysBaseStudent);
-    		new ExportExcel("学员", SysBaseStudent.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		new ExportExcel("學員", SysBaseStudent.class).setDataList(page.getList()).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导出学员记录失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導出學員記錄失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?menuId="+sysBaseStudent.getMenuId();
     }
 
 	/**
-	 * 导入Excel数据
+	 * 導入Excel數據
 
 	 */
 	@RequiresPermissions("att:sysBaseStudent:import")
@@ -195,7 +195,7 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 			this.check(ei);
 			if (!ei.isCheckOk) {
 				this.isTip = true;
-				ei.write(response, "学员列表导入失败结果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
+				ei.write(response, "學員列表導入失敗結果"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx");
 				return null;
 			}
 			else {
@@ -203,14 +203,14 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 				List<SysBaseStudentImport> list = ei.getDataList(SysBaseStudentImport.class);
 				for (SysBaseStudentImport sysBaseStudentImport : list){
 					try{
-						//1.计算学员编号 入学年份+月份+流水码 如:201901000001
+						//1.計算學員編號 入學年份+月份+流水碼 如:201901000001
 						Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
 						Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
 						String yearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date());
 						int nowStudents = this.sysBaseStudentService.findCountOfStudents(beginTime, endTime) + 1;
 						String code = yearMonth + com.kite.common.utils.date.DateUtils.transformNumString(nowStudents);
 
-						//字典转值
+						//字典轉值
 						String sexValue = this.systemService.findDictValueByTypeAndLabel("sex_flag", sysBaseStudentImport.getSex());
 						String studiedSwimValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getStudiedSwimFlag());
 						String drownedValue = this.systemService.findDictValueByTypeAndLabel("yes_no", sysBaseStudentImport.getDrownedFlag());
@@ -256,13 +256,13 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 					}
 				}
 				if (failureNum>0){
-					failureMsg.insert(0, "，失败 "+failureNum+" 条学员记录。");
+					failureMsg.insert(0, "，失敗 "+failureNum+" 條學員記錄。");
 				}
-				addMessage(redirectAttributes, "已成功导入 "+successNum+" 条学员记录"+failureMsg);
+				addMessage(redirectAttributes, "已成功導入 "+successNum+" 條學員記錄"+failureMsg);
 			}
 
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入学员失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入學員失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?menuId="+menuId;
     }
@@ -285,18 +285,18 @@ public class SysBaseStudentController extends BaseController implements BasicVer
 	}
 
 	/**
-	 * 下载导入学员数据模板
+	 * 下載導入學員數據模板
 	 */
 	@RequiresPermissions("att:sysBaseStudent:import")
     @RequestMapping(value = "import/template")
     public String importFileTemplate(HttpServletResponse response, RedirectAttributes redirectAttributes) {
 		try {
-            String fileName = "学员数据导入模板.xlsx";
+            String fileName = "學員數據導入模板.xlsx";
     		List<SysBaseStudent> list = Lists.newArrayList();
-    		new ExportExcel("学员数据", SysBaseStudentImport.class, 1).setDataList(list).write(response, fileName).dispose();
+    		new ExportExcel("學員數據", SysBaseStudentImport.class, 1).setDataList(list).write(response, fileName).dispose();
     		return null;
 		} catch (Exception e) {
-			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+			addMessage(redirectAttributes, "導入模板下載失敗！失敗信息："+e.getMessage());
 		}
 		return "redirect:"+Global.getAdminPath()+"/att/sysBaseStudent/?repage";
     }

@@ -2,20 +2,20 @@ package com.kite.modules.att.enums;
 
 /**
  * @author lyb
- * @Description: 泳课排班枚举类
+ * @Description: 泳課排班枚舉類
  * @date 2019-12-03
  */
 public class KidSwimDictEnum {
 
 	/**
-	 * 星期几字典标记
+	 * 星期幾字典標記
 	 * @author lyb
 	 *
 	 */
 	public enum weekenFlag {
 
 		星期日("0"),
-		星期一("1"),
+		星期壹("1"),
 		星期二("2"),
 		星期三("3"),
 		星期四("4"),
@@ -38,7 +38,7 @@ public class KidSwimDictEnum {
     }
 
 	/**
-	 * 是否标记
+	 * 是否標記
 	 * @author lyb
 	 *
 	 */
@@ -63,7 +63,7 @@ public class KidSwimDictEnum {
     }
 
 	/**
-	 * 收费标准标记
+	 * 收費標準標記
 	 * @author lyb
 	 *
 	 */

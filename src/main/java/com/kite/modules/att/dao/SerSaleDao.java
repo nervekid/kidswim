@@ -12,7 +12,7 @@ import com.kite.common.persistence.annotation.MyBatisDao;
 import com.kite.modules.att.entity.SerSale;
 
 /**
- * 销售资料DAO接口
+ * 銷售資料DAO接口
  * @author yyw
  * @version 2019-12-01
  */
