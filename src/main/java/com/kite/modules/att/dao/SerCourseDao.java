@@ -39,4 +39,11 @@ public interface SerCourseDao extends CrudDao<SerCourse> {
 	 * @return
 	 */
 	public List<SerCourse> findByLikeCode(@Param("code") String code);
+
+	/**
+	 * 根据编号唯一查找
+	 * @param code
+	 * @return
+	 */
+	public SerCourse findByLikeCodeOnly (@Param("code") String code);
 }

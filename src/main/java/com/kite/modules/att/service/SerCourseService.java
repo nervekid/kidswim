@@ -108,4 +108,13 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 		return this.dao.findByLikeCode(code);
 	}
 
+	/**
+	 * 根据编号唯一查找
+	 * @param code
+	 * @return
+	 */
+	public SerCourse findSerCourseByCode(String code) {
+		return this.dao.findByLikeCodeOnly(code);
+	}
+
 }

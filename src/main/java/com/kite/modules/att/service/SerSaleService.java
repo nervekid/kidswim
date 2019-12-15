@@ -60,16 +60,15 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 	}
 	@Override
 	public Page<SerSale> findPage(Page<SerSale> page, SerSale serSale) {
-
-
-
 		return super.findPage(page, serSale);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void save(SerSale serSale) {
 		super.save(serSale);
 	}
+
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(SerSale serSale) {
@@ -88,7 +87,6 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 
 		return serial.toString();
 	}
-
 
 	public int findcount(Date beginTime, Date endTime) {
 		return serSaleDao.findcount(beginTime, endTime);

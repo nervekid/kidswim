@@ -37,6 +37,16 @@
             });
 
 		});
+
+		function memberFeeFlagChange () {
+			var a = $("#memberFeeFlag").val();
+			if (a == '1') {
+				$("#memberFeeFlagStr").val("$170");
+			}
+			else {
+				$("#memberFeeFlagStr").val("$0");
+			}
+		}
 	</script>
 </head>
 <body class="hideScroll">
@@ -71,20 +81,6 @@
 			</tr>
 
 			<tr>
-				<td class="width-15 active"><label class="pull-right">付款金額：</label></td>
-				<td class="width-35">
-					<form:input path="payAmount" htmlEscape="false"    class="form-control"/>
-				</td>
-				<td class="width-15 active"><label class="pull-right">是否付款：</label></td>
-				<td class="width-35">
-					<form:select placeholder="是否付款" path="paidFlag"  class="form-control required"  >
-						<form:option value="" label="請選擇"/>
-						<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
-					</form:select>
-				</td>
-			</tr>
-
-			<tr>
 				<td class="width-15 active"><label class="pull-right">付款日期：</label></td>
 				<td class="width-35">
 					<input id="paidDate" name="paidDate"  type="text"  class="form-control required"
@@ -92,14 +88,31 @@
 				</td>
 				<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
 				<td class="width-35">
-					<form:input path="paymentType" htmlEscape="false" class="form-control"/>
+					<form:select placeholder="付款方式" path="paymentType" class="form-control required"  >
+						<form:option value="" label="請選擇"/>
+						<form:options items="${fns:getDictList('pay_type')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+					</form:select>
 				</td>
 			</tr>
 
 			<tr>
 				<td class="width-15 active"><label class="pull-right">是否收取会员费：</label></td>
 				<td class="width-35">
-					<form:select placeholder="是否收取会员费" path="memberFeeFlag"  class="form-control required"  >
+					<form:select placeholder="是否收取会员费" path="memberFeeFlag" onchange="memberFeeFlagChange()" class="form-control required"  >
+						<form:option value="" label="請選擇"/>
+						<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+					</form:select>
+				</td>
+				<td class="width-15 active"><label class="pull-right">会员费金额：</label></td>
+				<td class="width-35">
+					<input id="memberFeeFlagStr" disabled="true" name = "memberFeeFlagStr" htmlEscape="false" class="form-control"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="width-15 active"><label class="pull-right">是否付款：</label></td>
+				<td class="width-35">
+					<form:select placeholder="是否付款" path="paidFlag"  class="form-control required"  >
 						<form:option value="" label="請選擇"/>
 						<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 					</form:select>

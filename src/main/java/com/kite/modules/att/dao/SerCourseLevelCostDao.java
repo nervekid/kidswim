@@ -34,4 +34,12 @@ public interface SerCourseLevelCostDao extends CrudDao<SerCourseLevelCost> {
 	 * @return
 	 */
 	public String findcostStandardFlagByCourseAddressAndCourseLevelFlag(@Param("courseLevelFlag")String courseLevelFlag, @Param("courseAddress")String courseAddress);
+
+	/**
+	 * 根据对应等级与泳池的收费标准
+	 * @param courseLevelFlag
+	 * @param courseAddress
+	 * @return
+	 */
+	public SerCourseLevelCost findSerCourseLevelCostByCourseAddressAndCourseLevelFlag(@Param("courseLevelFlag")String courseLevelFlag, @Param("courseAddress")String courseAddress);
 }

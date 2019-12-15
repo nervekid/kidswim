@@ -43,7 +43,7 @@ import com.kite.common.utils.verification.BasicVerification;
 import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
 import com.kite.modules.att.entity.SerCourseDetails;
-import com.kite.modules.att.entity.SysBaseStudent;
+import com.kite.modules.att.entity.SerCourseLevelCost;
 import com.kite.modules.att.enums.KidSwimDictEnum;
 import com.kite.modules.att.service.SerCourseDetailsService;
 import com.kite.modules.att.service.SerCourseLevelCostService;
@@ -357,9 +357,16 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		String learnEndTimeTimeStr = endLearn.replace(":", "").substring(0, endLearn.replace(":", "").length() - 2);
 
 		//4.计算费用
+		BigDecimal costAmount = new BigDecimal("0.0");
 		//规则:如果收费标准是按照课堂收费，那么需要计算出多少堂课，然后乘积计算，如果是按月收费或者按双月收费，则不需要
-		
-		BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+		SerCourseLevelCost serCourseLevelCost = this.serCourseLevelCostService.findByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+		if (serCourseLevelCost.getCostStandardFlag().equals(KidSwimDictEnum.costStandardFlag.按堂收費.getName())) {
+			//若是按堂收费，则需要将课堂数乘以收费得到收费总额
+			costAmount =  serCourseLevelCost.getCostAmount().multiply(BigDecimal.valueOf(weekenNum));
+		}
+		else {
+			costAmount = serCourseLevelCost.getCostAmount();
+		}
 
 		//5.写入课程表
 		SerCourse serCourse = new SerCourse();
@@ -442,10 +449,8 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		try {
 			//1.獲取開始時間與結束時間以及评估日期
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
 			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
-			Date assessmentDate = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(assessmentDateStr));
 
 			int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdf.format(beginTime), sdf.format(endTime));
 			if (days < 7) {
@@ -465,7 +470,16 @@ public class SerCourseController extends BaseController implements BasicVerifica
 			String code = yearStr + courseAddress + "-" + courseLevel + countStr; //年份+地点编号+ - +课程对应等级+百位流水号 例如:2019MS-CCOO1 按照规则编码
 
 			//4.计算费用
-			BigDecimal costAmount = this.serCourseLevelCostService.findCostAmountByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+			BigDecimal costAmount = new BigDecimal("0.0");
+			//规则:如果收费标准是按照课堂收费，那么需要计算出多少堂课，然后乘积计算，如果是按月收费或者按双月收费，则不需要
+			SerCourseLevelCost serCourseLevelCost = this.serCourseLevelCostService.findByCourseAddressAndCourseLevelFlag(courseLevel, courseAddress);
+			if (serCourseLevelCost.getCostStandardFlag().equals(KidSwimDictEnum.costStandardFlag.按堂收費.getName())) {
+				//若是按堂收费，则需要将课堂数乘以收费得到收费总额
+				costAmount =  serCourseLevelCost.getCostAmount().multiply(BigDecimal.valueOf(weekenNum));
+			}
+			else {
+				costAmount = serCourseLevelCost.getCostAmount();
+			}
 
 			//5.获取星期几
 			String weekNumStr = DictUtils.getDictLabel(weekNum, "week_flag", null);

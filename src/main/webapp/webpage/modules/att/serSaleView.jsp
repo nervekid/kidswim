@@ -67,9 +67,10 @@
 				<input type="text" readonly="readonly" class="form-control" value="<fmt:formatDate value="${serSale.paidDate}" pattern="yyyy-MM-dd"/>" />
 			</td>
 			<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
-			<td class="width-35">
-				<form:input path="paymentType" htmlEscape="false"  disabled="true"  class="form-control"/>
-			</td>
+			<form:select placeholder="付款方式" path="paymentType" disabled="true" class="form-control m-b"  >
+					<form:option value="" label="请选择"/>
+					<form:options items="${fns:getDictList('pay_type')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+				</form:select>
 		</tr>
 
 		<tr>

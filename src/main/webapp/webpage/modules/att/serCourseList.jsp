@@ -16,20 +16,25 @@
 			});
             laydate.render({
 				elem: '#beginTimeStrSelect'
+				,trigger: 'click'
 			});
             laydate.render({
 				elem: '#endTimeStrSelect'
+				,trigger: 'click'
 			});
             laydate.render({
             	elem: '#beginLearnSelect'
           		,type: 'time'
+       			,trigger: 'click'
             });
             laydate.render({
             	elem: '#endLearnSelect'
           		,type: 'time'
+       			,trigger: 'click'
             });
             laydate.render({
             	elem: '#assessmentDateStrSelect'
+           		,trigger: 'click'
             });
 		});
 

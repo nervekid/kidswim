@@ -143,13 +143,26 @@
 	<select id="findCostAmountByCourseAddressAndCourseLevelFlag" resultType="java.math.BigDecimal">
 		select costAmount
 		FROM ser_course_level_cost
-		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress}
+		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress} and del_flag = '0'
+		order by create_date desc
+		limit 1
 	</select>
 
 	<select id="findcostStandardFlagByCourseAddressAndCourseLevelFlag" resultType="String">
 		select cost_standard_flag
 		FROM ser_course_level_cost
-		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress}
+		where courseLevel_flag = #{courseLevelFlag} and courseAddress = #{courseAddress} and del_flag = '0'
+		order by create_date desc
+		limit 1
+	</select>
+
+	<select id="findSerCourseLevelCostByCourseAddressAndCourseLevelFlag" resultType="SerCourseLevelCost">
+		select <include refid="serCourseLevelCostColumns"/>
+		FROM ser_course_level_cost a
+		<include refid="serCourseLevelCostJoins"/>
+		where a.courseLevel_flag = #{courseLevelFlag} and a.courseAddress = #{courseAddress} and a.del_flag = '0'
+		order by a.create_date desc
+		limit 1
 	</select>
 
 </mapper>

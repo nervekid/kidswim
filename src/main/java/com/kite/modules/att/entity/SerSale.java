@@ -25,7 +25,7 @@ public class SerSale extends DataEntity<SerSale> {
 	private BigDecimal payAmount;		// 付款金额 按照课程收费标准及折扣进行计算 单位(港币)
 	private String paidFlag;		// 是否付款 字典枚举 yes_no 1:是 0:否
 	private Date paidDate;		// 付款日期
-	private String paymentType;		// 付款方式
+	private String paymentType;		// 付款方式 字典枚举 pay_type 1:現金 2:銀行轉賬 3:支票 4:EPS
 	private String memberFeeFlag;	//是否收取会员费 字典枚举 yes_no 1:是 0:否
 
 	private String studentName;

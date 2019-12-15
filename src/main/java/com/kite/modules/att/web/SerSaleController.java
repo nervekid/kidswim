@@ -5,25 +5,15 @@ package com.kite.modules.att.web;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import com.google.common.collect.Maps;
-import com.kite.common.utils.*;
-import com.kite.common.utils.verification.BasicVerificationUtil;
-import com.kite.modules.att.entity.SerCourseLevelCost;
-import com.kite.modules.att.entity.SysBaseStudent;
-import com.kite.modules.att.service.SerCourseLevelCostService;
-import com.kite.modules.att.service.SysBaseStudentService;
-import com.kite.modules.sys.entity.SysSequence;
-import com.kite.modules.sys.service.SysSequenceService;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -41,13 +31,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
-import com.kite.common.utils.verification.BasicVerification;
-import com.kite.common.web.BaseController;
+import com.kite.common.utils.DateUtils;
+import com.kite.common.utils.ListUtils;
+import com.kite.common.utils.MapUtil;
+import com.kite.common.utils.MyBeanUtils;
+import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
 import com.kite.common.utils.excel.ImportExcel;
-import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.common.utils.verification.BasicVerification;
+import com.kite.common.web.BaseController;
+import com.kite.modules.att.entity.SerCourse;
+import com.kite.modules.att.entity.SerCourseLevelCost;
 import com.kite.modules.att.entity.SerSale;
+import com.kite.modules.att.entity.SysBaseStudent;
+import com.kite.modules.att.enums.KidSwimDictEnum;
+import com.kite.modules.att.service.SerCourseLevelCostService;
+import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SerSaleService;
+import com.kite.modules.att.service.SysBaseStudentService;
+import com.kite.modules.sys.entity.SysSequence;
+import com.kite.modules.sys.service.SysSequenceService;
+import com.kite.modules.sys.service.SysUserCollectionMenuService;
 
 /**
  * 销售资料Controller
@@ -68,8 +72,8 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	private SysBaseStudentService sysBaseStudentService;
 	@Autowired
 	private SerCourseLevelCostService serCourseLevelCostService;
-
-
+	@Autowired
+	private SerCourseService serCourseService;
 
 	/*** 是否导入错误提示*/
 	private boolean isTip = false;
@@ -133,18 +137,18 @@ public class SerSaleController extends BaseController implements BasicVerificati
 		if (!beanValidator(model, serSale)){
 			return form(serSale, model);
 		}
+		SerCourse serCourse = this.serCourseService.findSerCourseByCode(serSale.getCode());
 		if(!serSale.getIsNewRecord()){//编辑表单保存
 			SerSale t = serSaleService.get(serSale.getId());//从数据库取出记录的值
 			MyBeanUtils.copyBeanNotNull2Bean(serSale, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
 			serSaleService.save(t);//保存
 		}else{//新增表单保存
-
-//			Date nowDate = new Date();
-//			Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(com.kite.common.utils.date.DateUtils.firstDateInMonth(nowDate));
-//			Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(com.kite.common.utils.date.DateUtils.lastDateInMonth(nowDate));
-//			String yearMonth = com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date());
-//			int nowStudents = serSaleService.findcount(beginTime, endTime) + 1;
-//			String code = yearMonth + com.kite.common.utils.date.DateUtils.transformNumString(nowStudents);
+			//计算销售单费用，如果选择收取会员费，那么固定增加$170
+			BigDecimal multiply = new BigDecimal(serSale.getDiscount()).multiply(serCourse.getCourseFee() == null ? BigDecimal.ZERO : serCourse.getCourseFee());
+			if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
+				multiply = multiply.add(new BigDecimal(170));
+			}
+			serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
 
 			SysSequence waterNumber = sysSequenceService.getWaterNumber("SALE_CODE");
 			String s = String.format("%06d", waterNumber.getCurrentVal());
@@ -219,17 +223,11 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			else {
 				this.isTip = false;
 				List<SerSale> list = ei.getDataList(SerSale.class);
-				List<SerCourseLevelCost> listCose = serCourseLevelCostService.findList(new SerCourseLevelCost());
-				Map<String, List<SerCourseLevelCost>> map = new HashMap<>();
-				if(ListUtils.isNotNull(listCose)) {
-					 map = MapUtil.toMapListByString(listCose, "courseLevelFlag");
-				}
 
 				for (SerSale serSale : list){
 					try{
-
+						SerCourse serCourse = this.serCourseService.findSerCourseByCode(serSale.getCode());
 						Double discount = serSale.getDiscount();
-
 						SysSequence waterNumber = sysSequenceService.getWaterNumber("SALE_CODE");
 						String s = String.format("%06d", waterNumber.getCurrentVal());
 						serSale.setCode("P" + String.valueOf(com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date()) + s));
@@ -237,13 +235,13 @@ public class SerSaleController extends BaseController implements BasicVerificati
 						String courseLevelFlag = student.getCourseLevelFlag();
 
 						if(StringUtils.isNotEmpty(courseLevelFlag)) {
-							List<SerCourseLevelCost> temp = map.get(courseLevelFlag);
-							if(ListUtils.isNotNull(temp)) {
-								SerCourseLevelCost serCourseLevelCost = temp.get(0);
-								BigDecimal costAmount = serCourseLevelCost.getCostAmount();
-								BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
-								serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
+							BigDecimal costAmount = serCourse.getCourseFee();
+							//计算销售单费用，如果选择收取会员费，那么固定增加$170
+							BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
+							if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
+								multiply = multiply.add(new BigDecimal(170));
 							}
+							serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
 						}
 
 						serSaleService.save(serSale);

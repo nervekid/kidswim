@@ -123,7 +123,7 @@
 					<fmt:formatDate value="${serSale.paidDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					${serSale.paymentType}
+					${fns:getDictLabel(serSale.paymentType, 'pay_type', '')}
 				</td>
 				<td>
 					${fns:getDictLabel(serSale.memberFeeFlag, 'yes_no', '')}
