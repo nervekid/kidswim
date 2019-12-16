@@ -32,7 +32,8 @@
 			});
 			laydate.render({
 				elem: '#entryYear',
-				type: 'month'
+				type: 'month',
+				trigger: 'click'
 			});
 
 		});
@@ -54,7 +55,8 @@
 			});
 			laydate.render({
                 elem:"#sysCertificatesCoachList"+idx+"_obtainYearMonth",
-				type: 'month'
+				type: 'month',
+				trigger: 'click'
             });
 		}
 

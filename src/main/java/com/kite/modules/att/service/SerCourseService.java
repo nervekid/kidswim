@@ -30,6 +30,8 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	private SerCourseDao serCourseDao;
     @Autowired
 	private SerCourseDetailsDao serCourseDetailsDao;
+    @Autowired
+    private SerCourseDetailsService serCourseDetailsService;
 
 	@Override
 	public SerCourse get(String id) {
@@ -50,6 +52,28 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	@Transactional(readOnly = false)
 	public void save(SerCourse serCourse) {
 		super.save(serCourse);
+
+		//修改课程明细
+		List<SerCourseDetails> details = serCourse.getSerCourseDetailsList();
+		for (int i = 0; i < details.size(); i++) {
+			if (details.get(i).getId() != null && !details.get(i).getId().equals("")) {
+				SerCourseDetails serCourseDetails = this.serCourseDetailsDao.get(details.get(i).getId());
+				serCourseDetails.setLearnDate(details.get(i).getLearnDate());
+				serCourseDetails.setLearnBeginDate(details.get(i).getLearnBeginDate());
+				serCourseDetails.setLearnEndDate(details.get(i).getLearnEndDate());
+				serCourseDetails.setRollCallStatusFlag(details.get(i).getDelFlag());
+				this.serCourseDetailsService.save(serCourseDetails);
+			}
+			else {
+				SerCourseDetails serCourseDetails = new SerCourseDetails();
+				serCourseDetails.setLearnDate(details.get(i).getLearnDate());
+				serCourseDetails.setLearnBeginDate(details.get(i).getLearnBeginDate());
+				serCourseDetails.setLearnEndDate(details.get(i).getLearnEndDate());
+				serCourseDetails.setRollCallStatusFlag(details.get(i).getDelFlag());
+				this.serCourseDetailsService.save(serCourseDetails);
+			}
+		}
+
 	}
 
 	@Override
