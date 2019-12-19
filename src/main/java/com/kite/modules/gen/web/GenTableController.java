@@ -175,13 +175,15 @@ public class GenTableController extends BaseController {
             if (!this.genTableService.checkTableName(genTable.getName())) {
                 this.addMessage(redirectAttributes, new String[]{"下一步失败！" + genTable.getName() + " 表已经添加！"});
                 return "redirect:" + this.adminPath + "/gen/genTable/?repage";
-            } else {
+            }
+            else {
                 (genTable = this.genTableService.getTableFormDb(genTable)).setTableType("0");
                 this.genTableService.saveFromDB(genTable);
                 this.addMessage(redirectAttributes, new String[]{"数据库导入表单'" + genTable.getName() + "'成功"});
                 return "redirect:" + this.adminPath + "/gen/genTable/?repage";
             }
-        } else {
+        }
+        else {
             List<GenTable> tableList = this.genTableService.findTableListFormDb(new GenTable());
             model.addAttribute("tableList", tableList);
             model.addAttribute("config", GenUtils.getConfig());
