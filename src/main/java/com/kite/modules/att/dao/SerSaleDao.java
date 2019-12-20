@@ -4,11 +4,13 @@
 package com.kite.modules.att.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.entity.SerSale;
 
 /**
@@ -19,6 +21,21 @@ import com.kite.modules.att.entity.SerSale;
 @MyBatisDao
 public interface SerSaleDao extends CrudDao<SerSale> {
 
+	/**
+	 * 查看销售单数量
+	 * @param beginTime
+	 * @param endTime
+	 * @return
+	 */
+    public int findcount(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
 
-    int findcount(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
+    /**
+     * 根据课程地址同课程开始时间查询销售单学员信息
+     * @param courseAddress
+     * @param learnBeginTime
+     * @return
+     */
+    public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(@Param("courseAddress")String courseAddress,
+    		@Param("learnBeginTime")String learnBeginTime);
+
 }

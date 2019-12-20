@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.dao.SerSaleDao;
 import com.kite.modules.att.dao.SysBaseStudentDao;
 import com.kite.modules.att.entity.SerSale;
@@ -88,5 +89,15 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 
 	public int findcount(Date beginTime, Date endTime) {
 		return serSaleDao.findcount(beginTime, endTime);
+	}
+
+	/**
+	 * 根据地址及开始时间查找
+	 * @param courseAddress
+	 * @param learnBeginTime
+	 * @return
+	 */
+	public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(String courseAddress, String learnBeginTime) {
+		return this.serSaleDao.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress, learnBeginTime);
 	}
 }

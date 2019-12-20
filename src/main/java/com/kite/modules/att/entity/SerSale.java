@@ -83,7 +83,7 @@ public class SerSale extends DataEntity<SerSale> {
 		this.payAmount = payAmount;
 	}
 
-	@ExcelField(title="是否付款", dictType = "yes_no",align=2, sort=4)
+	@ExcelField(title="是否付款 输入是或否", dictType = "yes_no",align=2, sort=4)
 	public String getPaidFlag() {
 		return paidFlag;
 	}
@@ -102,7 +102,7 @@ public class SerSale extends DataEntity<SerSale> {
 		this.paidDate = paidDate;
 	}
 
-	@ExcelField(title="付款方式", align=2, sort=6)
+	@ExcelField(title="付款方式 (現金,銀行轉賬,支票,EPS)", dictType= "pay_type", align=2, sort=6)
 	public String getPaymentType() {
 		return paymentType;
 	}

@@ -32,8 +32,6 @@ import com.google.common.collect.Lists;
 import com.kite.common.config.Global;
 import com.kite.common.persistence.Page;
 import com.kite.common.utils.DateUtils;
-import com.kite.common.utils.ListUtils;
-import com.kite.common.utils.MapUtil;
 import com.kite.common.utils.MyBeanUtils;
 import com.kite.common.utils.StringUtils;
 import com.kite.common.utils.excel.ExportExcel;
@@ -41,7 +39,6 @@ import com.kite.common.utils.excel.ImportExcel;
 import com.kite.common.utils.verification.BasicVerification;
 import com.kite.common.web.BaseController;
 import com.kite.modules.att.entity.SerCourse;
-import com.kite.modules.att.entity.SerCourseLevelCost;
 import com.kite.modules.att.entity.SerSale;
 import com.kite.modules.att.entity.SysBaseStudent;
 import com.kite.modules.att.enums.KidSwimDictEnum;
@@ -52,6 +49,7 @@ import com.kite.modules.att.service.SysBaseStudentService;
 import com.kite.modules.sys.entity.SysSequence;
 import com.kite.modules.sys.service.SysSequenceService;
 import com.kite.modules.sys.service.SysUserCollectionMenuService;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 銷售資料Controller
@@ -74,6 +72,8 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	private SerCourseLevelCostService serCourseLevelCostService;
 	@Autowired
 	private SerCourseService serCourseService;
+	@Autowired
+	private SystemService systemService;
 
 	/*** 是否導入錯誤提示*/
 	private boolean isTip = false;
@@ -253,18 +253,17 @@ public class SerSaleController extends BaseController implements BasicVerificati
 						SysSequence waterNumber = sysSequenceService.getWaterNumber("SALE_CODE");
 						String s = String.format("%06d", waterNumber.getCurrentVal());
 						serSale.setCode("P" + String.valueOf(com.kite.common.utils.date.DateUtils.transformDateToYYYYMM(new Date()) + s));
-						SysBaseStudent student = sysBaseStudentService.getByCode(serSale.getStudentCode());
-						String courseLevelFlag = student.getCourseLevelFlag();
-
-						if(StringUtils.isNotEmpty(courseLevelFlag)) {
-							BigDecimal costAmount = serCourse.getCourseFee();
-							//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
-							BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
-							if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
-								multiply = multiply.add(new BigDecimal(170));
-							}
-							serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
+						//字典转值
+						if (serSale.getMemberFeeFlag().equals("1")) {
+							serSale.setRemarks("收取會員費$170");
 						}
+						BigDecimal costAmount = serCourse.getCourseFee();
+						//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
+						BigDecimal multiply = new BigDecimal(discount).multiply(costAmount == null ? BigDecimal.ZERO : costAmount);
+						if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
+							multiply = multiply.add(new BigDecimal(170));
+						}
+						serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
 
 						serSaleService.save(serSale);
 

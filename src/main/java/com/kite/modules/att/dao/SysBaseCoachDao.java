@@ -3,7 +3,7 @@
  */
 package com.kite.modules.att.dao;
 
-import javax.websocket.server.PathParam;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +38,11 @@ public interface SysBaseCoachDao extends CrudDao<SysBaseCoach> {
 	 * @return
 	 */
 	public String findSysBaseCoachByCoachid(@Param("codchId")String id);
+
+	/**
+	 * 根据名称查找教练列表
+	 * @param coachName
+	 * @return
+	 */
+	public List<SysBaseCoach> findSysBaseCoachListByCoachName(@Param("coachName")String coachName);
 }

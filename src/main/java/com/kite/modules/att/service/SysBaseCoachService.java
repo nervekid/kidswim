@@ -132,4 +132,13 @@ public class SysBaseCoachService extends CrudService<SysBaseCoachDao, SysBaseCoa
 	public String findCoachCodeByCoachId(String id) {
 		return this.dao.findSysBaseCoachByCoachid(id);
 	}
+
+	/**
+	 * 根据教练姓名进行查找
+	 * @param coachName
+	 * @return
+	 */
+	public List<SysBaseCoach> findSysBaseCoachByCoachName(String coachName) {
+		return this.dao.findSysBaseCoachListByCoachName(coachName);
+	}
 }

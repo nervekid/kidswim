@@ -211,4 +211,12 @@
 		limit 1
 	</select>
 
+	<select id="findSysBaseCoachListByCoachName" resultType="SysBaseCoach">
+		SELECT
+			<include refid="sysBaseCoachColumns"/>
+		FROM sys_base_coach a
+		<include refid="sysBaseCoachJoins"/>
+		where a.nameCn like '%' #{coachName} '%' and a.del_flag = '0'
+	</select>
+
 </mapper>
