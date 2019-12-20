@@ -183,4 +183,12 @@
 		AND type = #{type}
 		AND value = #{value}
 	</select>
+
+	<select id="findDictListByTypeNew" resultType="Dict">
+		SELECT *
+		FROM sys_dict
+		WHERE
+			del_flag = '0'
+		AND type = #{type}
+	</select>
 </mapper>

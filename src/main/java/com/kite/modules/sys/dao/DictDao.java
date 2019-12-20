@@ -43,4 +43,11 @@ public interface DictDao extends CrudDao<Dict> {
      * @return
      */
     public String findLabeByTypeAndValue(@Param("type")String type, @Param("value")String value);
+
+    /**
+     * 根据类型查找字典列表
+     * @param type
+     * @return
+     */
+    public List<Dict> findDictListByTypeNew(@Param("type")String type);
 }

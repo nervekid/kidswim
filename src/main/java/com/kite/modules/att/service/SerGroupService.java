@@ -48,23 +48,17 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	public void delete(SerGroup serGroup) {
 		super.delete(serGroup);
 	}
-	
+
 		@Transactional(readOnly = false)
 	public String findCodeNumber(String tablename,String codename,String beginString){
 		StringBuffer serial=new StringBuffer();
-		
+
 		serial.append(beginString);
 		serial.append("-");
 		serial.append(StringUtils.getNowYearMonth());
 		serial.append("-");
 		serial.append(String.format("%04d", Integer.parseInt(serGroupDao.findCodeNumber(tablename, codename, beginString))));
-		
+
 		return serial.toString();
 	}
-	
-	
-	
-	
-	
-	
 }

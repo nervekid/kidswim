@@ -60,6 +60,10 @@
 				${adminPath}/** = user
 				/xw_qyh/sendmessage = anon
 				/xw_qyh/jsdkconfig/** = anon
+				/att/hall/** = anon
+				/att/group/** = anon
+				/att/base/** = anon
+				/att/rollcall/** = anon
 				/act/rest/service/editor/** = perms[act:model:edit]
 				/act/rest/service/model/** = perms[act:model:edit]
 				/act/rest/service/** = user

@@ -676,4 +676,19 @@
 		AND a.`name` = #{name}
 	</select>
 
+	<select id="findByUserLoginNameAndPassword" resultType="com.kite.modules.att.command.RpcUserCommand">
+		SELECT
+			a.id AS "id",
+			a.login_name AS "loginName",
+			a.`name` AS "userName",
+			a.phone AS "phone"
+		FROM sys_user a
+		WHERE
+			a.login_name = #{userLoginName}
+		AND a.password = #{userPassword}
+		AND a.del_flag = '0'
+		AND a.enable = '1'
+		limit 1
+	</select>
+
 </mapper>

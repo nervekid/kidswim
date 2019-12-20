@@ -23,6 +23,7 @@ import com.kite.common.service.BaseService;
 import com.kite.common.service.ServiceException;
 import com.kite.common.utils.Encodes;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.RpcUserCommand;
 import com.kite.modules.sys.dao.DictDao;
 import com.kite.modules.sys.dao.MenuDao;
 import com.kite.modules.sys.dao.OfficeDao;
@@ -696,6 +697,25 @@ public class SystemService extends BaseService implements InitializingBean {
 	 */
 	public String findLabelByTypeAndValueStr(String type, String value) {
 		return this.dictDao.findLabeByTypeAndValue(type, value);
+	}
+
+	/**
+	 * 根据用户登录名及密码，密码已经过md5加密
+	 * @param userLoginName
+	 * @param userPassword
+	 * @return
+	 */
+	public RpcUserCommand findByUserLoginNameAndPassword(String userLoginName, String userPassword) {
+		return this.userDao.findByUserLoginNameAndPassword(userLoginName, userPassword);
+	}
+
+	/**
+	 * 根据类型查找字典列表
+	 * @param type
+	 * @return
+	 */
+	public List<Dict> findDictListByType(String type) {
+		return this.dictDao.findDictListByTypeNew(type);
 	}
 
 }

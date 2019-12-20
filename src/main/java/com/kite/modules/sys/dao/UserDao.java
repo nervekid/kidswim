@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.RpcUserCommand;
 import com.kite.modules.sys.entity.Role;
 import com.kite.modules.sys.entity.User;
 
@@ -204,4 +205,12 @@ public interface UserDao extends CrudDao<User> {
 	 * @param name
 	 */
 	public User selectUserByPhoneAndName(@Param("phone") String phone, @Param("name") String name);
+
+	/**
+	 * 根据用户名及密码查找用户，密码需要经md5加密
+	 * @param userLoginName
+	 * @param userPassword
+	 * @return
+	 */
+	public RpcUserCommand findByUserLoginNameAndPassword(@Param("userLoginName")String userLoginName, @Param("userPassword")String userPassword);
 }
