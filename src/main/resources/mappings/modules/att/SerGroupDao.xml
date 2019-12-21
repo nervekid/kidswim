@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kite.modules.att.dao.SerGroupDao">
-    
+
 	<sql id="serGroupColumns">
 		a.id AS "id",
 		a.code AS "code",
@@ -17,21 +17,21 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
 	</sql>
-	
+
 	<sql id="serGroupJoins">
 	</sql>
-	
-    
+
+
 	<select id="get" resultType="SerGroup" >
-		SELECT 
+		SELECT
 			<include refid="serGroupColumns"/>
 		FROM ser_group a
 		<include refid="serGroupJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
 	<select id="findList" resultType="SerGroup" >
-		SELECT 
+		SELECT
 			<include refid="serGroupColumns"/>
 		FROM ser_group a
 		<include refid="serGroupJoins"/>
@@ -56,15 +56,15 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="SerGroup" >
-		SELECT 
+		SELECT
 			<include refid="serGroupColumns"/>
 		FROM ser_group a
 		<include refid="serGroupJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -74,7 +74,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<insert id="insert">
 		INSERT INTO ser_group(
 			id,
@@ -106,9 +106,9 @@
 			#{delFlag}
 		)
 	</insert>
-	
+
 	<update id="update">
-		UPDATE ser_group SET 	
+		UPDATE ser_group SET
 			code = #{code},
 			coathId = #{coathId},
 			courseAddress = #{courseAddress},
@@ -120,25 +120,40 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM ser_group
 		WHERE id = #{id}
 	</update>
-	
+
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
-		UPDATE ser_group SET 
+		UPDATE ser_group SET
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
+
+
 	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
 	<select id="findUniqueByProperty" resultType="SerGroup" statementType="STATEMENT">
 		select * FROM ser_group  where ${propertyName} = '${value}'
 	</select>
-	
+
+	<select id="findSerGroupListByAddressAndBeginTime" resultType="SerGroup">
+		select <include refid="serGroupColumns"/>
+		FROM ser_group a
+		<include refid="serGroupJoins"/>
+		where a.courseAddress = #{courseAddress} and a.group_learn_beginTime = #{groupLearnBeginTime}
+		and a.del_flag = '0'
+	</select>
+
+	<select id="findSerGroupByAddressNum" resultType="Integer">
+		select count(1)
+		FROM ser_group a
+		where a.courseAddress = #{courseAddress}
+		and a.del_flag = '0'
+	</select>
+
 </mapper>
