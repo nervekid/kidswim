@@ -34,4 +34,11 @@ public interface SerGroupDao extends CrudDao<SerGroup> {
 	 * @return
 	 */
 	public int findSerGroupByAddressNum(@Param("courseAddress") String courseAddress);
+
+	/**
+	 * 根据编号查找
+	 * @param code
+	 * @return
+	 */
+	public SerGroup findSerGroupByCode(@Param("code") String code);
 }

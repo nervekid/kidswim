@@ -156,4 +156,12 @@
 		and a.del_flag = '0'
 	</select>
 
+	<select id="findSerGroupByCode" resultType="SerGroup">
+		select <include refid="serGroupColumns"/>
+		FROM ser_group a
+		<include refid="serGroupJoins"/>
+		where a.code = #{code}
+		and a.del_flag = '0'
+	</select>
+
 </mapper>

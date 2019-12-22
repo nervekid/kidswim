@@ -9,6 +9,8 @@ public class RpcCreateGroupCommand {
 
 	private static final long serialVersionUID = 1L;
 
+	private String userId;
+
 	/**1.[不可空] 教练id*/
 	private String coathId;
 
@@ -26,6 +28,14 @@ public class RpcCreateGroupCommand {
 
 	/**1.[不可空] 课程级别(最高)*/
 	private String courseLeavel;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getCoathId() {
 		return coathId;

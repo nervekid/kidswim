@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.internal.runners.statements.ExpectException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ import com.kite.modules.att.entity.SerGroupDetails;
 import com.kite.modules.att.service.SerGroupDetailsService;
 import com.kite.modules.att.service.SerGroupService;
 import com.kite.modules.att.service.SerSaleService;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 泳班分组远程接口类
@@ -44,7 +44,7 @@ public class RpcAttGroupController {
 	@Autowired private SerSaleService serSaleService;
 	@Autowired private SerGroupService serGroupService;
 	@Autowired private SerGroupDetailsService serGroupDetailsService;
-
+	@Autowired private SystemService systemService;
 	/**
 	 * 根据泳池，时间段开始时间查找销售单学员信息列表
 	 * @throws ParseException
@@ -126,6 +126,8 @@ public class RpcAttGroupController {
         	serGroup.setGroupBeginTime(sdf.parse(command.getBeginDate()));
         	serGroup.setGroupEndTimeTime(sdf.parse(command.getEndDate()));
         	serGroup.setGroupLearnBeginTime(command.getLearnBeginStr());
+        	serGroup.setCourseAddress(command.getCourseAddress());
+        	serGroup.setCreateBy(this.systemService.getUser(command.getUserId()));
         	this.serGroupService.save(serGroup);
         	logger.info("创建分组成功，编号为={}", code);
         	data.put("status", "1");
@@ -145,20 +147,30 @@ public class RpcAttGroupController {
 	 */
 	@RequestMapping(value = "inertSerGroupDetails")
 	@ResponseBody
-	public Map<String, Object> inertSerGroupDetails(@RequestParam("groupCode") String groupCode,@RequestParam("saleId") String saleId,
+	public Map<String, Object> inertSerGroupDetails(@RequestBody RpcAttGroupDetailsCommand command,
 			HttpServletRequest request, HttpServletResponse response, Model model) {
 		logger.info("进入插入分组的接口");
 		Map<String,Object> data =  new HashMap<>();
-//		try {
-//			SerGroup serGroup = this.serGroupService.get(id)
-//			SerGroupDetails serGroupDetails = new SerGroupDetails();
-//			serGroupDetails.setSaleId(saleId);
-//			serGroupDetails.setGroupId(groupId);
-//
-//		}
-//		catch(ExpectException e) {
-//
-//		}
+		try {
+			SerGroup serGroup = this.serGroupService.findSerGroupByCode(command.getGroupCode());
+			if (serGroup != null) {
+				SerGroupDetails serGroupDetails = new SerGroupDetails();
+				serGroupDetails.setSaleId(command.getSaleId());
+				serGroupDetails.setGroupId(serGroup.getId());
+				serGroupDetails.setCreateBy(this.systemService.getUser(command.getUserId()));
+				this.serGroupDetailsService.save(serGroupDetails);
+				logger.info("加入分组明细成功");
+				data.put("status", "1");
+			}
+			else {
+				logger.info("无法根据编号找到分组,分组编号code=", command.getGroupCode());
+				data.put("status", "0");
+			}
+		}
+		catch(Exception e) {
+			logger.info("加入分组明细失败");
+			data.put("status", "0");
+		}
         data.put("msg", "");
         return data;
 	}

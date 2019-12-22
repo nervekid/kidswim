@@ -83,6 +83,15 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	 * @return
 	 */
 	public int findSerGroupByAddressNum(String courseAddress) {
-		return this.findSerGroupByAddressNum(courseAddress);
+		return this.dao.findSerGroupByAddressNum(courseAddress);
+	}
+
+	/**
+	 * 根据编号查找分组
+	 * @param code
+	 * @return
+	 */
+	public SerGroup findSerGroupByCode(String code) {
+		return this.dao.findSerGroupByCode(code);
 	}
 }
