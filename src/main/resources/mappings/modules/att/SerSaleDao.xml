@@ -185,8 +185,7 @@
 		LEFT JOIN sys_dict courseLevelDict on courseLevelDict.`value` = stu.courseLevel_flag and courseLevelDict.type = 'course_level'
 		where course.courseAddress = #{courseAddress}
 		and course.learn_beginTime = #{learnBeginTime}
-		and ((course.course_beginTime BETWEEN #{beginDate} and #{endDate}) or
-			(course.course_endTimeTime BETWEEN #{beginDate} and #{endDate}))
+		and course.course_beginTime BETWEEN #{queryBeginDate} and #{queryEndDate}
 		and course.del_flag = '0'
 	</select>
 

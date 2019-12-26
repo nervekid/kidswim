@@ -98,7 +98,7 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 	 * @return
 	 */
 	public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(String courseAddress,
-			String learnBeginTime, Date beginDate, Date endDate) {
-		return this.serSaleDao.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress, learnBeginTime, beginDate, endDate);
+			String learnBeginTime, Date queryBeginDate, Date queryEndDate) {
+		return this.serSaleDao.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress, learnBeginTime, queryBeginDate, queryEndDate);
 	}
 }

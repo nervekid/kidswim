@@ -52,15 +52,15 @@ public class RpcAttGroupController {
 	@RequestMapping(value = "findSaleStudentList")
 	@ResponseBody
 	public Map<String, Object> findSaleStudentList(@RequestParam("courseAddress") String courseAddress,@RequestParam("learnBeginTime") String learnBeginTime,
-			@RequestParam("beginDateStr")String beginDateStr, @RequestParam("endDateStr")String endDateStr, HttpServletRequest request, HttpServletResponse response, Model model) throws ParseException {
+			@RequestParam("beginDateStr")String beginDateStr, HttpServletRequest request, HttpServletResponse response, Model model) throws ParseException {
 		logger.info("进入根据泳池，时间段开始时间查找销售单学员信息的接口courseAddress={}, learnBeginTime={}", courseAddress, learnBeginTime);
 		Map<String,Object> data =  new HashMap<>();
         data.put("msg", "");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(beginDateStr));
-        Date endDate = DateUtlis.getLastTimeDate(sdf.parse(endDateStr));
+        Date queryEndDate = DateUtlis.getLastTimeDate(beginDate);
         List<RpcSaleStudentCommand> tpcSaleStudentCommandList = this.serSaleService.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress,
-        		learnBeginTime, beginDate, endDate);
+        		learnBeginTime, beginDate, queryEndDate);
         if (tpcSaleStudentCommandList.isEmpty()) {
         	logger.info("查询销售单学员信息列表失败,status={}", 0);
         	data.put("status", "0");
@@ -72,6 +72,31 @@ public class RpcAttGroupController {
         }
         return data;
 	}
+
+	/**
+	 * 查找所有泳池
+	 */
+	@RequestMapping(value = "findGroupByAll")
+	@ResponseBody
+	public Map<String, Object> findGroupByAll(HttpServletRequest request, HttpServletResponse response, Model model) {
+		logger.info("进入查找所有分组的接口");
+		Map<String,Object> data =  new HashMap<>();
+        data.put("msg", "");
+        List<SerGroup> groupList = this.serGroupService.findList(new SerGroup());
+        if (groupList.isEmpty()) {
+        	logger.info("查询所有分组列表列表失败,status={}", 0);
+        	data.put("status", "0");
+        }
+        else {
+        	logger.info("查询所有分组成功,status={}", 1);
+        	data.put("status", "1");
+        	data.put("groupList", groupList);
+        }
+        return data;
+	}
+
+
+
 
 	/**
 	 * 根据泳池，时间段查询分组的接口
@@ -124,7 +149,6 @@ public class RpcAttGroupController {
         	serGroup.setCode(code);
         	serGroup.setCoathId(command.getCoathId());
         	serGroup.setGroupBeginTime(sdf.parse(command.getBeginDate()));
-        	serGroup.setGroupEndTimeTime(sdf.parse(command.getEndDate()));
         	serGroup.setGroupLearnBeginTime(command.getLearnBeginStr());
         	serGroup.setCourseAddress(command.getCourseAddress());
         	serGroup.setCreateBy(this.systemService.getUser(command.getUserId()));

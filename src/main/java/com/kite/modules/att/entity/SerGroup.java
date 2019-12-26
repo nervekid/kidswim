@@ -15,15 +15,14 @@ import com.kite.common.utils.excel.annotation.ExcelField;
  * @version 2019-12-19
  */
 public class SerGroup extends DataEntity<SerGroup> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String code;		// 分组编号
 	private String coathId;		// 教练员id
 	private String courseAddress;		// 课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘
 	private Date groupBeginTime;		// 分组开始时间
-	private Date groupEndTimeTime;		// 分组结束时间
 	private String groupLearnBeginTime;		// 分组上课开始时间字符串 1200 代表中午十二点
-	
+
 	public SerGroup() {
 		super();
 	}
@@ -40,7 +39,7 @@ public class SerGroup extends DataEntity<SerGroup> {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
 	@ExcelField(title="教练员id", align=2, sort=2)
 	public String getCoathId() {
 		return coathId;
@@ -49,7 +48,7 @@ public class SerGroup extends DataEntity<SerGroup> {
 	public void setCoathId(String coathId) {
 		this.coathId = coathId;
 	}
-	
+
 	@ExcelField(title="课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘", align=2, sort=3)
 	public String getCourseAddress() {
 		return courseAddress;
@@ -58,7 +57,7 @@ public class SerGroup extends DataEntity<SerGroup> {
 	public void setCourseAddress(String courseAddress) {
 		this.courseAddress = courseAddress;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@ExcelField(title="分组开始时间", align=2, sort=4)
 	public Date getGroupBeginTime() {
@@ -68,17 +67,7 @@ public class SerGroup extends DataEntity<SerGroup> {
 	public void setGroupBeginTime(Date groupBeginTime) {
 		this.groupBeginTime = groupBeginTime;
 	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@ExcelField(title="分组结束时间", align=2, sort=5)
-	public Date getGroupEndTimeTime() {
-		return groupEndTimeTime;
-	}
 
-	public void setGroupEndTimeTime(Date groupEndTimeTime) {
-		this.groupEndTimeTime = groupEndTimeTime;
-	}
-	
 	@ExcelField(title="分组上课开始时间字符串 1200 代表中午十二点", align=2, sort=6)
 	public String getGroupLearnBeginTime() {
 		return groupLearnBeginTime;
@@ -87,5 +76,5 @@ public class SerGroup extends DataEntity<SerGroup> {
 	public void setGroupLearnBeginTime(String groupLearnBeginTime) {
 		this.groupLearnBeginTime = groupLearnBeginTime;
 	}
-	
+
 }
