@@ -18,7 +18,8 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.memberFee_flag AS "memberFeeFlag"
+		a.memberFee_flag AS "memberFeeFlag",
+		a.group_flag AS "groupFlag"
 	</sql>
 
 	<sql id="serSaleJoins">
@@ -57,6 +58,9 @@
 			</if>
 			<if test="memberFeeFlag != null and memberFeeFlag != ''">
 				and a.memberFee_flag = #{memberFeeFlag}
+			</if>
+			<if test="groupFlag != null and groupFlag != ''">
+				and a.group_flag = #{groupFlag}
 			</if>
 
 		</where>
@@ -107,7 +111,8 @@
 			update_date,
 			remarks,
 			del_flag,
-			memberFee_flag
+			memberFee_flag,
+			group_flag
 		) VALUES (
 			#{id},
 			#{code},
@@ -124,7 +129,8 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{memberFeeFlag}
+			#{memberFeeFlag},
+			#{groupFlag}
 		)
 	</insert>
 
@@ -141,7 +147,8 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			memberFee_flag = #{memberFeeFlag}
+			memberFee_flag = #{memberFeeFlag},
+			group_flag = #{groupFlag}
 		WHERE id = #{id}
 	</update>
 
@@ -179,14 +186,21 @@
        		   sexDict.label as 'sexName',
 			   courseLevelDict.label as 'courseLevel'
 		from ser_course course
-		LEFT JOIN ser_sale sale on sale.courseCode = course.`code` and sale.del_flag = '0'
+		LEFT JOIN ser_sale sale on sale.courseCode = course.`code` and sale.del_flag = '0' and sale.group_flag = '0'
 		LEFT JOIN sys_base_student stu on stu.`code` = sale.studentCode and stu.del_flag = '0'
 		LEFT JOIN sys_dict sexDict on sexDict.`value` = stu.sex and sexDict.type = 'sex_flag'
 		LEFT JOIN sys_dict courseLevelDict on courseLevelDict.`value` = stu.courseLevel_flag and courseLevelDict.type = 'course_level'
 		where course.courseAddress = #{courseAddress}
+		and course.course_level = #{courseLavel}
 		and course.learn_beginTime = #{learnBeginTime}
 		and course.course_beginTime BETWEEN #{queryBeginDate} and #{queryEndDate}
 		and course.del_flag = '0'
 	</select>
+
+	<update id="updateGroupStatus">
+		UPDATE ser_sale SET
+			group_flag = #{status}
+		WHERE id = #{saleId}
+	</update>
 
 </mapper>

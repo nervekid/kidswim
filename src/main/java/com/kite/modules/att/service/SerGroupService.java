@@ -3,17 +3,20 @@
  */
 package com.kite.modules.att.service;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.kite.modules.att.entity.SerGroup;
 import com.kite.modules.att.dao.SerGroupDao;
+import com.kite.modules.att.entity.SerGroup;
+import com.kite.modules.att.entity.SerGroupDetails;
+import com.kite.modules.att.enums.KidSwimDictEnum;
 
 /**
  * 分组Service
@@ -25,7 +28,13 @@ import com.kite.modules.att.dao.SerGroupDao;
 public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 
     @Autowired
-	SerGroupDao serGroupDao;
+	private SerGroupDao serGroupDao;
+
+    @Autowired
+    private SerGroupDetailsService serGroupDetailsService;
+
+    @Autowired
+    private SerSaleService serSaleService;
 
 	@Override
 	public SerGroup get(String id) {
@@ -46,6 +55,30 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	@Transactional(readOnly = false)
 	public void save(SerGroup serGroup) {
 		super.save(serGroup);
+
+		//插入明细
+		String code = serGroup.getCode();
+		SerGroup entity = this.dao.findSerGroupByCode(code);
+		if (entity != null) {
+			for (int i = 0; i < serGroup.getSaleIds().size(); i++) {
+				try {
+					//插入分组明细
+					SerGroupDetails serGroupDetails = new SerGroupDetails();
+					serGroupDetails.setCreateBy(entity.getCreateBy());
+					serGroupDetails.setSaleId(serGroup.getSaleIds().get(i));
+					serGroupDetails.setGroupId(entity.getId());
+					this.serGroupDetailsService.save(serGroupDetails);
+
+					//修改分组状态
+					this.serSaleService.updateSetGroupFlagStatus(serGroup.getSaleIds().get(i), KidSwimDictEnum.yesNo.是.getName());
+
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
 	}
 
 	@Override
@@ -93,5 +126,17 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	 */
 	public SerGroup findSerGroupByCode(String code) {
 		return this.dao.findSerGroupByCode(code);
+	}
+
+	/**
+	 * 根据条件查找编号列表
+	 * @param address
+	 * @param leanBeginStr
+	 * @param queryBegin
+	 * @param queryEnd
+	 * @return
+	 */
+	public List<String> findCodeStrListByCondition(String address, String leanBeginStr, Date queryBegin, Date queryEnd) {
+		return this.dao.findCodesByCondition(address, leanBeginStr, queryBegin, queryEnd);
 	}
 }

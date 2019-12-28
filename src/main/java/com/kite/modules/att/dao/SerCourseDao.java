@@ -3,12 +3,14 @@
  */
 package com.kite.modules.att.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.entity.SerCourse;
 
 /**
@@ -46,4 +48,18 @@ public interface SerCourseDao extends CrudDao<SerCourse> {
 	 * @return
 	 */
 	public SerCourse findByLikeCodeOnly (@Param("code") String code);
+
+	/**
+	 * 查询未分组人员对应级别情况
+	 * @param addressStr
+	 * @param learnBeginTimeStr
+	 * @param queryBeginDateTime
+	 * @param queryEndDateTime
+	 * @return
+	 */
+	public List<UnGroupLevelCorrespondCountCommand> findUnGroupLevelCorrespondCount(
+			@Param("addressStr") String addressStr,
+			@Param("learnBeginTimeStr") String learnBeginTimeStr,
+			@Param("queryBeginDateTime") Date queryBeginDateTime,
+			@Param("queryEndDateTime") Date queryEndDateTime);
 }

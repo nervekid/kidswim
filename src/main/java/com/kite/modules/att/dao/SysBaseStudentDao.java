@@ -26,7 +26,19 @@ public interface SysBaseStudentDao extends CrudDao<SysBaseStudent> {
 	 */
 	public int findStudentCount(@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
 
-	List<SysBaseStudent> findByName(@Param("name")String subName);
+	/**
+	 * 根据学生名称查找
+	 * @param subName
+	 * @return
+	 */
+	public List<SysBaseStudent> findByName(@Param("name")String subName);
 
-    SysBaseStudent getByCode(@Param("code")String studentCode);
+	/**
+	 * 根据编号查找销售单
+	 * @param studentCode
+	 * @return
+	 */
+	public SysBaseStudent getByCode(@Param("code")String studentCode);
+
+
 }

@@ -83,6 +83,14 @@
 					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</td>
+
+			<td class="width-15 active"><label class="pull-right">是否已經分組：</label></td>
+			<td class="width-35">
+				<form:select placeholder="是否收取會員費" path="groupFlag" disabled="true" class="form-control m-b"  >
+					<form:option value="" label="請選擇"/>
+					<form:options items="${fns:getDictList('yes_no')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</td>
 		</tr>
 
 		<tr>

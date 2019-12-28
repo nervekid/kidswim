@@ -37,7 +37,18 @@ public interface SerSaleDao extends CrudDao<SerSale> {
      * @param endDate
      * @return
      */
-    public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(@Param("courseAddress")String courseAddress,
-    		@Param("learnBeginTime")String learnBeginTime, @Param("queryBeginDate")Date queryBeginDate, @Param("queryEndDate")Date queryEndDate);
+    public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(
+    		@Param("courseAddress")String courseAddress,
+    		@Param("courseLavel")String courseLavel,
+    		@Param("learnBeginTime")String learnBeginTime,
+    		@Param("queryBeginDate")Date queryBeginDate,
+    		@Param("queryEndDate")Date queryEndDate);
+
+
+    /**
+     * 更改分组状态
+     * @param groupId
+     */
+    public void updateGroupStatus(@Param("saleId") String saleId, @Param("status") String status);
 
 }

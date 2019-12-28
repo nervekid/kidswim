@@ -163,7 +163,11 @@ public class SerSaleController extends BaseController implements BasicVerificati
 				}
 			}
 			serSaleService.save(t);//保存
-		}else{//新增表單保存
+		}
+		else{//新增表單保存
+			//默认未为加入分组
+			serSale.setGroupFlag(KidSwimDictEnum.yesNo.否.getName());
+
 			//計算銷售單費用，如果選擇收取會員費，那麽固定增加$170
 			BigDecimal multiply = new BigDecimal(serSale.getDiscount()).multiply(serCourse.getCourseFee() == null ? BigDecimal.ZERO : serCourse.getCourseFee());
 			if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {

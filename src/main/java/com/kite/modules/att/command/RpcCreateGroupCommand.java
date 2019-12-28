@@ -1,5 +1,7 @@
 package com.kite.modules.att.command;
 
+import java.util.List;
+
 /**
  * 创建分组
  * @author lyb
@@ -14,20 +16,20 @@ public class RpcCreateGroupCommand {
 	/**1.[不可空] 教练id*/
 	private String coathId;
 
-	/**1.[不可空] 课程地址*/
+	/**2.[不可空] 课程地址*/
 	private String courseAddress;
 
-	/**1.[不可空] 分组开始日期*/
+	/**3[不可空] 分组开始日期*/
 	private String beginDate;
 
-	/**1.[不可空] 分组结束日期*/
-	private String endDate;
-
-	/**1.[不可空] 分组上课开始时间*/
+	/**5.[不可空] 分组上课开始时间*/
 	private String learnBeginStr;
 
-	/**1.[不可空] 课程级别(最高)*/
+	/**6.[不可空] 课程级别(最高)*/
 	private String courseLeavel;
+
+	/**7.[可空] 学生列表*/
+	private List<String> saleIds;
 
 	public String getUserId() {
 		return userId;
@@ -61,14 +63,6 @@ public class RpcCreateGroupCommand {
 		this.beginDate = beginDate;
 	}
 
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
 	public String getLearnBeginStr() {
 		return learnBeginStr;
 	}
@@ -83,6 +77,14 @@ public class RpcCreateGroupCommand {
 
 	public void setCourseLeavel(String courseLeavel) {
 		this.courseLeavel = courseLeavel;
+	}
+
+	public List<String> getSaleIds() {
+		return saleIds;
+	}
+
+	public void setSaleIds(List<String> saleIds) {
+		this.saleIds = saleIds;
 	}
 
 }

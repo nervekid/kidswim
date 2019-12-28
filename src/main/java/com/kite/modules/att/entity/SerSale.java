@@ -27,6 +27,7 @@ public class SerSale extends DataEntity<SerSale> {
 	private Date paidDate;		// 付款日期
 	private String paymentType;		// 付款方式 字典枚举 pay_type 1:現金 2:銀行轉賬 3:支票 4:EPS
 	private String memberFeeFlag;	//是否收取会员费 字典枚举 yes_no 1:是 0:否
+	private String groupFlag;		//是否已經分組 字典枚舉 yes_no 1:是 0:否
 
 	private String studentName;
 
@@ -127,6 +128,15 @@ public class SerSale extends DataEntity<SerSale> {
 
 	public void setMemberFeeFlag(String memberFeeFlag) {
 		this.memberFeeFlag = memberFeeFlag;
+	}
+
+	@ExcelField(title="是否已經分組", dictType = "yes_no",align=2, sort=8)
+	public String getGroupFlag() {
+		return groupFlag;
+	}
+
+	public void setGroupFlag(String groupFlag) {
+		this.groupFlag = groupFlag;
 	}
 
 }

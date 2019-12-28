@@ -3,6 +3,7 @@
  */
 package com.kite.modules.att.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -41,4 +42,17 @@ public interface SerGroupDao extends CrudDao<SerGroup> {
 	 * @return
 	 */
 	public SerGroup findSerGroupByCode(@Param("code") String code);
+
+	/**
+	 * 根据条件查询分组编号列表
+	 * @param addressStr
+	 * @param learnBeginStr
+	 * @param groupBeginDateTime
+	 * @param groupEndDateTime
+	 * @return
+	 */
+	public List<String> findCodesByCondition(@Param("addressStr") String addressStr,
+			@Param("learnBeginStr") String learnBeginStr,
+			@Param("groupBeginDateTime") Date groupBeginDateTime,
+			@Param("groupEndDateTime") Date groupEndDateTime);
 }

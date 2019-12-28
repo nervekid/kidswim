@@ -3,6 +3,7 @@
  */
 package com.kite.modules.att.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.dao.SerCourseDao;
 import com.kite.modules.att.dao.SerCourseDetailsDao;
 import com.kite.modules.att.entity.SerCourse;
@@ -143,6 +145,21 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	 */
 	public SerCourse findSerCourseByCode(String code) {
 		return this.dao.findByLikeCodeOnly(code);
+	}
+
+	/**
+	 * 查看人员对应级别人数情况
+	 * @param addressStr
+	 * @param learnBeginTimeStr
+	 * @param queryBeginDateTime
+	 * @param queryEndDateTime
+	 * @return
+	 */
+	public List<UnGroupLevelCorrespondCountCommand> findUnGroupLevelCorrespondCount(String addressStr,
+			String learnBeginTimeStr,
+			Date queryBeginDateTime,
+			Date queryEndDateTime){
+		return this.dao.findUnGroupLevelCorrespondCount(addressStr, learnBeginTimeStr, queryBeginDateTime, queryEndDateTime);
 	}
 
 }

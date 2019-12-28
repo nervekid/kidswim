@@ -94,11 +94,28 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 	/**
 	 * 根据地址及开始时间查找
 	 * @param courseAddress
+	 * @param courseLavel
 	 * @param learnBeginTime
+	 * @param queryBeginDate
+	 * @param queryEndDate
 	 * @return
 	 */
-	public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(String courseAddress,
-			String learnBeginTime, Date queryBeginDate, Date queryEndDate) {
-		return this.serSaleDao.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress, learnBeginTime, queryBeginDate, queryEndDate);
+	public List<RpcSaleStudentCommand> findRpcSaleStudentCommandByAddressAndBeginTime(
+			String courseAddress,
+			String courseLavel,
+			String learnBeginTime,
+			Date queryBeginDate,
+			Date queryEndDate) {
+		return this.serSaleDao.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress, courseLavel,
+				learnBeginTime, queryBeginDate, queryEndDate);
+	}
+
+	/**
+	 * 更改销售单的分组标记状态
+	 * @param saleId 销售单id
+	 * @param status 是否已经分组状态
+	 */
+	public void updateSetGroupFlagStatus(String saleId, String status) {
+		this.dao.updateGroupStatus(saleId, status);
 	}
 }

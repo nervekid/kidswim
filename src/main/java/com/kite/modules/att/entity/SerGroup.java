@@ -3,9 +3,11 @@
  */
 package com.kite.modules.att.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kite.common.persistence.DataEntity;
 import com.kite.common.utils.excel.annotation.ExcelField;
 
@@ -22,6 +24,8 @@ public class SerGroup extends DataEntity<SerGroup> {
 	private String courseAddress;		// 课程地址 字典枚举 course_addrese_flag MS:摩士 HH:斧山 KT:观塘
 	private Date groupBeginTime;		// 分组开始时间
 	private String groupLearnBeginTime;		// 分组上课开始时间字符串 1200 代表中午十二点
+
+	private List<String> saleIds = new ArrayList<String>();
 
 	public SerGroup() {
 		super();
@@ -75,6 +79,14 @@ public class SerGroup extends DataEntity<SerGroup> {
 
 	public void setGroupLearnBeginTime(String groupLearnBeginTime) {
 		this.groupLearnBeginTime = groupLearnBeginTime;
+	}
+
+	public List<String> getSaleIds() {
+		return saleIds;
+	}
+
+	public void setSaleIds(List<String> saleIds) {
+		this.saleIds = saleIds;
 	}
 
 }

@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kite.common.utils.DateUtlis;
+import com.kite.modules.att.command.RpcCourseCorrespondSaleSituationCommand;
 import com.kite.modules.att.command.RpcCreateGroupCommand;
 import com.kite.modules.att.command.RpcSaleStudentCommand;
+import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.entity.SerGroup;
 import com.kite.modules.att.entity.SerGroupDetails;
+import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SerGroupDetailsService;
 import com.kite.modules.att.service.SerGroupService;
 import com.kite.modules.att.service.SerSaleService;
@@ -42,31 +45,97 @@ public class RpcAttGroupController {
 	private static Logger logger = LoggerFactory.getLogger(RpcAttGroupController.class);
 
 	@Autowired private SerSaleService serSaleService;
+	@Autowired private SerCourseService serCourseService;
 	@Autowired private SerGroupService serGroupService;
 	@Autowired private SerGroupDetailsService serGroupDetailsService;
 	@Autowired private SystemService systemService;
+
 	/**
-	 * 根据泳池，时间段开始时间查找销售单学员信息列表
+	 * 根据条件查找课程对应销售单情况
+	 * @param courseAddress
+	 * @param learnBeginTime
+	 * @param beginDateStr
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
 	 * @throws ParseException
 	 */
-	@RequestMapping(value = "findSaleStudentList")
+	@RequestMapping(value = "findCourseCorrespondSaleSituation")
 	@ResponseBody
-	public Map<String, Object> findSaleStudentList(@RequestParam("courseAddress") String courseAddress,@RequestParam("learnBeginTime") String learnBeginTime,
-			@RequestParam("beginDateStr")String beginDateStr, HttpServletRequest request, HttpServletResponse response, Model model) throws ParseException {
-		logger.info("进入根据泳池，时间段开始时间查找销售单学员信息的接口courseAddress={}, learnBeginTime={}", courseAddress, learnBeginTime);
+	public Map<String, Object> findCourseCorrespondSaleSituation(
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("learnBeginTime") String learnBeginTime,
+			@RequestParam("beginDateStr")String beginDateStr,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) throws ParseException {
+		logger.info("进入根据条件查找课程对应销售单情况的接口courseAddress={}, learnBeginTime={}", courseAddress, learnBeginTime);
 		Map<String,Object> data =  new HashMap<>();
         data.put("msg", "");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(beginDateStr));
         Date queryEndDate = DateUtlis.getLastTimeDate(beginDate);
-        List<RpcSaleStudentCommand> tpcSaleStudentCommandList = this.serSaleService.findRpcSaleStudentCommandByAddressAndBeginTime(courseAddress,
-        		learnBeginTime, beginDate, queryEndDate);
+        try {
+        	RpcCourseCorrespondSaleSituationCommand command = new RpcCourseCorrespondSaleSituationCommand();
+            //1.查找课程级别对应销售单人数情况(未分组销售单)
+            List<UnGroupLevelCorrespondCountCommand> cList = this.serCourseService.findUnGroupLevelCorrespondCount(courseAddress,
+            		learnBeginTime, beginDate, queryEndDate);
+            //2.查询课程编号列表
+            List<String> codeList = this.serGroupService.findCodeStrListByCondition(courseAddress,
+            		learnBeginTime, beginDate, queryEndDate);
+            command.setUnGroupLevelCorrespondCountCommandList(cList);
+        	command.setCodes(codeList);
+        	logger.info("查询根据条件查找课程对应销售单情况成功,status={}", 1);
+        	data.put("status", "1");
+        	data.put("command", command);
+
+            return data;
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        	logger.info("查询根据条件查找课程对应销售单情况失败,status={}", 0);
+        	data.put("status", "0");
+        	return data;
+        }
+
+	}
+
+
+	/**
+	 * 根据泳池，时间段开始时间查找销售单学员信息列表
+	 * (符合条件的未分组销售单)
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "findSaleStudentList")
+	@ResponseBody
+	public Map<String, Object> findSaleStudentList(
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("learnBeginTime") String learnBeginTime,
+			@RequestParam("beginDateStr")String beginDateStr,
+			@RequestParam("courseLevel")String courseLevel,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) throws ParseException {
+		logger.info("进入根据泳池，时间段开始时间查找销售单学员信息(符合条件的未分组销售单)的接口courseAddress={}, learnBeginTime={}", courseAddress, learnBeginTime);
+		Map<String,Object> data =  new HashMap<>();
+        data.put("msg", "");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(beginDateStr));
+        Date queryEndDate = DateUtlis.getLastTimeDate(beginDate);
+        List<RpcSaleStudentCommand> tpcSaleStudentCommandList = this.serSaleService.findRpcSaleStudentCommandByAddressAndBeginTime(
+        		courseAddress,
+        		courseLevel,
+        		learnBeginTime,
+        		beginDate,
+        		queryEndDate);
+        data.put("size", tpcSaleStudentCommandList.size());
         if (tpcSaleStudentCommandList.isEmpty()) {
-        	logger.info("查询销售单学员信息列表失败,status={}", 0);
+        	logger.info("查询销售单学员信息列表(符合条件的未分组销售单)失败,status={}", 0);
         	data.put("status", "0");
         }
         else {
-        	logger.info("查询销售单学员信息列表成功,status={}", 1);
+        	logger.info("查询销售单学员信息列表(符合条件的未分组销售单)成功,status={}", 1);
         	data.put("status", "1");
         	data.put("tpcSaleStudentCommandList", tpcSaleStudentCommandList);
         }
@@ -95,16 +164,17 @@ public class RpcAttGroupController {
         return data;
 	}
 
-
-
-
 	/**
 	 * 根据泳池，时间段查询分组的接口
 	 */
 	@RequestMapping(value = "findGroupByAddressAndBeginTime")
 	@ResponseBody
-	public Map<String, Object> findGroupByAddressAndBeginTime(@RequestParam("courseAddress") String courseAddress,@RequestParam("learnBeginTime") String learnBeginTime,
-			HttpServletRequest request, HttpServletResponse response, Model model) {
+	public Map<String, Object> findGroupByAddressAndBeginTime(
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("learnBeginTime") String learnBeginTime,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) {
 		logger.info("进入根据泳池，时间段查询分组的接口");
 		Map<String,Object> data =  new HashMap<>();
         data.put("msg", "");
@@ -152,7 +222,11 @@ public class RpcAttGroupController {
         	serGroup.setGroupLearnBeginTime(command.getLearnBeginStr());
         	serGroup.setCourseAddress(command.getCourseAddress());
         	serGroup.setCreateBy(this.systemService.getUser(command.getUserId()));
+        	if (command.getSaleIds() != null && !command.getSaleIds().isEmpty()) {
+        		serGroup.setSaleIds(command.getSaleIds());
+        	}
         	this.serGroupService.save(serGroup);
+
         	logger.info("创建分组成功，编号为={}", code);
         	data.put("status", "1");
         	data.put("code", code);

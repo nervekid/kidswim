@@ -160,4 +160,13 @@
 		and a.del_flag = '0'
 	</select>
 
+	<select id="findCodesByCondition" resultType="String">
+		select gr.`code`
+			FROM ser_group gr
+			where gr.courseAddress = #{addressStr}
+			and gr.group_learn_beginTime = #{learnBeginStr}
+			and gr.group_beginTime BETWEEN #{groupBeginDateTime} and #{groupEndDateTime}
+			and gr.del_flag = '0'
+	</select>
+
 </mapper>
