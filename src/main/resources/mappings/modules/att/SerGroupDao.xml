@@ -169,4 +169,11 @@
 			and gr.del_flag = '0'
 	</select>
 
+	<select id="findGroupSaleNum" resultType="Integer">
+		select COUNT(1)
+		from ser_group gr
+		LEFT JOIN ser_group_details details on details.groupId = gr.id
+		where gr.`code` = #{code}
+	</select>
+
 </mapper>

@@ -51,4 +51,5 @@ public interface SerSaleDao extends CrudDao<SerSale> {
      */
     public void updateGroupStatus(@Param("saleId") String saleId, @Param("status") String status);
 
+
 }

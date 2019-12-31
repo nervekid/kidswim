@@ -3,6 +3,7 @@
  */
 package com.kite.modules.att.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -137,6 +138,12 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	 * @return
 	 */
 	public List<String> findCodeStrListByCondition(String address, String leanBeginStr, Date queryBegin, Date queryEnd) {
-		return this.dao.findCodesByCondition(address, leanBeginStr, queryBegin, queryEnd);
+		List<String> codess = new ArrayList<String>();
+		List<String> codes = this.dao.findCodesByCondition(address, leanBeginStr, queryBegin, queryEnd);
+		for (int i = 0; i < codes.size(); i++) {
+			String strBuffer = codes.get(i) + ",組內有" + this.dao.findGroupSaleNum(codes.get(i)) + "人";
+			codess.add(strBuffer);
+		}
+		return codess;
 	}
 }

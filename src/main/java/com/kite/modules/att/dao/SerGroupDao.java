@@ -55,4 +55,11 @@ public interface SerGroupDao extends CrudDao<SerGroup> {
 			@Param("learnBeginStr") String learnBeginStr,
 			@Param("groupBeginDateTime") Date groupBeginDateTime,
 			@Param("groupEndDateTime") Date groupEndDateTime);
+
+	/**
+     * 根据编号查找分组人数
+     * @param code
+     * @return
+     */
+    public int findGroupSaleNum(@Param("code") String code);
 }
