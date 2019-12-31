@@ -15,14 +15,20 @@ public class RpcSaleStudentCommand {
 	/**2.[不可空] 学员id*/
 	private String stuId;
 
-	/**3.[不可空] 学员名称 中文*/
+	/**3.[不可空] 学员编号*/
+	private String stuCode;
+
+	/**4.[不可空] 学员名称 中文*/
 	private String stuName;
 
-	/**4.[不可空] 学员性别*/
+	/**5.[不可空] 学员性别*/
 	private String sexName;
 
-	/**5.[不可空] 学员课程级别*/
+	/**6.[不可空] 学员课程级别*/
 	private String courseLevel;
+
+	/**7.[不可空] 学员课程级别值*/
+	private String courseLevelValue;
 
 	public String getSaleId() {
 		return saleId;
@@ -62,6 +68,22 @@ public class RpcSaleStudentCommand {
 
 	public void setCourseLevel(String courseLevel) {
 		this.courseLevel = courseLevel;
+	}
+
+	public String getStuCode() {
+		return stuCode;
+	}
+
+	public void setStuCode(String stuCode) {
+		this.stuCode = stuCode;
+	}
+
+	public String getCourseLevelValue() {
+		return courseLevelValue;
+	}
+
+	public void setCourseLevelValue(String courseLevelValue) {
+		this.courseLevelValue = courseLevelValue;
 	}
 
 }

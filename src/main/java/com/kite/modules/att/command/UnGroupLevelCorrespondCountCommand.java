@@ -11,7 +11,10 @@ public class UnGroupLevelCorrespondCountCommand {
 	/**1.[不可空] 级别*/
 	private String leavel;
 
-	/**2.[不可空] 人数*/
+	/**2.[不可空] 级别名称*/
+	private String leveLName;
+
+	/**3.[不可空] 人数*/
 	private String countNum;
 
 	public String getLeavel() {
@@ -26,6 +29,11 @@ public class UnGroupLevelCorrespondCountCommand {
 	public void setCountNum(String countNum) {
 		this.countNum = countNum;
 	}
-
+	public String getLeveLName() {
+		return leveLName;
+	}
+	public void setLeveLName(String leveLName) {
+		this.leveLName = leveLName;
+	}
 
 }

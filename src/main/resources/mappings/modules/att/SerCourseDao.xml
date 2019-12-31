@@ -207,14 +207,16 @@
 
 	<select id="findUnGroupLevelCorrespondCount" resultType="com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand">
 		select course.course_level AS leavel,
+			dict.label AS leveLName,
 			COUNT(sale.id) AS countNum
 			from ser_course course
 			LEFT JOIN ser_sale sale on sale.courseCode = course.`code` and sale.group_flag = '0' and sale.del_flag = '0'
+			LEFT JOIN sys_dict dict on dict.`value` = course.course_level and dict.type = 'course_level' and dict.del_flag = '0'
 			where course.courseAddress = #{addressStr}
 			and course.learn_beginTime = #{learnBeginTimeStr}
 			and course.course_beginTime BETWEEN #{queryBeginDateTime} and #{queryEndDateTime}
 		  and course.del_flag = '0'
-			GROUP BY course.course_level
+			GROUP BY course.course_level,dict.label
 	</select>
 
 </mapper>

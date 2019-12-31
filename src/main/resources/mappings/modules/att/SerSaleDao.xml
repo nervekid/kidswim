@@ -182,9 +182,11 @@
 	<select id="findRpcSaleStudentCommandByAddressAndBeginTime" resultType="com.kite.modules.att.command.RpcSaleStudentCommand">
 		SELECT sale.id as 'saleId',
        		   stu.id as 'stuId',
+       		   stu.code as 'stuCode',
 			   stu.nameCn as 'stuName',
        		   sexDict.label as 'sexName',
-			   courseLevelDict.label as 'courseLevel'
+			   courseLevelDict.label as 'courseLevel',
+			   courseLevelDict.`value` as 'courseLevelValue'
 		from ser_course course
 		LEFT JOIN ser_sale sale on sale.courseCode = course.`code` and sale.del_flag = '0' and sale.group_flag = '0'
 		LEFT JOIN sys_base_student stu on stu.`code` = sale.studentCode and stu.del_flag = '0'
