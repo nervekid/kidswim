@@ -140,11 +140,11 @@
             <artifactId>common</artifactId>
             <version>1.0-RELEASE</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>kite_base</groupId>
             <artifactId>activity</artifactId>
             <version>1.5-RELEASE</version>
-        </dependency>
+        </dependency> -->
         <!-- Swagger -->
         <dependency>
             <groupId>io.swagger</groupId>
