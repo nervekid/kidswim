@@ -11,7 +11,7 @@ public class RpcCourseCorrespondSaleSituationCommand {
 	private List<UnGroupLevelCorrespondCountCommand> unGroupLevelCorrespondCountCommandList;
 
 	/**2. [不可空] 分组编号列表 */
-	private List<String> codes;
+	private List<GroupDetailsInfo> groupDetailsInfos;
 
 	public List<UnGroupLevelCorrespondCountCommand> getUnGroupLevelCorrespondCountCommandList() {
 		return unGroupLevelCorrespondCountCommandList;
@@ -22,13 +22,12 @@ public class RpcCourseCorrespondSaleSituationCommand {
 		this.unGroupLevelCorrespondCountCommandList = unGroupLevelCorrespondCountCommandList;
 	}
 
-	public List<String> getCodes() {
-		return codes;
+	public List<GroupDetailsInfo> getGroupDetailsInfos() {
+		return groupDetailsInfos;
 	}
 
-	public void setCodes(List<String> codes) {
-		this.codes = codes;
+	public void setGroupDetailsInfos(List<GroupDetailsInfo> groupDetailsInfos) {
+		this.groupDetailsInfos = groupDetailsInfos;
 	}
-
 
 }

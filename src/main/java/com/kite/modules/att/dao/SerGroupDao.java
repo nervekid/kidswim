@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.GroupDetailsInfo;
 import com.kite.modules.att.entity.SerGroup;
 
 /**
@@ -51,7 +52,7 @@ public interface SerGroupDao extends CrudDao<SerGroup> {
 	 * @param groupEndDateTime
 	 * @return
 	 */
-	public List<String> findCodesByCondition(@Param("addressStr") String addressStr,
+	public List<GroupDetailsInfo> findCodesByCondition(@Param("addressStr") String addressStr,
 			@Param("learnBeginStr") String learnBeginStr,
 			@Param("groupBeginDateTime") Date groupBeginDateTime,
 			@Param("groupEndDateTime") Date groupEndDateTime);

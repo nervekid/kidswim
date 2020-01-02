@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kite.common.utils.DateUtlis;
+import com.kite.modules.att.command.GroupDetailsInfo;
 import com.kite.modules.att.command.RpcCourseCorrespondSaleSituationCommand;
 import com.kite.modules.att.command.RpcCreateGroupCommand;
 import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.entity.SerGroup;
 import com.kite.modules.att.entity.SerGroupDetails;
+import com.kite.modules.att.enums.KidSwimDictEnum;
 import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SerGroupDetailsService;
 import com.kite.modules.att.service.SerGroupService;
@@ -82,10 +84,10 @@ public class RpcAttGroupController {
             List<UnGroupLevelCorrespondCountCommand> cList = this.serCourseService.findUnGroupLevelCorrespondCount(courseAddress,
             		learnBeginTime, beginDate, queryEndDate);
             //2.查询课程编号列表
-            List<String> codeList = this.serGroupService.findCodeStrListByCondition(courseAddress,
+            List<GroupDetailsInfo> groupDetailsInfoList = this.serGroupService.findCodeStrListByCondition(courseAddress,
             		learnBeginTime, beginDate, queryEndDate);
             command.setUnGroupLevelCorrespondCountCommandList(cList);
-        	command.setCodes(codeList);
+            command.setGroupDetailsInfos(groupDetailsInfoList);
         	logger.info("查询根据条件查找课程对应销售单情况成功,status={}", 1);
         	data.put("status", "1");
         	data.put("command", command);
@@ -252,18 +254,22 @@ public class RpcAttGroupController {
 		try {
 			SerGroup serGroup = this.serGroupService.findSerGroupByCode(command.getGroupCode());
 			if (serGroup != null) {
-				SerGroupDetails serGroupDetails = new SerGroupDetails();
-				serGroupDetails.setSaleId(command.getSaleId());
-				serGroupDetails.setGroupId(serGroup.getId());
-				serGroupDetails.setCreateBy(this.systemService.getUser(command.getUserId()));
-				this.serGroupDetailsService.save(serGroupDetails);
+				for (int i = 0; i < command.getSaleIds().size(); i++) {
+					SerGroupDetails serGroupDetails = new SerGroupDetails();
+					serGroupDetails.setSaleId(command.getSaleIds().get(i));
+					serGroupDetails.setGroupId(serGroup.getId());
+					serGroupDetails.setCreateBy(this.systemService.getUser(command.getUserId()));
+					this.serGroupDetailsService.save(serGroupDetails);
+				}
 				logger.info("加入分组明细成功");
 				data.put("status", "1");
+				data.put("success_num", command.getSaleIds().size());
 			}
 			else {
 				logger.info("无法根据编号找到分组,分组编号code=", command.getGroupCode());
 				data.put("status", "0");
 			}
+
 		}
 		catch(Exception e) {
 			logger.info("加入分组明细失败");

@@ -3,6 +3,7 @@
  */
 package com.kite.modules.att.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.GroupDetailsInfo;
 import com.kite.modules.att.dao.SerGroupDao;
 import com.kite.modules.att.entity.SerGroup;
 import com.kite.modules.att.entity.SerGroupDetails;
@@ -137,13 +139,18 @@ public class SerGroupService extends CrudService<SerGroupDao, SerGroup> {
 	 * @param queryEnd
 	 * @return
 	 */
-	public List<String> findCodeStrListByCondition(String address, String leanBeginStr, Date queryBegin, Date queryEnd) {
-		List<String> codess = new ArrayList<String>();
-		List<String> codes = this.dao.findCodesByCondition(address, leanBeginStr, queryBegin, queryEnd);
-		for (int i = 0; i < codes.size(); i++) {
-			String strBuffer = codes.get(i) + ",組內有" + this.dao.findGroupSaleNum(codes.get(i)) + "人";
-			codess.add(strBuffer);
+	public List<GroupDetailsInfo> findCodeStrListByCondition(String address, String leanBeginStr, Date queryBegin, Date queryEnd) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<GroupDetailsInfo> groupDetailsInfoList = this.dao.findCodesByCondition(address, leanBeginStr, queryBegin, queryEnd);
+		for (int i = 0; i < groupDetailsInfoList.size(); i++) {
+			String strBuffer = groupDetailsInfoList.get(i).getCode() + ",組內有" + this.dao.findGroupSaleNum(groupDetailsInfoList.get(i).getCode()) + "人";
+			String dateStr = sdf.format(groupDetailsInfoList.get(i).getGroupBeginTime());
+			String learnBeginShowStr = groupDetailsInfoList.get(i).getGroupLearnBeginTime().substring(0, 2)
+					+ ":" + groupDetailsInfoList.get(i).getGroupLearnBeginTime().substring(2, 4);
+			groupDetailsInfoList.get(i).setCodeAndNumShow(strBuffer);
+			groupDetailsInfoList.get(i).setGroupBeginTimeStr(dateStr);
+			groupDetailsInfoList.get(i).setGroupLearnBeginTimeStr(learnBeginShowStr);
 		}
-		return codess;
+		return groupDetailsInfoList;
 	}
 }

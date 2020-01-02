@@ -1,16 +1,19 @@
 package com.kite.modules.att.rpc;
 
+import java.util.List;
+
 public class RpcAttGroupDetailsCommand {
 
 	private static final long serialVersionUID = 1L;
 
+	/**1.[不可空] 学员id*/
 	private String userId;
 
-	/**1.[不可空] 分组编号*/
+	/**2.[不可空] 分组编号*/
 	private String groupCode;
 
-	/**2.[不可空] 销售单id*/
-	private String saleId;
+	/**3.[不可空] 销售单id*/
+	private List<String> saleIds;
 
 	public String getUserId() {
 		return userId;
@@ -28,12 +31,12 @@ public class RpcAttGroupDetailsCommand {
 		this.groupCode = groupCode;
 	}
 
-	public String getSaleId() {
-		return saleId;
+	public List<String> getSaleIds() {
+		return saleIds;
 	}
 
-	public void setSaleId(String saleId) {
-		this.saleId = saleId;
+	public void setSaleIds(List<String> saleIds) {
+		this.saleIds = saleIds;
 	}
 
 }
