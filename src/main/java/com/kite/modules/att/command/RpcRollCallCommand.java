@@ -6,6 +6,10 @@ public class RpcRollCallCommand {
 
 	private static final long serialVersionUID = 1L;
 
+	/**1.[不可空] 用户id*/
+	private String userId;
+
+	/**2.[不可空] 点名情况*/
 	private List<RollCallCommand> rollCallCommandList;
 
 	public static class RollCallCommand {
@@ -52,5 +56,15 @@ public class RpcRollCallCommand {
 	public void setRollCallCommandList(List<RollCallCommand> rollCallCommandList) {
 		this.rollCallCommandList = rollCallCommandList;
 	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+
 
 }

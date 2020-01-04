@@ -206,7 +206,7 @@
 	</update>
 
 	<select id="findRpcRollCallShowCommandByCondition" resultType="com.kite.modules.att.command.RpcRollCallShowCommand">
-		select courseDetails.id as "courseDetailsId",
+		 select courseDetails.id as "courseDetailsId",
 		stu.id as "studentId",
 		stu.nameCn as "studentName",
 		course.course_level as "courseLevel"
@@ -220,7 +220,8 @@
 		and DATE_FORMAT(courseDetails.learn_begin_date,'%H%i') = #{beginTimeStr}
 		and DATE_FORMAT(courseDetails.learn_end_date,'%H%i') = #{endTimeStr}
 		where sale.del_flag = "0" and sale.group_flag = '1'
-		 and gr.courseAddress = #{address}
+		 and gr.courseAddress = #{address} and stu.id not in ((select ser_roll_call.studentId from ser_roll_call
+		WHERE ser_roll_call.course_detailsId = courseDetails.id and ser_roll_call.studentId = stu.id))
 	</select>
 
 

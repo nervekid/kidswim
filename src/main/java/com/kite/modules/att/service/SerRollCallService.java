@@ -5,16 +5,17 @@ package com.kite.modules.att.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.kite.modules.att.entity.SerRollCall;
 import com.kite.modules.att.command.RpcRollCallCommand;
 import com.kite.modules.att.dao.SerRollCallDao;
+import com.kite.modules.att.entity.SerRollCall;
+import com.kite.modules.sys.service.SystemService;
 
 /**
  * 點名Service
@@ -27,6 +28,9 @@ public class SerRollCallService extends CrudService<SerRollCallDao, SerRollCall>
 
     @Autowired
 	private SerRollCallDao serRollCallDao;
+
+    @Autowired
+    private SystemService systemService;
 
 	@Override
 	public SerRollCall get(String id) {
@@ -76,6 +80,7 @@ public class SerRollCallService extends CrudService<SerRollCallDao, SerRollCall>
 	public void rollCallByList(RpcRollCallCommand command) {
 		for (int i = 0; i < command.getRollCallCommandList().size(); i++) {
 			SerRollCall entity = new SerRollCall();
+			entity.setCreateBy(this.systemService.getUser(command.getUserId()));
 			entity.setCourseDetailsId(command.getRollCallCommandList().get(i).getCourseDetailsId());
 			entity.setStudentId(command.getRollCallCommandList().get(i).getStudentId());
 			entity.setRollCallStatusFlag(command.getRollCallCommandList().get(i).getRollCallStatusFlag());
