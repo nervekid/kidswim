@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.RpcRollCallShowCommand;
 import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.entity.SerSale;
 
@@ -51,5 +52,16 @@ public interface SerSaleDao extends CrudDao<SerSale> {
      */
     public void updateGroupStatus(@Param("saleId") String saleId, @Param("status") String status);
 
-
+    /**
+     * 根据条件查找点名原型
+     * @param address 地址
+     * @param beginDateStr 开始日期字符串
+     * @param endDateStr 结束日期字符串 yp0920930
+     * @param beginTimeStr 开始时间字符串
+     * @param endTimeStr 结束时间字符串
+     * @return
+     */
+    public List<RpcRollCallShowCommand> findRpcRollCallShowCommandByCondition(@Param("address")String address,
+    		@Param("beginDateStr")Date beginDateStr, @Param("endDateStr")Date endDateStr,
+    		@Param("beginTimeStr")String beginTimeStr, @Param("endTimeStr")String endTimeStr);
 }

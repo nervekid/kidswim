@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.RpcRollCallShowCommand;
 import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.dao.SerSaleDao;
 import com.kite.modules.att.dao.SysBaseStudentDao;
@@ -117,5 +118,19 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 	 */
 	public void updateSetGroupFlagStatus(String saleId, String status) {
 		this.dao.updateGroupStatus(saleId, status);
+	}
+
+	/**
+	 * 查找点名原型
+	 * @param address
+	 * @param beginDateStr
+	 * @param endDateStr
+	 * @param beginTimeStr
+	 * @param endTimeStr
+	 * @return
+	 */
+	public List<RpcRollCallShowCommand> findRpcRollCallShowCommandByCondition(String address, Date beginDateStr,
+			Date endDateStr, String beginTimeStr, String endTimeStr) {
+		return this.dao.findRpcRollCallShowCommandByCondition(address, beginDateStr, endDateStr, beginTimeStr, endTimeStr);
 	}
 }

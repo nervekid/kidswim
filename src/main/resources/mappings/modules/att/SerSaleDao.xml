@@ -205,4 +205,24 @@
 		WHERE id = #{saleId}
 	</update>
 
+	<select id="findRpcRollCallShowCommandByCondition" resultType="com.kite.modules.att.command.RpcRollCallShowCommand">
+		select courseDetails.id as "courseDetailsId",
+		stu.id as "studentId",
+		stu.nameCn as "studentName",
+		course.course_level as "courseLevel"
+		from ser_sale sale
+		join sys_base_student stu on stu.`code` = sale.studentCode and stu.del_flag = '0'
+		join ser_group_details groupDeatails on groupDeatails.saleId = sale.id and groupDeatails.del_flag = '0'
+		join ser_group gr on gr.id = groupDeatails.groupId and gr.del_flag = '0'
+		JOIN ser_course course on course.`code` = sale.courseCode and sale.del_flag = '0'
+		JOIN ser_course_details courseDetails on courseDetails.courseId = course.id
+		and courseDetails.del_flag = '0' and courseDetails.learn_date BETWEEN #{beginDateStr} and #{endDateStr}
+		and DATE_FORMAT(courseDetails.learn_begin_date,'%H%i') = #{beginTimeStr}
+		and DATE_FORMAT(courseDetails.learn_end_date,'%H%i') = #{endTimeStr}
+		where sale.del_flag = "0" and sale.group_flag = '1'
+		 and gr.courseAddress = #{address}
+	</select>
+
+
+
 </mapper>
