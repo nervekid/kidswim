@@ -130,7 +130,7 @@ public class SerSaleService extends CrudService<SerSaleDao, SerSale> {
 	 * @return
 	 */
 	public List<RpcRollCallShowCommand> findRpcRollCallShowCommandByCondition(String address, Date beginDateStr,
-			Date endDateStr, String beginTimeStr, String endTimeStr) {
-		return this.dao.findRpcRollCallShowCommandByCondition(address, beginDateStr, endDateStr, beginTimeStr, endTimeStr);
+			Date endDateStr, Date beginTime, Date endTime) {
+		return this.dao.findRpcRollCallShowCommandByCondition(address, beginDateStr, endDateStr, beginTime, endTime);
 	}
 }

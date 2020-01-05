@@ -60,14 +60,23 @@ public class RpcAttRollCallController {
 		Map<String,Object> data =  new HashMap<>();
         data.put("msg", "");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(dateStr));
         Date endDate = DateUtlis.getLastTimeDate(beginDate);
+
+        String beginTimeStrHm = beginTimeStr.substring(0, 2) + ":" + beginTimeStr.substring(2, 4);
+        String beginTimeHoleStr = dateStr + " " + beginTimeStrHm + ":" + "00";
+        Date beginTime = sdd.parse(beginTimeHoleStr);
+        String endTimeStrHm = endTimeStr.substring(0, 2) + ":" + endTimeStr.substring(2, 4);
+        String endTimeStrHoleStr = dateStr + " " + endTimeStrHm + ":" + "59";
+        Date endTime = sdd.parse(endTimeStrHoleStr);
+
         List<RpcRollCallShowCommand> rollCallShowList = this.serSaleService.findRpcRollCallShowCommandByCondition(
         		courseAddress,
         		beginDate,
         		endDate,
-        		beginTimeStr,
-        		endTimeStr);
+        		beginTime,
+        		endTime);
         data.put("size", rollCallShowList.size());
         if (rollCallShowList.isEmpty()) {
         	logger.info("查询根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单失败,status={}", 0);
