@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.kite.common.persistence.CrudDao;
 import com.kite.common.persistence.annotation.MyBatisDao;
+import com.kite.modules.att.command.RpcAllCourseBeginTimeCommand;
 import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.entity.SerCourse;
 
@@ -62,4 +63,14 @@ public interface SerCourseDao extends CrudDao<SerCourse> {
 			@Param("learnBeginTimeStr") String learnBeginTimeStr,
 			@Param("queryBeginDateTime") Date queryBeginDateTime,
 			@Param("queryEndDateTime") Date queryEndDateTime);
+
+	/**
+	 *
+	 * @param address
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<RpcAllCourseBeginTimeCommand> findCourseBeginTimeByAddressAndDate(@Param("address")String address,
+			@Param("beginDate")Date beginDate, @Param("endDate")Date endDate);
 }

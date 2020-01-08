@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
+import com.kite.modules.att.command.RpcAllCourseBeginTimeCommand;
 import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.dao.SerCourseDao;
 import com.kite.modules.att.dao.SerCourseDetailsDao;
@@ -160,6 +161,18 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 			Date queryBeginDateTime,
 			Date queryEndDateTime){
 		return this.dao.findUnGroupLevelCorrespondCount(addressStr, learnBeginTimeStr, queryBeginDateTime, queryEndDateTime);
+	}
+
+	/**
+	 * 根据开始日期，结束日期，地址，查找符合条件当天所有的课程明细开始时间
+	 * @param address
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<RpcAllCourseBeginTimeCommand> findAllCourseBeginTimeByAddressAndBeginTime(
+			String address, Date beginDate, Date endDate) {
+		return this.serCourseDao.findCourseBeginTimeByAddressAndDate(address, beginDate, endDate);
 	}
 
 }

@@ -63,5 +63,6 @@ public interface SerSaleDao extends CrudDao<SerSale> {
      */
     public List<RpcRollCallShowCommand> findRpcRollCallShowCommandByCondition(@Param("address")String address,
     		@Param("beginDateStr")Date beginDateStr, @Param("endDateStr")Date endDateStr,
-    		@Param("beginTime")Date beginTime, @Param("endTime")Date endTime);
+    		@Param("beginTime")Date beginTime);
+
 }

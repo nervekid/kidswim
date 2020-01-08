@@ -219,4 +219,13 @@
 			GROUP BY course.course_level,dict.label
 	</select>
 
+	<select id="findCourseBeginTimeByAddressAndDate" resultType="com.kite.modules.att.command.RpcAllCourseBeginTimeCommand">
+		select DATE_FORMAT(details.learn_begin_date,'%H:%i') as "showTime",
+			DATE_FORMAT(details.learn_begin_date,'%H%i') as "selectTime"
+			FROM ser_course course
+			JOIN ser_course_details details on details.courseId = course.id
+			and details.learn_date BETWEEN '2020-02-04 00:00:00' and '2020-02-04 23:59:59'
+			where course.courseAddress = 'HH'
+	</select>
+
 </mapper>

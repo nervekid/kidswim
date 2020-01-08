@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kite.common.utils.DateUtlis;
+import com.kite.modules.att.command.RpcAllCourseBeginTimeCommand;
 import com.kite.modules.att.command.RpcRollCallCommand;
 import com.kite.modules.att.command.RpcRollCallShowCommand;
+import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SerRollCallService;
 import com.kite.modules.att.service.SerSaleService;
 
@@ -39,6 +41,44 @@ public class RpcAttRollCallController {
 
 	@Autowired private SerSaleService serSaleService;
 	@Autowired private SerRollCallService serRollCallService;
+	@Autowired private SerCourseService serCourseService;
+
+	/**
+	 * 根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "findAllBeginTimeByAddressAndDate")
+	@ResponseBody
+	public Map<String, Object> findAllBeginTimeByAddressAndDate(
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("dateStr") String dateStr,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) throws ParseException {
+		logger.info("进入根据条件(课程地址，日期)查找课堂明细开始时间的接口"
+				+ "courseAddress={}, dateStr={}",
+				courseAddress, dateStr);
+		Map<String,Object> data =  new HashMap<>();
+        data.put("msg", "");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(dateStr));
+        Date endDate = DateUtlis.getLastTimeDate(beginDate);
+        List<RpcAllCourseBeginTimeCommand> beginTimeList = this.serCourseService.findAllCourseBeginTimeByAddressAndBeginTime(
+        		courseAddress,
+        		beginDate,
+        		endDate);
+        data.put("size", beginTimeList.size());
+        if (beginTimeList.isEmpty()) {
+        	logger.info("查询根据条件(课程地址，日期)查找课堂明细开始时间失败,status={}", 0);
+        	data.put("status", "0");
+        }
+        else {
+        	logger.info("查询根据条件(课程地址，日期)查找课堂明细开始时间成功,status={}", 1);
+        	data.put("status", "1");
+        	data.put("beginTimeList", beginTimeList);
+        }
+        return data;
+	}
 
 	/**
 	 * 根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单
@@ -50,13 +90,12 @@ public class RpcAttRollCallController {
 			@RequestParam("courseAddress") String courseAddress,
 			@RequestParam("dateStr") String dateStr,
 			@RequestParam("beginTimeStr")String beginTimeStr,
-			@RequestParam("endTimeStr")String endTimeStr,
 			HttpServletRequest request,
 			HttpServletResponse response,
 			Model model) throws ParseException {
 		logger.info("进入根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单的接口"
-				+ "courseAddress={}, dateStr={},beginTimeStr={}, endTimeStr={}",
-				courseAddress, dateStr, beginTimeStr, endTimeStr);
+				+ "courseAddress={}, dateStr={},beginTimeStr={}",
+				courseAddress, dateStr, beginTimeStr);
 		Map<String,Object> data =  new HashMap<>();
         data.put("msg", "");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,16 +106,12 @@ public class RpcAttRollCallController {
         String beginTimeStrHm = beginTimeStr.substring(0, 2) + ":" + beginTimeStr.substring(2, 4);
         String beginTimeHoleStr = dateStr + " " + beginTimeStrHm + ":" + "00";
         Date beginTime = sdd.parse(beginTimeHoleStr);
-        String endTimeStrHm = endTimeStr.substring(0, 2) + ":" + endTimeStr.substring(2, 4);
-        String endTimeStrHoleStr = dateStr + " " + endTimeStrHm + ":" + "59";
-        Date endTime = sdd.parse(endTimeStrHoleStr);
 
         List<RpcRollCallShowCommand> rollCallShowList = this.serSaleService.findRpcRollCallShowCommandByCondition(
         		courseAddress,
         		beginDate,
         		endDate,
-        		beginTime,
-        		endTime);
+        		beginTime);
         data.put("size", rollCallShowList.size());
         if (rollCallShowList.isEmpty()) {
         	logger.info("查询根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单失败,status={}", 0);
