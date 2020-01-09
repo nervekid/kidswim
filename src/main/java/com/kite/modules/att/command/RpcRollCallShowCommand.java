@@ -16,6 +16,12 @@ public class RpcRollCallShowCommand {
 	/**4.[不可空] 课程级别*/
 	private String courseLevel;
 
+	/**5.[不可空] 点名状态值 1:出席 2:缺席 3:请假 4:事故 0:未点名*/
+	private String rollCallStatusFlag;
+
+	/**6.[不可空] 点名状态名称 1:出席 2:缺席 3:请假 4:事故 0:未点名*/
+	private String rollCallStatusName;
+
 	public String getCourseDetailsId() {
 		return courseDetailsId;
 	}
@@ -44,8 +50,25 @@ public class RpcRollCallShowCommand {
 		return courseLevel;
 	}
 
+
+	public String getRollCallStatusName() {
+		return rollCallStatusName;
+	}
+
+	public void setRollCallStatusName(String rollCallStatusName) {
+		this.rollCallStatusName = rollCallStatusName;
+	}
+
 	public void setCourseLevel(String courseLevel) {
 		this.courseLevel = courseLevel;
+	}
+
+	public String getRollCallStatusFlag() {
+		return rollCallStatusFlag;
+	}
+
+	public void setRollCallStatusFlag(String rollCallStatusFlag) {
+		this.rollCallStatusFlag = rollCallStatusFlag;
 	}
 
 }

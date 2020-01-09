@@ -209,7 +209,9 @@
 		select courseDetails.id as "courseDetailsId",
 		stu.id as "studentId",
 		stu.nameCn as "studentName",
-		course.course_level as "courseLevel"
+		course.course_level as "courseLevel",
+		"0" AS "rollCallStatusFlag",
+		"未點名" as "rollCallStatusName"
 		from ser_sale sale
 		join sys_base_student stu on stu.`code` = sale.studentCode and stu.del_flag = '0'
 		join ser_group_details groupDeatails on groupDeatails.saleId = sale.id and groupDeatails.del_flag = '0'
@@ -220,6 +222,28 @@
 		and courseDetails.learn_begin_date = #{beginTime}
 		where sale.del_flag = "0" and sale.group_flag = '1'
 		 and gr.courseAddress = #{address} and stu.id not in ((select ser_roll_call.studentId from ser_roll_call
+		WHERE ser_roll_call.course_detailsId = courseDetails.id and ser_roll_call.studentId = stu.id))
+
+		UNION ALL
+
+		select courseDetails.id as "courseDetailsId",
+		stu.id as "studentId",
+		stu.nameCn as "studentName",
+		course.course_level as "courseLevel",
+		rollCall.rollCall_status_flag AS "rollCallStatusFlag",
+		dict.label as "rollCallStatusName"
+		from ser_sale sale
+		join sys_base_student stu on stu.`code` = sale.studentCode and stu.del_flag = '0'
+		join ser_group_details groupDeatails on groupDeatails.saleId = sale.id and groupDeatails.del_flag = '0'
+		join ser_group gr on gr.id = groupDeatails.groupId and gr.del_flag = '0'
+		JOIN ser_course course on course.`code` = sale.courseCode and sale.del_flag = '0'
+		JOIN ser_course_details courseDetails on courseDetails.courseId = course.id
+		JOIN ser_roll_call rollCall on rollCall.studentId = stu.id and rollCall.course_detailsId = courseDetails.id and rollCall.del_flag = '0'
+		JOIN sys_dict dict on dict.value = rollCall.rollCall_status_flag and dict.type = 'roll_call_status_flag' and dict.del_flag = '0'
+		and courseDetails.del_flag = '0' and courseDetails.learn_date BETWEEN #{beginDateStr} and #{endDateStr}
+		and courseDetails.learn_begin_date = #{beginTime}
+		where sale.del_flag = "0" and sale.group_flag = '1'
+		 and gr.courseAddress = #{address} and stu.id in ((select ser_roll_call.studentId from ser_roll_call
 		WHERE ser_roll_call.course_detailsId = courseDetails.id and ser_roll_call.studentId = stu.id))
 	</select>
 

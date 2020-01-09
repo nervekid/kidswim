@@ -44,7 +44,6 @@ public class RpcAttRollCallController {
 	@Autowired private SerCourseService serCourseService;
 
 	/**
-	 * 根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单
 	 * @throws ParseException
 	 */
 	@RequestMapping(value = "findAllBeginTimeByAddressAndDate")
@@ -81,7 +80,6 @@ public class RpcAttRollCallController {
 	}
 
 	/**
-	 * 根据条件(课程地址，日期，上课开始时间，上课结束时间)查找点名单
 	 * @throws ParseException
 	 */
 	@RequestMapping(value = "findRollCallSaleStudentList")
