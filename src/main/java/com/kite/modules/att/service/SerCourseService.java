@@ -14,6 +14,7 @@ import com.kite.common.persistence.Page;
 import com.kite.common.service.CrudService;
 import com.kite.common.utils.StringUtils;
 import com.kite.modules.att.command.RpcAllCourseBeginTimeCommand;
+import com.kite.modules.att.command.RpcCourseBeginInfo;
 import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.dao.SerCourseDao;
 import com.kite.modules.att.dao.SerCourseDetailsDao;
@@ -173,6 +174,18 @@ public class SerCourseService extends CrudService<SerCourseDao, SerCourse> {
 	public List<RpcAllCourseBeginTimeCommand> findAllCourseBeginTimeByAddressAndBeginTime(
 			String address, Date beginDate, Date endDate) {
 		return this.serCourseDao.findCourseBeginTimeByAddressAndDate(address, beginDate, endDate);
+	}
+
+	/**
+	 * 根据开始时间，结束时间，查找课程上课开始时间列表
+	 * @param beginDate
+	 * @param endDate
+	 * @param address
+	 * @return
+	 */
+	public List<RpcCourseBeginInfo> findRpcCourseBeginInfoByBeginDateAndAddress(Date beginDate,
+			Date endDate, String address) {
+		return this.serCourseDao.findRpcCourseBeginInfoByCourseBeginDateAndAddress(beginDate, endDate, address);
 	}
 
 }

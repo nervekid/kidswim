@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kite.common.utils.DateUtlis;
 import com.kite.modules.att.command.GroupDetailsInfo;
+import com.kite.modules.att.command.RpcCourseBeginInfo;
 import com.kite.modules.att.command.RpcCourseCorrespondSaleSituationCommand;
 import com.kite.modules.att.command.RpcCreateGroupCommand;
 import com.kite.modules.att.command.RpcSaleStudentCommand;
 import com.kite.modules.att.command.UnGroupLevelCorrespondCountCommand;
 import com.kite.modules.att.entity.SerGroup;
 import com.kite.modules.att.entity.SerGroupDetails;
-import com.kite.modules.att.enums.KidSwimDictEnum;
 import com.kite.modules.att.service.SerCourseService;
 import com.kite.modules.att.service.SerGroupDetailsService;
 import com.kite.modules.att.service.SerGroupService;
@@ -51,6 +51,49 @@ public class RpcAttGroupController {
 	@Autowired private SerGroupService serGroupService;
 	@Autowired private SerGroupDetailsService serGroupDetailsService;
 	@Autowired private SystemService systemService;
+
+	/**
+	 * 根据条件查找课程上课时间列表
+	 * @param courseAddress
+	 * @param beginDateStr
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "findCourseBeginTimeList")
+	@ResponseBody
+	public Map<String, Object> findCourseBeginTimeList(
+			@RequestParam("courseAddress") String courseAddress,
+			@RequestParam("beginDateStr")String beginDateStr,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Model model) throws ParseException {
+		logger.info("进入根据条件查找课程上课时间列表的接口courseAddress={}", courseAddress);
+		Map<String,Object> data =  new HashMap<>();
+        data.put("msg", "");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date beginDate = DateUtlis.getFistTimeDate(sdf.parse(beginDateStr));
+        Date queryEndDate = DateUtlis.getLastTimeDate(beginDate);
+        try {
+            //1.查找课程级别对应销售单人数情况(未分组销售单)
+            List<RpcCourseBeginInfo> infoList = this.serCourseService.findRpcCourseBeginInfoByBeginDateAndAddress
+            		(beginDate, queryEndDate, courseAddress);
+        	logger.info("查询根据条件查找课程上课时间列表成功,status={}", 1);
+        	data.put("status", "1");
+        	data.put("infoList", infoList);
+        	data.put("size", infoList.size());
+            return data;
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        	logger.info("查询根据条件查找课程上课时间列表成失败,status={}", 0);
+        	data.put("status", "0");
+        	return data;
+        }
+
+	}
 
 	/**
 	 * 根据条件查找课程对应销售单情况

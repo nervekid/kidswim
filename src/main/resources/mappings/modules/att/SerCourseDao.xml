@@ -224,8 +224,15 @@
 			DATE_FORMAT(details.learn_begin_date,'%H%i') as "selectTime"
 			FROM ser_course course
 			JOIN ser_course_details details on details.courseId = course.id
-			and details.learn_date BETWEEN '2020-02-04 00:00:00' and '2020-02-04 23:59:59'
-			where course.courseAddress = 'HH'
+			and details.learn_date BETWEEN #{beginDate} and #{endDate} and details.del_flag = '0'
+			where course.courseAddress = #{address} and course.del_flag = '0'
+	</select>
+
+	<select id="findRpcCourseBeginInfoByCourseBeginDateAndAddress" resultType="com.kite.modules.att.command.RpcCourseBeginInfo">
+		select course.learn_beginTime as "beginTimeStr"
+			from ser_course course
+			where course.course_beginTime BETWEEN #{beginDate} and #{endDate}
+			and course.courseAddress = #{address} and course.del_flag = '0'
 	</select>
 
 </mapper>
