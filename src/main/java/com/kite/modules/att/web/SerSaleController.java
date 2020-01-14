@@ -110,6 +110,9 @@ public class SerSaleController extends BaseController implements BasicVerificati
 	@RequiresPermissions(value={"att:serSale:view","att:serSale:add","att:serSale:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
 	public String form(SerSale serSale, Model model) {
+		if (serSale.getDiscount() == null || serSale.getDiscount().equals("")) {
+			serSale.setDiscount(1.0);
+		}
 		model.addAttribute("serSale", serSale);
 		if(serSale.getId()==null){
 			// serSale.setMaterialnumber(materialService.findCodeNumber("src_t_material", "materialnumber","LCD"));
@@ -154,7 +157,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 				if (isAdd) {
 					//原先不用收取会员费，现在需要
 					t.setPayAmount(serSale.getPayAmount().add(new BigDecimal(170)));
-					serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "收取會員費$170");
+					serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "<br>" + "收取會員費$170");
 				}
 				else {
 					//原先收取了会员费，现在不需要
@@ -172,7 +175,7 @@ public class SerSaleController extends BaseController implements BasicVerificati
 			BigDecimal multiply = new BigDecimal(serSale.getDiscount()).multiply(serCourse.getCourseFee() == null ? BigDecimal.ZERO : serCourse.getCourseFee());
 			if (serSale.getMemberFeeFlag().equals(KidSwimDictEnum.yesNo.是.getName())) {
 				multiply = multiply.add(new BigDecimal(170));
-				serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "收取會員費$170");
+				serSale.setRemarks(serSale.getRemarks() == null ? "收取會員費$170" : serSale.getRemarks() + "<br>" + "收取會員費$170");
 			}
 			serSale.setPayAmount(multiply.setScale(2,BigDecimal.ROUND_DOWN));
 

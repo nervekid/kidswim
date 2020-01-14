@@ -299,7 +299,6 @@ public class SerCourseController extends BaseController implements BasicVerifica
     }
 
 	/**
-	 * 功能：兌換用戶收到且未兌換打的飛象卡，更新飛象卡的狀態，更新錢包的金額
 	 * @param userwallet
 	 * @param request
 	 * @param response
@@ -328,7 +327,6 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date beginTime = com.kite.common.utils.date.DateUtils.getTimesmorning(sdf.parse(beginTimeStr));
 		Date endTime = com.kite.common.utils.date.DateUtils.getTimesevening(sdf.parse(endTimeStr));
-		Date assessmentDate = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(assessmentDateStr));
 
 		int days = com.kite.common.utils.date.DateUtils.getDateSpace(sdf.format(beginTime), sdf.format(endTime));
 		if (days < 7) {
@@ -367,14 +365,17 @@ public class SerCourseController extends BaseController implements BasicVerifica
 		SerCourse serCourse = new SerCourse();
 		serCourse.setCode(code);
 		serCourse.setCourseLevel(courseLevel);
-		serCourse.setCourseBeginTime(beginTime);
-		serCourse.setCourseEndTimeTime(endTime);
+		serCourse.setCourseBeginTime(com.kite.common.utils.date.DateUtils.getNextWekkByDateAndWeek(beginTime, Integer.parseInt(weekNum)));
+		serCourse.setCourseEndTimeTime(com.kite.common.utils.date.DateUtils.getPreWekkByDateAndWeek(endTime, Integer.parseInt(weekNum)));
 		serCourse.setLearnBeginTime(learnBeginTimeStr);
 		serCourse.setLearnEndTimeTime(learnEndTimeTimeStr);
 		serCourse.setLearnNum(weekenNum);
 		serCourse.setCourseAddress(courseAddress);
 		serCourse.setStrInWeek(weekNum);
-		serCourse.setAssessmentDate(assessmentDate);
+		if (assessmentDateStr != null && !assessmentDateStr.equals("")) {
+			Date assessmentDate = com.kite.common.utils.date.DateUtils.getNoon12OclockTimeDate(sdf.parse(assessmentDateStr));
+			serCourse.setAssessmentDate(assessmentDate);
+		}
 		serCourse.setCourseFee(costAmount);
 		this.serCourseService.save(serCourse);
 

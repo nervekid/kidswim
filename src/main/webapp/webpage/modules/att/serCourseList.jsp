@@ -82,10 +82,6 @@
                 return;
             }
             var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
-            if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
-                alert("您還沒有選擇評估日期,請選擇！");
-                return;
-            }
             $.ajax({
                 type:"post",
                 dataType:"json",
@@ -158,11 +154,6 @@
                 return;
             }
             var assessmentDateStrSelectVal = $("#assessmentDateStrSelect").val();
-            if(null==assessmentDateStrSelectVal|| assessmentDateStrSelectVal==''){
-                alert("您還沒有選擇評估日期,請選擇！");
-                return;
-            }
-
             if(confirm("確定要進行課程生成嗎？")==true){
             	loading('正在生成，請稍等...');
                 $.ajax({
@@ -284,7 +275,7 @@
 							</tr>
 
 							<tr>
-								<td class="width-15 active"><label class="pull-right"><font color="red">*</font>評估日期：</label></td>
+								<td class="width-15 active"><label class="pull-right">評估日期：</label></td>
 								<td class="width-35">
 								   <input id="assessmentDateStrSelect" placeholder="評估日期" name="assessmentDateStrSelect" type="text" length="20" class="form-control"
                                    value=""/>

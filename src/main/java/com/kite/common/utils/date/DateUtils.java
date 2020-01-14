@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kite.common.utils.DateUtlis;
 import com.kite.common.utils.StringUtils;
 
 public class DateUtils {
@@ -809,6 +810,40 @@ public class DateUtils {
     	   return 0;
        }
        return dayForWeek;
+   }
+
+   /**
+    * 选择指定日期的下一个星期几
+    * 0代表星期日 1-6代表星期一至星期六
+    * @param date
+    * @param week
+    * @return
+    */
+   public static Date getNextWekkByDateAndWeek(Date date, int week) {
+	   for (int i = 0; i < 7; i++) {
+		   Date tarDate = DateUtils.getPreNumDate(date, i);
+		   if (DateUtils.getWeekByDate(tarDate) == week) {
+			   return tarDate;
+		   }
+	   }
+	   return date;
+   }
+
+   /**
+    * 获取指定日期的上一个星期几
+    * 0代表星期日 1-6代表星期一至星期六
+    * @param date
+    * @param week
+    * @return
+    */
+   public static Date getPreWekkByDateAndWeek(Date date, int week) {
+	   for (int i = 0; i < 7; i++) {
+		   Date tarDate = DateUtils.getLastNumDate(date, i);
+		   if (DateUtils.getWeekByDate(tarDate) == week) {
+			   return tarDate;
+		   }
+	   }
+	   return date;
    }
 
    /**

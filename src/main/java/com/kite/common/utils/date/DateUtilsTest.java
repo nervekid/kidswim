@@ -253,5 +253,44 @@ public class DateUtilsTest {
         assertEquals(time10, com.kite.common.utils.date.DateUtils.getPreNumDate(time9, 7));
         assertEquals(time111, com.kite.common.utils.date.DateUtils.getPreNumDate(time10, 7));
 
+
+
+
+        Date pre1 = new Date();
+        try {
+        	pre1 = spd.parse("2020-01-01 15:25:33");
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date pre1Taget = new Date();
+        try {
+        	pre1Taget = spd.parse("2020-01-06 15:25:33");
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Date last1 = new Date();
+        try {
+        	last1 = spd.parse("2020-02-29 15:25:33");
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date last1Taget = new Date();
+        try {
+        	last1Taget = spd.parse("2020-02-24 15:25:33");
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        assertEquals(pre1Taget, com.kite.common.utils.date.DateUtils.getNextWekkByDateAndWeek(pre1, 1));
+        assertEquals(last1Taget, com.kite.common.utils.date.DateUtils.getPreWekkByDateAndWeek(last1, 1));
+
+
+
+
 	}
 }

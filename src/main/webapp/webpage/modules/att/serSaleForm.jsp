@@ -34,10 +34,16 @@
 
             laydate.render({
                 elem: '#paidDate',
-                trigger:'click'
+                trigger:'click',
+                max:minDate()
             });
 
 		});
+
+		function minDate(){
+		    var now = new Date();
+		    return now.getFullYear()+"-" + (now.getMonth()+1) + "-" + now.getDate();
+		}
 
 		function memberFeeFlagChange () {
 			var a = $("#memberFeeFlag").val();
@@ -84,12 +90,12 @@
 			<tr>
 				<td class="width-15 active"><label class="pull-right">付款日期：</label></td>
 				<td class="width-35">
-					<input id="paidDate" name="paidDate"  type="text"  class="form-control required"
+					<input id="paidDate" name="paidDate"  type="text"  class="form-control"
 						   value="<fmt:formatDate value="${serSale.paidDate}" pattern="yyyy-MM-dd"/>"/>
 				</td>
 				<td class="width-15 active"><label class="pull-right">付款方式：</label></td>
 				<td class="width-35">
-					<form:select placeholder="付款方式" path="paymentType" class="form-control required"  >
+					<form:select placeholder="付款方式" path="paymentType" class="form-control"  >
 						<form:option value="" label="請選擇"/>
 						<form:options items="${fns:getDictList('pay_type')}"  itemLabel="label"   itemValue="value" htmlEscape="false"/>
 					</form:select>
